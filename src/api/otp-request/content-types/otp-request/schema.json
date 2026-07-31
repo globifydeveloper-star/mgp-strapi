@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "otp_requests",
+  "info": {
+    "singularName": "otp-request",
+    "pluralName": "otp-requests",
+    "displayName": "OTP Request"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "phone": { "type": "string", "required": true },
+    "code": { "type": "string", "required": true },
+    "expiresAt": { "type": "datetime", "required": true },
+    "verified": { "type": "boolean", "default": false },
+    "attempts": { "type": "integer", "default": 0 },
+    "name": { "type": "string" },
+    "state": { "type": "string" },
+    "city": { "type": "string" },
+    "message": { "type": "text" },
+    "consent": { "type": "boolean", "default": false }
+  }
+}

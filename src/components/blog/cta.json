@@ -1,0 +1,20 @@
+{
+    "collectionName": "components_blog_ctas",
+    "info": {
+        "displayName": "CTA",
+        "icon": "link"
+    },
+    "options": {},
+    "attributes": {
+        "enabled": {
+            "type": "boolean",
+            "default": false
+        },
+        "label": {
+            "type": "string"
+        },
+        "link": {
+            "type": "string"
+        }
+    }
+}

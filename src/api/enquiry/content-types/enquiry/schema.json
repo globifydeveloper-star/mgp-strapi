@@ -1,0 +1,64 @@
+{
+  "kind": "collectionType",
+  "collectionName": "enquiries",
+  "info": {
+    "singularName": "enquiry",
+    "pluralName": "enquiries",
+    "displayName": "Enquiry"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "mobile": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email"
+    },
+    "source": {
+      "type": "enumeration",
+      "enum": ["BLOG", "CONTACT_US", "HOME_PAGE", "LANDING_PAGE", "OTHER"],
+      "required": true
+    },
+    "otpVerified": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    },
+    "crmStatus": {
+      "type": "enumeration",
+      "enum": ["PENDING", "SYNCED", "FAILED"],
+      "required": true,
+      "default": "PENDING"
+    },
+    "crmLeadId": {
+      "type": "string"
+    },
+    "crmResponse": {
+      "type": "json"
+    },
+    "crmError": {
+      "type": "text"
+    },
+    "syncAttempts": {
+      "type": "integer",
+      "required": true,
+      "default": 0,
+      "min": 0
+    },
+    "lastSyncAt": {
+      "type": "datetime"
+    },
+    "blog": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::blog-post.blog-post"
+    }
+  }
+}
