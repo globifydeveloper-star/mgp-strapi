@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "promo_slides",
+  "info": {
+    "singularName": "promo-slide",
+    "pluralName": "promo-slides",
+    "displayName": "Promo Slide"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "creativeImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "heading": {
+      "type": "string"
+    },
+    "highlight": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "button": {
+      "type": "component",
+      "component": "blog.cta",
+      "repeatable": false
+    }
+  }
+}
