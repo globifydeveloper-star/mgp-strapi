@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "faqs",
+  "info": {
+    "singularName": "faq",
+    "pluralName": "faqs",
+    "displayName": "FAQ"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "question": {
+      "type": "string"
+    },
+    "answer": {
+      "type": "text"
+    },
+    "section": {
+      "type": "enumeration",
+      "enum": [
+        "home",
+        "gold-rate"
+      ]
+    },
+    "order": {
+      "type": "integer"
+    }
+  }
+}
