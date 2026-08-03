@@ -1,0 +1,57 @@
+{
+  "kind": "singleType",
+  "collectionName": "blog_page_settings",
+  "info": {
+    "singularName": "blog-page-setting",
+    "pluralName": "blog-page-settings",
+    "displayName": "Blog Page Settings"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "heroHeading": {
+      "type": "string"
+    },
+    "heroSubheading": {
+      "type": "string"
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "noPostsMessage": {
+      "type": "string"
+    },
+    "noPostsInCategoryMessage": {
+      "type": "string"
+    },
+    "allCategoryLabel": {
+      "type": "string"
+    },
+    "readMoreLabel": {
+      "type": "string"
+    },
+    "backToBlogLabel": {
+      "type": "string"
+    },
+    "relatedArticlesHeading": {
+      "type": "string"
+    },
+    "sortNewestLabel": {
+      "type": "string"
+    },
+    "sortOldestLabel": {
+      "type": "string"
+    }
+  }
+}
