@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "hero_slides",
+  "info": {
+    "singularName": "hero-slide",
+    "pluralName": "hero-slides",
+    "displayName": "Hero Slide"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "heroText": {
+      "type": "text"
+    },
+    "heroSubtext": {
+      "type": "text"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "slideLink": {
+      "type": "string"
+    },
+    "button1": {
+      "type": "component",
+      "component": "blog.cta",
+      "repeatable": false
+    },
+    "button2": {
+      "type": "component",
+      "component": "blog.cta",
+      "repeatable": false
+    }
+  }
+}
