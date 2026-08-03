@@ -1,0 +1,76 @@
+{
+  "kind": "singleType",
+  "collectionName": "homepages",
+  "info": {
+    "singularName": "homepage",
+    "pluralName": "homepages",
+    "displayName": "Homepage"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "heroFirstSlideImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "processSectionImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "estimateGoldImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "estimateGoldHeading": {
+      "type": "string"
+    },
+    "estimateGoldHeadingHighlight": {
+      "type": "string"
+    },
+    "estimateGoldNote": {
+      "type": "string"
+    },
+    "vanHeadingLight": {
+      "type": "string"
+    },
+    "vanHeadingBold": {
+      "type": "string"
+    },
+    "vanDescription": {
+      "type": "text"
+    },
+    "vanButtonLabel": {
+      "type": "string"
+    },
+    "vanImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "ogImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  }
+}
