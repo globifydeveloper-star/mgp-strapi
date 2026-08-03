@@ -1,0 +1,1228 @@
+{
+  "generatedAt": "2026-08-03T09:42:03.825Z",
+  "strapiUrl": "http://localhost:1337",
+  "sourceDirectories": [
+    "D:\\MGP\\MGP-WEB\\public",
+    "D:\\MGP\\MGP-WEB\\src\\assets\\images"
+  ],
+  "uploadLimitBytes": 209715200,
+  "totals": {
+    "discovered": 86,
+    "uploaded": 86,
+    "failed": 0,
+    "oversize": 0
+  },
+  "files": [
+    {
+      "originalFilename": "AMAR SINGH.png",
+      "sourcePath": "..\\MGP-WEB\\public\\AMAR SINGH.png",
+      "sizeBytes": 12894,
+      "status": "uploaded",
+      "mediaId": 8,
+      "mediaUrl": "/uploads/AMAR_SINGH_a52c5d7de2.png"
+    },
+    {
+      "originalFilename": "bangle.png",
+      "sourcePath": "..\\MGP-WEB\\public\\bangle.png",
+      "sizeBytes": 4852667,
+      "status": "uploaded",
+      "mediaId": 9,
+      "mediaUrl": "/uploads/bangle_e6b45878fb.png"
+    },
+    {
+      "originalFilename": "Basvaraju.png",
+      "sourcePath": "..\\MGP-WEB\\public\\Basvaraju.png",
+      "sizeBytes": 12881,
+      "status": "uploaded",
+      "mediaId": 10,
+      "mediaUrl": "/uploads/Basvaraju_812407038c.png"
+    },
+    {
+      "originalFilename": "bg-pattern.svg",
+      "sourcePath": "..\\MGP-WEB\\public\\bg-pattern.svg",
+      "sizeBytes": 958,
+      "status": "uploaded",
+      "mediaId": 11,
+      "mediaUrl": "/uploads/bg_pattern_0bb204011e.svg"
+    },
+    {
+      "originalFilename": "feedback_bg.png",
+      "sourcePath": "..\\MGP-WEB\\public\\feedback_bg.png",
+      "sizeBytes": 1301934,
+      "status": "uploaded",
+      "mediaId": 12,
+      "mediaUrl": "/uploads/feedback_bg_33f3bc8b21.png"
+    },
+    {
+      "originalFilename": "file.svg",
+      "sourcePath": "..\\MGP-WEB\\public\\file.svg",
+      "sizeBytes": 391,
+      "status": "uploaded",
+      "mediaId": 13,
+      "mediaUrl": "/uploads/file_75e21db206.svg"
+    },
+    {
+      "originalFilename": "gcard1.png",
+      "sourcePath": "..\\MGP-WEB\\public\\gcard1.png",
+      "sizeBytes": 2975405,
+      "status": "uploaded",
+      "mediaId": 14,
+      "mediaUrl": "/uploads/gcard1_1a7c82b6ec.png"
+    },
+    {
+      "originalFilename": "gcard2.png",
+      "sourcePath": "..\\MGP-WEB\\public\\gcard2.png",
+      "sizeBytes": 2769819,
+      "status": "uploaded",
+      "mediaId": 15,
+      "mediaUrl": "/uploads/gcard2_a7de4ebba5.png"
+    },
+    {
+      "originalFilename": "gcard3.png",
+      "sourcePath": "..\\MGP-WEB\\public\\gcard3.png",
+      "sizeBytes": 3463717,
+      "status": "uploaded",
+      "mediaId": 16,
+      "mediaUrl": "/uploads/gcard3_58cf10fdc7.png"
+    },
+    {
+      "originalFilename": "gcard_bg_pattern.png",
+      "sourcePath": "..\\MGP-WEB\\public\\gcard_bg_pattern.png",
+      "sizeBytes": 5716206,
+      "status": "uploaded",
+      "mediaId": 17,
+      "mediaUrl": "/uploads/gcard_bg_pattern_97b8754140.png"
+    },
+    {
+      "originalFilename": "globe.svg",
+      "sourcePath": "..\\MGP-WEB\\public\\globe.svg",
+      "sizeBytes": 1035,
+      "status": "uploaded",
+      "mediaId": 18,
+      "mediaUrl": "/uploads/globe_8cb4f66566.svg"
+    },
+    {
+      "originalFilename": "g_selling.png",
+      "sourcePath": "..\\MGP-WEB\\public\\g_selling.png",
+      "sizeBytes": 2132347,
+      "status": "uploaded",
+      "mediaId": 19,
+      "mediaUrl": "/uploads/g_selling_f4d6db8c1f.png"
+    },
+    {
+      "originalFilename": "hero_bg_pattern_square.png",
+      "sourcePath": "..\\MGP-WEB\\public\\hero_bg_pattern_square.png",
+      "sizeBytes": 102083,
+      "status": "uploaded",
+      "mediaId": 20,
+      "mediaUrl": "/uploads/hero_bg_pattern_square_1fd2ddf89d.png"
+    },
+    {
+      "originalFilename": "hero_bg_pattern_vertical.png",
+      "sourcePath": "..\\MGP-WEB\\public\\hero_bg_pattern_vertical.png",
+      "sizeBytes": 55454,
+      "status": "uploaded",
+      "mediaId": 21,
+      "mediaUrl": "/uploads/hero_bg_pattern_vertical_2f9e616382.png"
+    },
+    {
+      "originalFilename": "logo_image.png",
+      "sourcePath": "..\\MGP-WEB\\public\\logo_image.png",
+      "sizeBytes": 80734,
+      "status": "uploaded",
+      "mediaId": 22,
+      "mediaUrl": "/uploads/logo_image_d6d55d0491.png"
+    },
+    {
+      "originalFilename": "navbar-bg.png",
+      "sourcePath": "..\\MGP-WEB\\public\\navbar-bg.png",
+      "sizeBytes": 84891,
+      "status": "uploaded",
+      "mediaId": 23,
+      "mediaUrl": "/uploads/navbar_bg_f1bec9f80c.png"
+    },
+    {
+      "originalFilename": "next.svg",
+      "sourcePath": "..\\MGP-WEB\\public\\next.svg",
+      "sizeBytes": 1375,
+      "status": "uploaded",
+      "mediaId": 24,
+      "mediaUrl": "/uploads/next_dccaeeaf91.svg"
+    },
+    {
+      "originalFilename": "pattern2.png",
+      "sourcePath": "..\\MGP-WEB\\public\\pattern2.png",
+      "sizeBytes": 1301934,
+      "status": "uploaded",
+      "mediaId": 25,
+      "mediaUrl": "/uploads/pattern2_6904dc6313.png"
+    },
+    {
+      "originalFilename": "pattern3.png",
+      "sourcePath": "..\\MGP-WEB\\public\\pattern3.png",
+      "sizeBytes": 4067,
+      "status": "uploaded",
+      "mediaId": 26,
+      "mediaUrl": "/uploads/pattern3_ad75c8d8e4.png"
+    },
+    {
+      "originalFilename": "pattern4.png",
+      "sourcePath": "..\\MGP-WEB\\public\\pattern4.png",
+      "sizeBytes": 65193,
+      "status": "uploaded",
+      "mediaId": 27,
+      "mediaUrl": "/uploads/pattern4_49584f08ad.png"
+    },
+    {
+      "originalFilename": "road-strip.png",
+      "sourcePath": "..\\MGP-WEB\\public\\road-strip.png",
+      "sizeBytes": 2060,
+      "status": "uploaded",
+      "mediaId": 28,
+      "mediaUrl": "/uploads/road_strip_0ad5ed30fa.png"
+    },
+    {
+      "originalFilename": "rp_card1.png",
+      "sourcePath": "..\\MGP-WEB\\public\\rp_card1.png",
+      "sizeBytes": 2975405,
+      "status": "uploaded",
+      "mediaId": 29,
+      "mediaUrl": "/uploads/rp_card1_29cb6181e1.png"
+    },
+    {
+      "originalFilename": "rp_card2.png",
+      "sourcePath": "..\\MGP-WEB\\public\\rp_card2.png",
+      "sizeBytes": 2769819,
+      "status": "uploaded",
+      "mediaId": 30,
+      "mediaUrl": "/uploads/rp_card2_2bab54f9d9.png"
+    },
+    {
+      "originalFilename": "rp_card3.png",
+      "sourcePath": "..\\MGP-WEB\\public\\rp_card3.png",
+      "sizeBytes": 8330338,
+      "status": "uploaded",
+      "mediaId": 31,
+      "mediaUrl": "/uploads/rp_card3_b522a3e49a.png"
+    },
+    {
+      "originalFilename": "sachin-joneja.png",
+      "sourcePath": "..\\MGP-WEB\\public\\sachin-joneja.png",
+      "sizeBytes": 15380,
+      "status": "uploaded",
+      "mediaId": 32,
+      "mediaUrl": "/uploads/sachin_joneja_cd745968c1.png"
+    },
+    {
+      "originalFilename": "Srinarayan.png",
+      "sourcePath": "..\\MGP-WEB\\public\\Srinarayan.png",
+      "sizeBytes": 16034,
+      "status": "uploaded",
+      "mediaId": 33,
+      "mediaUrl": "/uploads/Srinarayan_bf151b6f12.png"
+    },
+    {
+      "originalFilename": "test.png",
+      "sourcePath": "..\\MGP-WEB\\public\\test.png",
+      "sizeBytes": 364235,
+      "status": "uploaded",
+      "mediaId": 34,
+      "mediaUrl": "/uploads/test_3b206c2a94.png"
+    },
+    {
+      "originalFilename": "van.png",
+      "sourcePath": "..\\MGP-WEB\\public\\van.png",
+      "sizeBytes": 1225176,
+      "status": "uploaded",
+      "mediaId": 35,
+      "mediaUrl": "/uploads/van_ded8cb1745.png"
+    },
+    {
+      "originalFilename": "vannew.png",
+      "sourcePath": "..\\MGP-WEB\\public\\vannew.png",
+      "sizeBytes": 1225176,
+      "status": "uploaded",
+      "mediaId": 36,
+      "mediaUrl": "/uploads/vannew_0868d24346.png"
+    },
+    {
+      "originalFilename": "van_road.png",
+      "sourcePath": "..\\MGP-WEB\\public\\van_road.png",
+      "sizeBytes": 28057,
+      "status": "uploaded",
+      "mediaId": 37,
+      "mediaUrl": "/uploads/van_road_fdecd42e77.png"
+    },
+    {
+      "originalFilename": "vercel.svg",
+      "sourcePath": "..\\MGP-WEB\\public\\vercel.svg",
+      "sizeBytes": 128,
+      "status": "uploaded",
+      "mediaId": 38,
+      "mediaUrl": "/uploads/vercel_1516d32d1b.svg"
+    },
+    {
+      "originalFilename": "video_img.png",
+      "sourcePath": "..\\MGP-WEB\\public\\video_img.png",
+      "sizeBytes": 4103268,
+      "status": "uploaded",
+      "mediaId": 39,
+      "mediaUrl": "/uploads/video_img_9a055abceb.png"
+    },
+    {
+      "originalFilename": "video_thumb.png",
+      "sourcePath": "..\\MGP-WEB\\public\\video_thumb.png",
+      "sizeBytes": 2068775,
+      "status": "uploaded",
+      "mediaId": 40,
+      "mediaUrl": "/uploads/video_thumb_cc21954ae1.png"
+    },
+    {
+      "originalFilename": "window.svg",
+      "sourcePath": "..\\MGP-WEB\\public\\window.svg",
+      "sizeBytes": 385,
+      "status": "uploaded",
+      "mediaId": 41,
+      "mediaUrl": "/uploads/window_d58059f7ec.svg"
+    },
+    {
+      "originalFilename": "woman-saree.png",
+      "sourcePath": "..\\MGP-WEB\\public\\woman-saree.png",
+      "sizeBytes": 2620535,
+      "status": "uploaded",
+      "mediaId": 42,
+      "mediaUrl": "/uploads/woman_saree_37e3f3b9bf.png"
+    },
+    {
+      "originalFilename": "aboutlast.jpeg",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\aboutlast.jpeg",
+      "sizeBytes": 176295,
+      "status": "uploaded",
+      "mediaId": 43,
+      "mediaUrl": "/uploads/aboutlast_8f4799350e.jpeg"
+    },
+    {
+      "originalFilename": "aboutslide1.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\aboutslide1.png",
+      "sizeBytes": 2189228,
+      "status": "uploaded",
+      "mediaId": 44,
+      "mediaUrl": "/uploads/aboutslide1_47b4c1c905.png"
+    },
+    {
+      "originalFilename": "aboutslide2.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\aboutslide2.png",
+      "sizeBytes": 2157380,
+      "status": "uploaded",
+      "mediaId": 45,
+      "mediaUrl": "/uploads/aboutslide2_3981e6f0bf.png"
+    },
+    {
+      "originalFilename": "aboutslide3.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\aboutslide3.png",
+      "sizeBytes": 2070080,
+      "status": "uploaded",
+      "mediaId": 46,
+      "mediaUrl": "/uploads/aboutslide3_8af67aadee.png"
+    },
+    {
+      "originalFilename": "aboutvan.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\aboutvan.png",
+      "sizeBytes": 2451331,
+      "status": "uploaded",
+      "mediaId": 47,
+      "mediaUrl": "/uploads/aboutvan_1e8198c71d.png"
+    },
+    {
+      "originalFilename": "COIN.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\COIN.png",
+      "sizeBytes": 19127,
+      "status": "uploaded",
+      "mediaId": 48,
+      "mediaUrl": "/uploads/COIN_6f1e373f3e.png"
+    },
+    {
+      "originalFilename": "conbg.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\conbg.png",
+      "sizeBytes": 1604223,
+      "status": "uploaded",
+      "mediaId": 49,
+      "mediaUrl": "/uploads/conbg_2d381b1495.png"
+    },
+    {
+      "originalFilename": "conbg1.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\conbg1.png",
+      "sizeBytes": 1663053,
+      "status": "uploaded",
+      "mediaId": 50,
+      "mediaUrl": "/uploads/conbg1_8bbaa55dbd.png"
+    },
+    {
+      "originalFilename": "conbg2.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\conbg2.png",
+      "sizeBytes": 1524962,
+      "status": "uploaded",
+      "mediaId": 51,
+      "mediaUrl": "/uploads/conbg2_9585aab208.png"
+    },
+    {
+      "originalFilename": "faqimg.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\faqimg.png",
+      "sizeBytes": 1873565,
+      "status": "uploaded",
+      "mediaId": 52,
+      "mediaUrl": "/uploads/faqimg_dbc735198c.png"
+    },
+    {
+      "originalFilename": "frame 1.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\frames\\Van-Frames-Animated\\frame 1.png",
+      "sizeBytes": 398975,
+      "status": "uploaded",
+      "mediaId": 53,
+      "mediaUrl": "/uploads/frame_1_6b4939af23.png"
+    },
+    {
+      "originalFilename": "frame 2.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\frames\\Van-Frames-Animated\\frame 2.png",
+      "sizeBytes": 429168,
+      "status": "uploaded",
+      "mediaId": 54,
+      "mediaUrl": "/uploads/frame_2_400ca1257c.png"
+    },
+    {
+      "originalFilename": "frame 3.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\frames\\Van-Frames-Animated\\frame 3.png",
+      "sizeBytes": 415572,
+      "status": "uploaded",
+      "mediaId": 55,
+      "mediaUrl": "/uploads/frame_3_564b655ab2.png"
+    },
+    {
+      "originalFilename": "frame 4.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\frames\\Van-Frames-Animated\\frame 4.png",
+      "sizeBytes": 410688,
+      "status": "uploaded",
+      "mediaId": 56,
+      "mediaUrl": "/uploads/frame_4_14224f9691.png"
+    },
+    {
+      "originalFilename": "frame 5.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\frames\\Van-Frames-Animated\\frame 5.png",
+      "sizeBytes": 436484,
+      "status": "uploaded",
+      "mediaId": 57,
+      "mediaUrl": "/uploads/frame_5_1112eb4d99.png"
+    },
+    {
+      "originalFilename": "frame 6.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\frames\\Van-Frames-Animated\\frame 6.png",
+      "sizeBytes": 440615,
+      "status": "uploaded",
+      "mediaId": 58,
+      "mediaUrl": "/uploads/frame_6_df2317d8e5.png"
+    },
+    {
+      "originalFilename": "golds.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\golds.png",
+      "sizeBytes": 2808038,
+      "status": "uploaded",
+      "mediaId": 59,
+      "mediaUrl": "/uploads/golds_c63ece1479.png"
+    },
+    {
+      "originalFilename": "01-hero-gold-bars-jewellery.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\01-hero-gold-bars-jewellery.png",
+      "sizeBytes": 343921,
+      "status": "uploaded",
+      "mediaId": 60,
+      "mediaUrl": "/uploads/01_hero_gold_bars_jewellery_e600a7ca1d.png"
+    },
+    {
+      "originalFilename": "02-gold-valuation-assessment.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\02-gold-valuation-assessment.png",
+      "sizeBytes": 308240,
+      "status": "uploaded",
+      "mediaId": 61,
+      "mediaUrl": "/uploads/02_gold_valuation_assessment_e78a6102d0.png"
+    },
+    {
+      "originalFilename": "03-gold-rate-factors-bars-coins.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\03-gold-rate-factors-bars-coins.png",
+      "sizeBytes": 306753,
+      "status": "uploaded",
+      "mediaId": 62,
+      "mediaUrl": "/uploads/03_gold_rate_factors_bars_coins_3aedc68c5f.png"
+    },
+    {
+      "originalFilename": "04-gold-weighing-process.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\04-gold-weighing-process.png",
+      "sizeBytes": 294991,
+      "status": "uploaded",
+      "mediaId": 63,
+      "mediaUrl": "/uploads/04_gold_weighing_process_c496dd565c.png"
+    },
+    {
+      "originalFilename": "05-cta-hand-holding-gold.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\05-cta-hand-holding-gold.png",
+      "sizeBytes": 316621,
+      "status": "uploaded",
+      "mediaId": 64,
+      "mediaUrl": "/uploads/05_cta_hand_holding_gold_8983f81e91.png"
+    },
+    {
+      "originalFilename": "06-faq-gold-bars-coins.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\06-faq-gold-bars-coins.png",
+      "sizeBytes": 299747,
+      "status": "uploaded",
+      "mediaId": 65,
+      "mediaUrl": "/uploads/06_faq_gold_bars_coins_29077f4013.png"
+    },
+    {
+      "originalFilename": "07-why-rates-treasure-chest.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\07-why-rates-treasure-chest.png",
+      "sizeBytes": 1461001,
+      "status": "uploaded",
+      "mediaId": 66,
+      "mediaUrl": "/uploads/07_why_rates_treasure_chest_b27698093b.png"
+    },
+    {
+      "originalFilename": "08-valuation-process-scale.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\08-valuation-process-scale.png",
+      "sizeBytes": 1355342,
+      "status": "uploaded",
+      "mediaId": 67,
+      "mediaUrl": "/uploads/08_valuation_process_scale_61c6662759.png"
+    },
+    {
+      "originalFilename": "09-hero-background-gold-bars-jewellery.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\09-hero-background-gold-bars-jewellery.png",
+      "sizeBytes": 8992315,
+      "status": "uploaded",
+      "mediaId": 68,
+      "mediaUrl": "/uploads/09_hero_background_gold_bars_jewellery_ccb8a6cb6b.png"
+    },
+    {
+      "originalFilename": "valuation_counter_customer.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\valuation_counter_customer.png",
+      "sizeBytes": 7219037,
+      "status": "uploaded",
+      "mediaId": 69,
+      "mediaUrl": "/uploads/valuation_counter_customer_7102cb4b28.png"
+    },
+    {
+      "originalFilename": "GroupHero.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\GroupHero.png",
+      "sizeBytes": 164295,
+      "status": "uploaded",
+      "mediaId": 70,
+      "mediaUrl": "/uploads/Group_Hero_582308a7c4.png"
+    },
+    {
+      "originalFilename": "gs-hero.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gs-hero.png",
+      "sizeBytes": 1140048,
+      "status": "uploaded",
+      "mediaId": 71,
+      "mediaUrl": "/uploads/gs_hero_c3626273d8.png"
+    },
+    {
+      "originalFilename": "gs-heroo.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gs-heroo.png",
+      "sizeBytes": 2834825,
+      "status": "uploaded",
+      "mediaId": 72,
+      "mediaUrl": "/uploads/gs_heroo_00d413faac.png"
+    },
+    {
+      "originalFilename": "gs-herooo.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gs-herooo.png",
+      "sizeBytes": 2458220,
+      "status": "uploaded",
+      "mediaId": 73,
+      "mediaUrl": "/uploads/gs_herooo_257bc1e38e.png"
+    },
+    {
+      "originalFilename": "hero-wave.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\hero-wave.png",
+      "sizeBytes": 2638607,
+      "status": "uploaded",
+      "mediaId": 74,
+      "mediaUrl": "/uploads/hero_wave_20a4cec73b.png"
+    },
+    {
+      "originalFilename": "hm6-img01.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\hm6-img01.png",
+      "sizeBytes": 4883621,
+      "status": "uploaded",
+      "mediaId": 75,
+      "mediaUrl": "/uploads/hm6_img01_b9c6bb0069.png"
+    },
+    {
+      "originalFilename": "Line.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\Line.png",
+      "sizeBytes": 5342,
+      "status": "uploaded",
+      "mediaId": 76,
+      "mediaUrl": "/uploads/Line_e7b7c4d9cf.png"
+    },
+    {
+      "originalFilename": "Line2.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\Line2.png",
+      "sizeBytes": 3117,
+      "status": "uploaded",
+      "mediaId": 77,
+      "mediaUrl": "/uploads/Line2_6336f83095.png"
+    },
+    {
+      "originalFilename": "logo.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\logo.png",
+      "sizeBytes": 53223,
+      "status": "uploaded",
+      "mediaId": 78,
+      "mediaUrl": "/uploads/logo_b7f9b82ff7.png"
+    },
+    {
+      "originalFilename": "mg1.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\mg1.png",
+      "sizeBytes": 2370073,
+      "status": "uploaded",
+      "mediaId": 79,
+      "mediaUrl": "/uploads/mg1_ad7a8bb00c.png"
+    },
+    {
+      "originalFilename": "mg2.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\mg2.png",
+      "sizeBytes": 2815696,
+      "status": "uploaded",
+      "mediaId": 80,
+      "mediaUrl": "/uploads/mg2_8f98811a51.png"
+    },
+    {
+      "originalFilename": "muthootlogo.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\muthootlogo.png",
+      "sizeBytes": 6564,
+      "status": "uploaded",
+      "mediaId": 81,
+      "mediaUrl": "/uploads/muthootlogo_bfc991b5f0.png"
+    },
+    {
+      "originalFilename": "NAVBAR BG.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\NAVBAR BG.png",
+      "sizeBytes": 84891,
+      "status": "uploaded",
+      "mediaId": 82,
+      "mediaUrl": "/uploads/NAVBAR_BG_987a7251e9.png"
+    },
+    {
+      "originalFilename": "pattern2.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\pattern2.png",
+      "sizeBytes": 1301934,
+      "status": "uploaded",
+      "mediaId": 83,
+      "mediaUrl": "/uploads/pattern2_1bd32a48ec.png"
+    },
+    {
+      "originalFilename": "pattern4.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\pattern4.png",
+      "sizeBytes": 65193,
+      "status": "uploaded",
+      "mediaId": 84,
+      "mediaUrl": "/uploads/pattern4_e1768dc7e1.png"
+    },
+    {
+      "originalFilename": "purity.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\purity.png",
+      "sizeBytes": 1850262,
+      "status": "uploaded",
+      "mediaId": 85,
+      "mediaUrl": "/uploads/purity_f06e9a692e.png"
+    },
+    {
+      "originalFilename": "s-hero.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\s-hero.png",
+      "sizeBytes": 2356786,
+      "status": "uploaded",
+      "mediaId": 86,
+      "mediaUrl": "/uploads/s_hero_748dff1365.png"
+    },
+    {
+      "originalFilename": "sparkle.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\sparkle.png",
+      "sizeBytes": 3136,
+      "status": "uploaded",
+      "mediaId": 87,
+      "mediaUrl": "/uploads/sparkle_b4e8c7c7c0.png"
+    },
+    {
+      "originalFilename": "sparkle2.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\sparkle2.png",
+      "sizeBytes": 4944,
+      "status": "uploaded",
+      "mediaId": 88,
+      "mediaUrl": "/uploads/sparkle2_ac111f22e2.png"
+    },
+    {
+      "originalFilename": "Star.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\Star.png",
+      "sizeBytes": 69784,
+      "status": "uploaded",
+      "mediaId": 89,
+      "mediaUrl": "/uploads/Star_272fd9d4f2.png"
+    },
+    {
+      "originalFilename": "test.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\test.png",
+      "sizeBytes": 364235,
+      "status": "uploaded",
+      "mediaId": 90,
+      "mediaUrl": "/uploads/test_6777a91000.png"
+    },
+    {
+      "originalFilename": "trusticon.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\trusticon.png",
+      "sizeBytes": 11267,
+      "status": "uploaded",
+      "mediaId": 91,
+      "mediaUrl": "/uploads/trusticon_19395f6949.png"
+    },
+    {
+      "originalFilename": "van.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\van.png",
+      "sizeBytes": 1318507,
+      "status": "uploaded",
+      "mediaId": 92,
+      "mediaUrl": "/uploads/van_a220da1300.png"
+    },
+    {
+      "originalFilename": "vb-img.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\vb-img.png",
+      "sizeBytes": 358411,
+      "status": "uploaded",
+      "mediaId": 93,
+      "mediaUrl": "/uploads/vb_img_5c4e68541b.png"
+    }
+  ],
+  "homepageAutoLink": {
+    "linked": [],
+    "ambiguous": [],
+    "error": "Cannot read properties of undefined (reading 'toLowerCase')"
+  },
+  "manualAssignmentRequired": [
+    {
+      "originalFilename": "AMAR SINGH.png",
+      "sourcePath": "..\\MGP-WEB\\public\\AMAR SINGH.png",
+      "mediaId": 8,
+      "mediaUrl": "/uploads/AMAR_SINGH_a52c5d7de2.png"
+    },
+    {
+      "originalFilename": "bangle.png",
+      "sourcePath": "..\\MGP-WEB\\public\\bangle.png",
+      "mediaId": 9,
+      "mediaUrl": "/uploads/bangle_e6b45878fb.png"
+    },
+    {
+      "originalFilename": "Basvaraju.png",
+      "sourcePath": "..\\MGP-WEB\\public\\Basvaraju.png",
+      "mediaId": 10,
+      "mediaUrl": "/uploads/Basvaraju_812407038c.png"
+    },
+    {
+      "originalFilename": "bg-pattern.svg",
+      "sourcePath": "..\\MGP-WEB\\public\\bg-pattern.svg",
+      "mediaId": 11,
+      "mediaUrl": "/uploads/bg_pattern_0bb204011e.svg"
+    },
+    {
+      "originalFilename": "feedback_bg.png",
+      "sourcePath": "..\\MGP-WEB\\public\\feedback_bg.png",
+      "mediaId": 12,
+      "mediaUrl": "/uploads/feedback_bg_33f3bc8b21.png"
+    },
+    {
+      "originalFilename": "file.svg",
+      "sourcePath": "..\\MGP-WEB\\public\\file.svg",
+      "mediaId": 13,
+      "mediaUrl": "/uploads/file_75e21db206.svg"
+    },
+    {
+      "originalFilename": "gcard1.png",
+      "sourcePath": "..\\MGP-WEB\\public\\gcard1.png",
+      "mediaId": 14,
+      "mediaUrl": "/uploads/gcard1_1a7c82b6ec.png"
+    },
+    {
+      "originalFilename": "gcard2.png",
+      "sourcePath": "..\\MGP-WEB\\public\\gcard2.png",
+      "mediaId": 15,
+      "mediaUrl": "/uploads/gcard2_a7de4ebba5.png"
+    },
+    {
+      "originalFilename": "gcard3.png",
+      "sourcePath": "..\\MGP-WEB\\public\\gcard3.png",
+      "mediaId": 16,
+      "mediaUrl": "/uploads/gcard3_58cf10fdc7.png"
+    },
+    {
+      "originalFilename": "gcard_bg_pattern.png",
+      "sourcePath": "..\\MGP-WEB\\public\\gcard_bg_pattern.png",
+      "mediaId": 17,
+      "mediaUrl": "/uploads/gcard_bg_pattern_97b8754140.png"
+    },
+    {
+      "originalFilename": "globe.svg",
+      "sourcePath": "..\\MGP-WEB\\public\\globe.svg",
+      "mediaId": 18,
+      "mediaUrl": "/uploads/globe_8cb4f66566.svg"
+    },
+    {
+      "originalFilename": "g_selling.png",
+      "sourcePath": "..\\MGP-WEB\\public\\g_selling.png",
+      "mediaId": 19,
+      "mediaUrl": "/uploads/g_selling_f4d6db8c1f.png"
+    },
+    {
+      "originalFilename": "hero_bg_pattern_square.png",
+      "sourcePath": "..\\MGP-WEB\\public\\hero_bg_pattern_square.png",
+      "mediaId": 20,
+      "mediaUrl": "/uploads/hero_bg_pattern_square_1fd2ddf89d.png"
+    },
+    {
+      "originalFilename": "hero_bg_pattern_vertical.png",
+      "sourcePath": "..\\MGP-WEB\\public\\hero_bg_pattern_vertical.png",
+      "mediaId": 21,
+      "mediaUrl": "/uploads/hero_bg_pattern_vertical_2f9e616382.png"
+    },
+    {
+      "originalFilename": "logo_image.png",
+      "sourcePath": "..\\MGP-WEB\\public\\logo_image.png",
+      "mediaId": 22,
+      "mediaUrl": "/uploads/logo_image_d6d55d0491.png"
+    },
+    {
+      "originalFilename": "navbar-bg.png",
+      "sourcePath": "..\\MGP-WEB\\public\\navbar-bg.png",
+      "mediaId": 23,
+      "mediaUrl": "/uploads/navbar_bg_f1bec9f80c.png"
+    },
+    {
+      "originalFilename": "next.svg",
+      "sourcePath": "..\\MGP-WEB\\public\\next.svg",
+      "mediaId": 24,
+      "mediaUrl": "/uploads/next_dccaeeaf91.svg"
+    },
+    {
+      "originalFilename": "pattern2.png",
+      "sourcePath": "..\\MGP-WEB\\public\\pattern2.png",
+      "mediaId": 25,
+      "mediaUrl": "/uploads/pattern2_6904dc6313.png"
+    },
+    {
+      "originalFilename": "pattern3.png",
+      "sourcePath": "..\\MGP-WEB\\public\\pattern3.png",
+      "mediaId": 26,
+      "mediaUrl": "/uploads/pattern3_ad75c8d8e4.png"
+    },
+    {
+      "originalFilename": "pattern4.png",
+      "sourcePath": "..\\MGP-WEB\\public\\pattern4.png",
+      "mediaId": 27,
+      "mediaUrl": "/uploads/pattern4_49584f08ad.png"
+    },
+    {
+      "originalFilename": "road-strip.png",
+      "sourcePath": "..\\MGP-WEB\\public\\road-strip.png",
+      "mediaId": 28,
+      "mediaUrl": "/uploads/road_strip_0ad5ed30fa.png"
+    },
+    {
+      "originalFilename": "rp_card1.png",
+      "sourcePath": "..\\MGP-WEB\\public\\rp_card1.png",
+      "mediaId": 29,
+      "mediaUrl": "/uploads/rp_card1_29cb6181e1.png"
+    },
+    {
+      "originalFilename": "rp_card2.png",
+      "sourcePath": "..\\MGP-WEB\\public\\rp_card2.png",
+      "mediaId": 30,
+      "mediaUrl": "/uploads/rp_card2_2bab54f9d9.png"
+    },
+    {
+      "originalFilename": "rp_card3.png",
+      "sourcePath": "..\\MGP-WEB\\public\\rp_card3.png",
+      "mediaId": 31,
+      "mediaUrl": "/uploads/rp_card3_b522a3e49a.png"
+    },
+    {
+      "originalFilename": "sachin-joneja.png",
+      "sourcePath": "..\\MGP-WEB\\public\\sachin-joneja.png",
+      "mediaId": 32,
+      "mediaUrl": "/uploads/sachin_joneja_cd745968c1.png"
+    },
+    {
+      "originalFilename": "Srinarayan.png",
+      "sourcePath": "..\\MGP-WEB\\public\\Srinarayan.png",
+      "mediaId": 33,
+      "mediaUrl": "/uploads/Srinarayan_bf151b6f12.png"
+    },
+    {
+      "originalFilename": "test.png",
+      "sourcePath": "..\\MGP-WEB\\public\\test.png",
+      "mediaId": 34,
+      "mediaUrl": "/uploads/test_3b206c2a94.png"
+    },
+    {
+      "originalFilename": "van.png",
+      "sourcePath": "..\\MGP-WEB\\public\\van.png",
+      "mediaId": 35,
+      "mediaUrl": "/uploads/van_ded8cb1745.png"
+    },
+    {
+      "originalFilename": "vannew.png",
+      "sourcePath": "..\\MGP-WEB\\public\\vannew.png",
+      "mediaId": 36,
+      "mediaUrl": "/uploads/vannew_0868d24346.png"
+    },
+    {
+      "originalFilename": "van_road.png",
+      "sourcePath": "..\\MGP-WEB\\public\\van_road.png",
+      "mediaId": 37,
+      "mediaUrl": "/uploads/van_road_fdecd42e77.png"
+    },
+    {
+      "originalFilename": "vercel.svg",
+      "sourcePath": "..\\MGP-WEB\\public\\vercel.svg",
+      "mediaId": 38,
+      "mediaUrl": "/uploads/vercel_1516d32d1b.svg"
+    },
+    {
+      "originalFilename": "video_img.png",
+      "sourcePath": "..\\MGP-WEB\\public\\video_img.png",
+      "mediaId": 39,
+      "mediaUrl": "/uploads/video_img_9a055abceb.png"
+    },
+    {
+      "originalFilename": "video_thumb.png",
+      "sourcePath": "..\\MGP-WEB\\public\\video_thumb.png",
+      "mediaId": 40,
+      "mediaUrl": "/uploads/video_thumb_cc21954ae1.png"
+    },
+    {
+      "originalFilename": "window.svg",
+      "sourcePath": "..\\MGP-WEB\\public\\window.svg",
+      "mediaId": 41,
+      "mediaUrl": "/uploads/window_d58059f7ec.svg"
+    },
+    {
+      "originalFilename": "woman-saree.png",
+      "sourcePath": "..\\MGP-WEB\\public\\woman-saree.png",
+      "mediaId": 42,
+      "mediaUrl": "/uploads/woman_saree_37e3f3b9bf.png"
+    },
+    {
+      "originalFilename": "aboutlast.jpeg",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\aboutlast.jpeg",
+      "mediaId": 43,
+      "mediaUrl": "/uploads/aboutlast_8f4799350e.jpeg"
+    },
+    {
+      "originalFilename": "aboutslide1.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\aboutslide1.png",
+      "mediaId": 44,
+      "mediaUrl": "/uploads/aboutslide1_47b4c1c905.png"
+    },
+    {
+      "originalFilename": "aboutslide2.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\aboutslide2.png",
+      "mediaId": 45,
+      "mediaUrl": "/uploads/aboutslide2_3981e6f0bf.png"
+    },
+    {
+      "originalFilename": "aboutslide3.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\aboutslide3.png",
+      "mediaId": 46,
+      "mediaUrl": "/uploads/aboutslide3_8af67aadee.png"
+    },
+    {
+      "originalFilename": "aboutvan.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\aboutvan.png",
+      "mediaId": 47,
+      "mediaUrl": "/uploads/aboutvan_1e8198c71d.png"
+    },
+    {
+      "originalFilename": "COIN.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\COIN.png",
+      "mediaId": 48,
+      "mediaUrl": "/uploads/COIN_6f1e373f3e.png"
+    },
+    {
+      "originalFilename": "conbg.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\conbg.png",
+      "mediaId": 49,
+      "mediaUrl": "/uploads/conbg_2d381b1495.png"
+    },
+    {
+      "originalFilename": "conbg1.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\conbg1.png",
+      "mediaId": 50,
+      "mediaUrl": "/uploads/conbg1_8bbaa55dbd.png"
+    },
+    {
+      "originalFilename": "conbg2.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\conbg2.png",
+      "mediaId": 51,
+      "mediaUrl": "/uploads/conbg2_9585aab208.png"
+    },
+    {
+      "originalFilename": "faqimg.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\faqimg.png",
+      "mediaId": 52,
+      "mediaUrl": "/uploads/faqimg_dbc735198c.png"
+    },
+    {
+      "originalFilename": "frame 1.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\frames\\Van-Frames-Animated\\frame 1.png",
+      "mediaId": 53,
+      "mediaUrl": "/uploads/frame_1_6b4939af23.png"
+    },
+    {
+      "originalFilename": "frame 2.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\frames\\Van-Frames-Animated\\frame 2.png",
+      "mediaId": 54,
+      "mediaUrl": "/uploads/frame_2_400ca1257c.png"
+    },
+    {
+      "originalFilename": "frame 3.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\frames\\Van-Frames-Animated\\frame 3.png",
+      "mediaId": 55,
+      "mediaUrl": "/uploads/frame_3_564b655ab2.png"
+    },
+    {
+      "originalFilename": "frame 4.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\frames\\Van-Frames-Animated\\frame 4.png",
+      "mediaId": 56,
+      "mediaUrl": "/uploads/frame_4_14224f9691.png"
+    },
+    {
+      "originalFilename": "frame 5.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\frames\\Van-Frames-Animated\\frame 5.png",
+      "mediaId": 57,
+      "mediaUrl": "/uploads/frame_5_1112eb4d99.png"
+    },
+    {
+      "originalFilename": "frame 6.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\frames\\Van-Frames-Animated\\frame 6.png",
+      "mediaId": 58,
+      "mediaUrl": "/uploads/frame_6_df2317d8e5.png"
+    },
+    {
+      "originalFilename": "golds.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\golds.png",
+      "mediaId": 59,
+      "mediaUrl": "/uploads/golds_c63ece1479.png"
+    },
+    {
+      "originalFilename": "01-hero-gold-bars-jewellery.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\01-hero-gold-bars-jewellery.png",
+      "mediaId": 60,
+      "mediaUrl": "/uploads/01_hero_gold_bars_jewellery_e600a7ca1d.png"
+    },
+    {
+      "originalFilename": "02-gold-valuation-assessment.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\02-gold-valuation-assessment.png",
+      "mediaId": 61,
+      "mediaUrl": "/uploads/02_gold_valuation_assessment_e78a6102d0.png"
+    },
+    {
+      "originalFilename": "03-gold-rate-factors-bars-coins.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\03-gold-rate-factors-bars-coins.png",
+      "mediaId": 62,
+      "mediaUrl": "/uploads/03_gold_rate_factors_bars_coins_3aedc68c5f.png"
+    },
+    {
+      "originalFilename": "04-gold-weighing-process.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\04-gold-weighing-process.png",
+      "mediaId": 63,
+      "mediaUrl": "/uploads/04_gold_weighing_process_c496dd565c.png"
+    },
+    {
+      "originalFilename": "05-cta-hand-holding-gold.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\05-cta-hand-holding-gold.png",
+      "mediaId": 64,
+      "mediaUrl": "/uploads/05_cta_hand_holding_gold_8983f81e91.png"
+    },
+    {
+      "originalFilename": "06-faq-gold-bars-coins.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\06-faq-gold-bars-coins.png",
+      "mediaId": 65,
+      "mediaUrl": "/uploads/06_faq_gold_bars_coins_29077f4013.png"
+    },
+    {
+      "originalFilename": "07-why-rates-treasure-chest.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\07-why-rates-treasure-chest.png",
+      "mediaId": 66,
+      "mediaUrl": "/uploads/07_why_rates_treasure_chest_b27698093b.png"
+    },
+    {
+      "originalFilename": "08-valuation-process-scale.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\08-valuation-process-scale.png",
+      "mediaId": 67,
+      "mediaUrl": "/uploads/08_valuation_process_scale_61c6662759.png"
+    },
+    {
+      "originalFilename": "09-hero-background-gold-bars-jewellery.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\09-hero-background-gold-bars-jewellery.png",
+      "mediaId": 68,
+      "mediaUrl": "/uploads/09_hero_background_gold_bars_jewellery_ccb8a6cb6b.png"
+    },
+    {
+      "originalFilename": "valuation_counter_customer.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gold_rate_component_photos\\valuation_counter_customer.png",
+      "mediaId": 69,
+      "mediaUrl": "/uploads/valuation_counter_customer_7102cb4b28.png"
+    },
+    {
+      "originalFilename": "GroupHero.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\GroupHero.png",
+      "mediaId": 70,
+      "mediaUrl": "/uploads/Group_Hero_582308a7c4.png"
+    },
+    {
+      "originalFilename": "gs-hero.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gs-hero.png",
+      "mediaId": 71,
+      "mediaUrl": "/uploads/gs_hero_c3626273d8.png"
+    },
+    {
+      "originalFilename": "gs-heroo.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gs-heroo.png",
+      "mediaId": 72,
+      "mediaUrl": "/uploads/gs_heroo_00d413faac.png"
+    },
+    {
+      "originalFilename": "gs-herooo.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\gs-herooo.png",
+      "mediaId": 73,
+      "mediaUrl": "/uploads/gs_herooo_257bc1e38e.png"
+    },
+    {
+      "originalFilename": "hero-wave.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\hero-wave.png",
+      "mediaId": 74,
+      "mediaUrl": "/uploads/hero_wave_20a4cec73b.png"
+    },
+    {
+      "originalFilename": "hm6-img01.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\hm6-img01.png",
+      "mediaId": 75,
+      "mediaUrl": "/uploads/hm6_img01_b9c6bb0069.png"
+    },
+    {
+      "originalFilename": "Line.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\Line.png",
+      "mediaId": 76,
+      "mediaUrl": "/uploads/Line_e7b7c4d9cf.png"
+    },
+    {
+      "originalFilename": "Line2.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\Line2.png",
+      "mediaId": 77,
+      "mediaUrl": "/uploads/Line2_6336f83095.png"
+    },
+    {
+      "originalFilename": "logo.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\logo.png",
+      "mediaId": 78,
+      "mediaUrl": "/uploads/logo_b7f9b82ff7.png"
+    },
+    {
+      "originalFilename": "mg1.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\mg1.png",
+      "mediaId": 79,
+      "mediaUrl": "/uploads/mg1_ad7a8bb00c.png"
+    },
+    {
+      "originalFilename": "mg2.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\mg2.png",
+      "mediaId": 80,
+      "mediaUrl": "/uploads/mg2_8f98811a51.png"
+    },
+    {
+      "originalFilename": "muthootlogo.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\muthootlogo.png",
+      "mediaId": 81,
+      "mediaUrl": "/uploads/muthootlogo_bfc991b5f0.png"
+    },
+    {
+      "originalFilename": "NAVBAR BG.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\NAVBAR BG.png",
+      "mediaId": 82,
+      "mediaUrl": "/uploads/NAVBAR_BG_987a7251e9.png"
+    },
+    {
+      "originalFilename": "pattern2.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\pattern2.png",
+      "mediaId": 83,
+      "mediaUrl": "/uploads/pattern2_1bd32a48ec.png"
+    },
+    {
+      "originalFilename": "pattern4.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\pattern4.png",
+      "mediaId": 84,
+      "mediaUrl": "/uploads/pattern4_e1768dc7e1.png"
+    },
+    {
+      "originalFilename": "purity.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\purity.png",
+      "mediaId": 85,
+      "mediaUrl": "/uploads/purity_f06e9a692e.png"
+    },
+    {
+      "originalFilename": "s-hero.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\s-hero.png",
+      "mediaId": 86,
+      "mediaUrl": "/uploads/s_hero_748dff1365.png"
+    },
+    {
+      "originalFilename": "sparkle.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\sparkle.png",
+      "mediaId": 87,
+      "mediaUrl": "/uploads/sparkle_b4e8c7c7c0.png"
+    },
+    {
+      "originalFilename": "sparkle2.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\sparkle2.png",
+      "mediaId": 88,
+      "mediaUrl": "/uploads/sparkle2_ac111f22e2.png"
+    },
+    {
+      "originalFilename": "Star.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\Star.png",
+      "mediaId": 89,
+      "mediaUrl": "/uploads/Star_272fd9d4f2.png"
+    },
+    {
+      "originalFilename": "test.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\test.png",
+      "mediaId": 90,
+      "mediaUrl": "/uploads/test_6777a91000.png"
+    },
+    {
+      "originalFilename": "trusticon.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\trusticon.png",
+      "mediaId": 91,
+      "mediaUrl": "/uploads/trusticon_19395f6949.png"
+    },
+    {
+      "originalFilename": "van.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\van.png",
+      "mediaId": 92,
+      "mediaUrl": "/uploads/van_a220da1300.png"
+    },
+    {
+      "originalFilename": "vb-img.png",
+      "sourcePath": "..\\MGP-WEB\\src\\assets\\images\\vb-img.png",
+      "mediaId": 93,
+      "mediaUrl": "/uploads/vb_img_5c4e68541b.png"
+    }
+  ]
+}
