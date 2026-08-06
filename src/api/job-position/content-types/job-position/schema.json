@@ -1,0 +1,67 @@
+{
+  "kind": "collectionType",
+  "collectionName": "job_positions",
+  "info": {
+    "singularName": "job-position",
+    "pluralName": "job-positions",
+    "displayName": "Job Position",
+    "description": "Job vacancies and open opportunities"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "department": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::job-department.job-department"
+    },
+    "location": {
+      "type": "string"
+    },
+    "employmentType": {
+      "type": "enumeration",
+      "enum": [
+        "Full-time",
+        "Part-time",
+        "Contract",
+        "Internship"
+      ],
+      "default": "Full-time"
+    },
+    "experienceLevel": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "text"
+    },
+    "description": {
+      "type": "text"
+    },
+    "responsibilities": {
+      "type": "text"
+    },
+    "requirements": {
+      "type": "text"
+    },
+    "isOpen": {
+      "type": "boolean",
+      "default": true
+    },
+    "deadline": {
+      "type": "date"
+    },
+    "postedDate": {
+      "type": "date"
+    }
+  }
+}

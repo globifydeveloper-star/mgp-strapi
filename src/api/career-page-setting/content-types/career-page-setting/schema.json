@@ -1,0 +1,43 @@
+{
+  "kind": "singleType",
+  "collectionName": "career_page_settings",
+  "info": {
+    "singularName": "career-page-setting",
+    "pluralName": "career-page-settings",
+    "displayName": "Career Page Setting",
+    "description": "Global CMS settings for the Careers landing page"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "heroHeading": {
+      "type": "string"
+    },
+    "heroSubheading": {
+      "type": "string"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "cultureHeading": {
+      "type": "string"
+    },
+    "cultureDescription": {
+      "type": "text"
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "ogImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

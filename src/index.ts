@@ -332,6 +332,107 @@ export default {
       }
     }
 
+    // 8b. Seed Career Page Settings and Departments
+    const careerSettingUid = 'api::career-page-setting.career-page-setting';
+    const careerSettingExisting = await strapi.documents(careerSettingUid).findFirst();
+    if (!careerSettingExisting) {
+      strapi.log.info('Seeding Career Page Settings...');
+      await strapi.documents(careerSettingUid).create({
+        data: {
+          heroHeading: 'Join the Muthoot Gold Point Team',
+          heroSubheading: 'Build a rewarding career with India’s most trusted gold buying organization. We foster talent, integrity, and career growth.',
+          cultureHeading: 'Why Work With Us?',
+          cultureDescription: 'At Muthoot Gold Point, we believe our people are our strongest asset. We provide a collaborative, transparent, and growth-oriented work environment with competitive benefits and continuous learning opportunities.',
+          seoTitle: 'Careers | Work With Muthoot Gold Point',
+          seoDescription: 'Explore open job opportunities and build your career with Muthoot Gold Point.'
+        }
+      });
+    }
+
+    const deptUid = 'api::job-department.job-department';
+    let deptsList = await strapi.documents(deptUid).findMany({});
+    if (deptsList.length === 0) {
+      strapi.log.info('Seeding Job Departments...');
+      const defaultDepts = [
+        { name: 'Operations', slug: 'operations' },
+        { name: 'Technology', slug: 'technology' },
+        { name: 'Sales & Marketing', slug: 'sales-marketing' },
+        { name: 'Finance & Accounting', slug: 'finance-accounting' }
+      ];
+      for (const dept of defaultDepts) {
+        await strapi.documents(deptUid).create({ data: dept });
+      }
+      deptsList = await strapi.documents(deptUid).findMany({});
+    }
+
+    const posUid = 'api::job-position.job-position';
+    const posExisting = await strapi.documents(posUid).findMany({ limit: 1 });
+    if (posExisting.length === 0 && deptsList.length > 0) {
+      strapi.log.info('Seeding Initial Job Positions...');
+      const opsDept = deptsList.find(d => d.slug === 'operations') || deptsList[0];
+      const salesDept = deptsList.find(d => d.slug === 'sales-marketing') || deptsList[0];
+      const techDept = deptsList.find(d => d.slug === 'technology') || deptsList[0];
+
+      const initialJobs = [
+        {
+          title: 'Branch Relationship Executive',
+          slug: 'branch-relationship-executive',
+          department: salesDept.documentId,
+          location: 'Bengaluru, India',
+          employmentType: 'Full-time' as const,
+          experienceLevel: '1-3 Years',
+          summary: 'Engage with clients, explain the gold valuation and selling process, and build lasting customer relationships at our branches.',
+          description: 'We are seeking a proactive Branch Relationship Executive to engage with clients, explain the gold valuation and selling process, and build lasting customer relationships at our branches.',
+          requirements: 'Prior experience in retail banking, gold loan, or financial services sales. Excellent verbal communication and customer relationship skills.',
+          isOpen: true,
+          postedDate: new Date().toISOString().split('T')[0]
+        },
+        {
+          title: 'Customer Relationship Manager',
+          slug: 'customer-relationship-manager',
+          department: opsDept.documentId,
+          location: 'Chennai, India',
+          employmentType: 'Full-time' as const,
+          experienceLevel: '3-5 Years',
+          summary: 'Ensure smooth branch operations, oversee transparent gold testing protocols, and handle client escalations.',
+          description: 'Ensure smooth branch operations, oversee transparent gold testing protocols, handle client escalations, and manage a team of valuation executives to guarantee top-tier service.',
+          requirements: 'Proven track record in operations management in gold loan or gold buying sector. Strong leadership abilities and team management experience.',
+          isOpen: true,
+          postedDate: new Date().toISOString().split('T')[0]
+        },
+        {
+          title: 'Frontend React/Next.js Developer',
+          slug: 'frontend-react-nextjs-developer',
+          department: techDept.documentId,
+          location: 'Bengaluru / Hybrid',
+          employmentType: 'Full-time' as const,
+          experienceLevel: '2-4 Years',
+          summary: 'Craft beautiful, responsive, and high-performance web applications using React and Next.js.',
+          description: 'Join our digital transformation team to craft beautiful, responsive, and high-performance web applications using React, Next.js, and modern styling libraries.',
+          requirements: 'Strong expertise in JavaScript, TypeScript, React.js, and Next.js. Experience building responsive layouts with pixel-perfect CSS.',
+          isOpen: true,
+          postedDate: new Date().toISOString().split('T')[0]
+        },
+        {
+          title: 'Valuation & XRF Specialist',
+          slug: 'valuation-xrf-specialist',
+          department: opsDept.documentId,
+          location: 'Mumbai, India',
+          employmentType: 'Full-time' as const,
+          experienceLevel: '1-3 Years',
+          summary: 'Conduct scientific purity assessment of gold ornaments using XRF testing machines.',
+          description: 'Conduct scientific purity assessment of gold ornaments using advanced XRF testing machines, explain purity findings transparently to clients, and handle instant cash processing.',
+          requirements: 'Technical proficiency in gold testing or laboratory evaluation methods. High integrity and focus on transparency.',
+          isOpen: true,
+          postedDate: new Date().toISOString().split('T')[0]
+        }
+      ];
+
+      for (const job of initialJobs) {
+        await strapi.documents(posUid).create({ data: job });
+      }
+    }
+
     // 9. Auto-configure Public Role Permissions
     try {
       const publicRole = await strapi.db.connection('up_roles').where('type', 'public').first();
@@ -351,7 +452,12 @@ export default {
           'api::process-step.process-step.find',
           'api::difference-box.difference-box.find',
           'api::promo-slide.promo-slide.find',
-          'api::testimonial.testimonial.find'
+          'api::testimonial.testimonial.find',
+          'api::career-page-setting.career-page-setting.find',
+          'api::job-department.job-department.find',
+          'api::job-position.job-position.find',
+          'api::job-position.job-position.findOne',
+          'api::job-application.job-application.create'
         ];
 
         for (const action of actions) {
@@ -405,6 +511,7 @@ export default {
             items: [
               'api::homepage.homepage',
               'api::blog-page-setting.blog-page-setting',
+              'api::career-page-setting.career-page-setting',
               'api::difference-box.difference-box'
             ]
           },
@@ -418,6 +525,17 @@ export default {
               'api::promo-slide.promo-slide',
               'api::process-step.process-step',
               'api::testimonial.testimonial'
+            ]
+          },
+          {
+            id: 'careers-and-jobs',
+            label: '💼 Careers & Job Openings',
+            defaultExpanded: true,
+            kind: 'collectionType',
+            items: [
+              'api::job-position.job-position',
+              'api::job-department.job-department',
+              'api::job-application.job-application'
             ]
           },
           {
