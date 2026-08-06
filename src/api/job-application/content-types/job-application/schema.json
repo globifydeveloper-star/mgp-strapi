@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "job_applications",
+  "info": {
+    "singularName": "job-application",
+    "pluralName": "job-applications",
+    "displayName": "Job Application",
+    "description": "Candidate job applications submitted through website (Strapi ONLY)"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "fullName": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "experienceYears": {
+      "type": "string"
+    },
+    "currentCity": {
+      "type": "string"
+    },
+    "coverNote": {
+      "type": "text"
+    },
+    "resume": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["files", "images"]
+    },
+    "jobPosition": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::job-position.job-position"
+    },
+    "submittedAt": {
+      "type": "datetime"
+    }
+  }
+}

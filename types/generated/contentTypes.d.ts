@@ -594,6 +594,43 @@ export interface ApiBranchBranch extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCareerPageSettingCareerPageSetting
+  extends Struct.SingleTypeSchema {
+  collectionName: 'career_page_settings';
+  info: {
+    description: 'Global CMS settings for the Careers landing page';
+    displayName: 'Career Page Setting';
+    pluralName: 'career-page-settings';
+    singularName: 'career-page-setting';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    cultureDescription: Schema.Attribute.Text;
+    cultureHeading: Schema.Attribute.String;
+    heroHeading: Schema.Attribute.String;
+    heroImage: Schema.Attribute.Media<'images'>;
+    heroSubheading: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::career-page-setting.career-page-setting'
+    > &
+      Schema.Attribute.Private;
+    ogImage: Schema.Attribute.Media<'images'>;
+    publishedAt: Schema.Attribute.DateTime;
+    seoDescription: Schema.Attribute.Text;
+    seoTitle: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   collectionName: 'categories';
   info: {
@@ -869,6 +906,125 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
     vanHeadingBold: Schema.Attribute.String;
     vanHeadingLight: Schema.Attribute.String;
     vanImage: Schema.Attribute.Media<'images'>;
+  };
+}
+
+export interface ApiJobApplicationJobApplication
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'job_applications';
+  info: {
+    description: 'Candidate job applications submitted through website (Strapi ONLY)';
+    displayName: 'Job Application';
+    pluralName: 'job-applications';
+    singularName: 'job-application';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    coverNote: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    currentCity: Schema.Attribute.String;
+    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    experienceYears: Schema.Attribute.String;
+    fullName: Schema.Attribute.String & Schema.Attribute.Required;
+    jobPosition: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::job-position.job-position'
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::job-application.job-application'
+    > &
+      Schema.Attribute.Private;
+    phone: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    resume: Schema.Attribute.Media<'files' | 'images'>;
+    submittedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiJobDepartmentJobDepartment
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'job_departments';
+  info: {
+    description: 'Departments for categorizing job positions';
+    displayName: 'Job Department';
+    pluralName: 'job-departments';
+    singularName: 'job-department';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::job-department.job-department'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiJobPositionJobPosition extends Struct.CollectionTypeSchema {
+  collectionName: 'job_positions';
+  info: {
+    description: 'Job vacancies and open opportunities';
+    displayName: 'Job Position';
+    pluralName: 'job-positions';
+    singularName: 'job-position';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    deadline: Schema.Attribute.Date;
+    department: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::job-department.job-department'
+    >;
+    description: Schema.Attribute.Text;
+    employmentType: Schema.Attribute.Enumeration<
+      ['Full-time', 'Part-time', 'Contract', 'Internship']
+    > &
+      Schema.Attribute.DefaultTo<'Full-time'>;
+    experienceLevel: Schema.Attribute.String;
+    isOpen: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::job-position.job-position'
+    > &
+      Schema.Attribute.Private;
+    location: Schema.Attribute.String;
+    postedDate: Schema.Attribute.Date;
+    publishedAt: Schema.Attribute.DateTime;
+    requirements: Schema.Attribute.Text;
+    responsibilities: Schema.Attribute.Text;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    summary: Schema.Attribute.Text;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -1587,6 +1743,7 @@ declare module '@strapi/strapi' {
       'api::blog-page-setting.blog-page-setting': ApiBlogPageSettingBlogPageSetting;
       'api::blog-post.blog-post': ApiBlogPostBlogPost;
       'api::branch.branch': ApiBranchBranch;
+      'api::career-page-setting.career-page-setting': ApiCareerPageSettingCareerPageSetting;
       'api::category.category': ApiCategoryCategory;
       'api::difference-box.difference-box': ApiDifferenceBoxDifferenceBox;
       'api::enquiry.enquiry': ApiEnquiryEnquiry;
@@ -1594,6 +1751,9 @@ declare module '@strapi/strapi' {
       'api::form-submission.form-submission': ApiFormSubmissionFormSubmission;
       'api::hero-slide.hero-slide': ApiHeroSlideHeroSlide;
       'api::homepage.homepage': ApiHomepageHomepage;
+      'api::job-application.job-application': ApiJobApplicationJobApplication;
+      'api::job-department.job-department': ApiJobDepartmentJobDepartment;
+      'api::job-position.job-position': ApiJobPositionJobPosition;
       'api::otp-request.otp-request': ApiOtpRequestOtpRequest;
       'api::process-step.process-step': ApiProcessStepProcessStep;
       'api::promo-slide.promo-slide': ApiPromoSlidePromoSlide;

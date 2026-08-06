@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "job_departments",
+  "info": {
+    "singularName": "job-department",
+    "pluralName": "job-departments",
+    "displayName": "Job Department",
+    "description": "Departments for categorizing job positions"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
+    }
+  }
+}
