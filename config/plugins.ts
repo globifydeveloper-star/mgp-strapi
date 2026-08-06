@@ -60,6 +60,9 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
       },
     },
   },
+  'content-manager-organizer': {
+    enabled: true,
+  },
 });
 
 export default config;
