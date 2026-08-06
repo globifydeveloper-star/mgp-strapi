@@ -15,7 +15,6 @@ const config: Core.Config.Middlewares = [
             'data:',
             'blob:',
             'market-assets.strapi.io',
-            'res.cloudinary.com',
             'pub-bd272ef986bf4b208d871d215567b407.r2.dev',
           ],
           'media-src': [
@@ -23,7 +22,6 @@ const config: Core.Config.Middlewares = [
             'data:',
             'blob:',
             'market-assets.strapi.io',
-            'res.cloudinary.com',
             'pub-bd272ef986bf4b208d871d215567b407.r2.dev',
           ],
           upgradeInsecureRequests: null,
