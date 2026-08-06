@@ -446,6 +446,7 @@ export default {
             defaultExpanded: true,
             kind: 'collectionType',
             items: [
+              'api::form-submission.form-submission',
               'api::enquiry.enquiry',
               'api::faq.faq',
               'api::otp-request.otp-request'

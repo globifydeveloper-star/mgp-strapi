@@ -78,6 +78,24 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
       },
     });
 
+    // Dual-Write Mirror to Form Submissions Collection
+    try {
+      const formSubmissionService = strapi.service('api::form-submission.form-submission') as unknown as {
+        submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
+      };
+      if (formSubmissionService) {
+        await formSubmissionService.submitAndSync({
+          name: input.name,
+          phone: input.mobile,
+          email: input.email,
+          sourceForm: input.source,
+          enquiryType: input.source === 'CONTACT_US' ? 'Contact Us' : (input.source === 'BLOG' ? 'Blog Enquiry' : 'Enquire Now'),
+        });
+      }
+    } catch (mirrorErr) {
+      strapi.log.error('[enquiry] Failed to mirror to form-submission collection:', mirrorErr);
+    }
+
     const crmConfig = strapi.config.get('crm') as {
       baseUrl: string;
       token: string;
