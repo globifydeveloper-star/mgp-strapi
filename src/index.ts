@@ -390,5 +390,90 @@ export default {
     } catch (err) {
       strapi.log.error('Failed to configure Public role permissions:', err);
     }
+
+    // 10. Pre-seed / Update Content Manager Organizer Categories
+    try {
+      const organizerUid = 'plugin::content-manager-organizer.content-manager-configuration';
+      const organizerConfig = {
+        sortBy: 'custom',
+        groups: [
+          {
+            id: 'pages-single-types',
+            label: '📄 Single Types & Pages',
+            defaultExpanded: true,
+            kind: 'singleType',
+            items: [
+              'api::homepage.homepage',
+              'api::blog-page-setting.blog-page-setting',
+              'api::difference-box.difference-box'
+            ]
+          },
+          {
+            id: 'homepage-components',
+            label: '🏠 Homepage Sections',
+            defaultExpanded: true,
+            kind: 'collectionType',
+            items: [
+              'api::hero-slide.hero-slide',
+              'api::promo-slide.promo-slide',
+              'api::process-step.process-step',
+              'api::testimonial.testimonial'
+            ]
+          },
+          {
+            id: 'blog-and-news',
+            label: '📝 Blog & Categories',
+            defaultExpanded: true,
+            kind: 'collectionType',
+            items: [
+              'api::blog-post.blog-post',
+              'api::category.category'
+            ]
+          },
+          {
+            id: 'locations-and-branches',
+            label: '📍 Locations & Network',
+            defaultExpanded: true,
+            kind: 'collectionType',
+            items: [
+              'api::branch.branch',
+              'api::state.state'
+            ]
+          },
+          {
+            id: 'leads-and-support',
+            label: '📩 Enquiries & Support',
+            defaultExpanded: true,
+            kind: 'collectionType',
+            items: [
+              'api::enquiry.enquiry',
+              'api::faq.faq',
+              'api::otp-request.otp-request'
+            ]
+          }
+        ]
+      };
+
+      const existingConfig = await strapi.db.query(organizerUid).findOne({ where: { key: 'main' } });
+      if (!existingConfig) {
+        await strapi.db.query(organizerUid).create({
+          data: {
+            key: 'main',
+            config: organizerConfig
+          }
+        });
+        strapi.log.info('Seeded Content Manager Organizer configuration successfully.');
+      } else {
+        await strapi.db.query(organizerUid).update({
+          where: { key: 'main' },
+          data: {
+            config: organizerConfig
+          }
+        });
+        strapi.log.info('Updated Content Manager Organizer configuration successfully.');
+      }
+    } catch (err: any) {
+      strapi.log.warn('Could not auto-configure Content Manager Organizer:', err.message || err);
+    }
   },
 };
