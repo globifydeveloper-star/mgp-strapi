@@ -1,0 +1,67 @@
+{
+  "kind": "collectionType",
+  "collectionName": "form_submissions",
+  "info": {
+    "singularName": "form-submission",
+    "pluralName": "form-submissions",
+    "displayName": "Form Submission",
+    "description": "Real-time mirror of lead form submissions in Strapi Admin"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email"
+    },
+    "branch": {
+      "type": "string"
+    },
+    "enquiryType": {
+      "type": "enumeration",
+      "enum": [
+        "Contact Us",
+        "Mobile Van",
+        "Enquire Now",
+        "Offers Popup",
+        "Blog Enquiry",
+        "Other"
+      ],
+      "default": "Enquire Now",
+      "required": true
+    },
+    "sourceForm": {
+      "type": "string"
+    },
+    "submittedAt": {
+      "type": "datetime"
+    },
+    "crmPushStatus": {
+      "type": "enumeration",
+      "enum": [
+        "Sent",
+        "Pending",
+        "Failed"
+      ],
+      "default": "Pending",
+      "required": true
+    },
+    "crmLeadId": {
+      "type": "string"
+    },
+    "crmResponse": {
+      "type": "json"
+    },
+    "crmError": {
+      "type": "text"
+    }
+  }
+}

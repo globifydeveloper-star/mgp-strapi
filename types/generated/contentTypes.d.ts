@@ -745,6 +745,59 @@ export interface ApiFaqFaq extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiFormSubmissionFormSubmission
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'form_submissions';
+  info: {
+    description: 'Real-time mirror of lead form submissions in Strapi Admin';
+    displayName: 'Form Submission';
+    pluralName: 'form-submissions';
+    singularName: 'form-submission';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    branch: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    crmError: Schema.Attribute.Text;
+    crmLeadId: Schema.Attribute.String;
+    crmPushStatus: Schema.Attribute.Enumeration<['Sent', 'Pending', 'Failed']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Pending'>;
+    crmResponse: Schema.Attribute.JSON;
+    email: Schema.Attribute.Email;
+    enquiryType: Schema.Attribute.Enumeration<
+      [
+        'Contact Us',
+        'Mobile Van',
+        'Enquire Now',
+        'Offers Popup',
+        'Blog Enquiry',
+        'Other',
+      ]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Enquire Now'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::form-submission.form-submission'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    phone: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    sourceForm: Schema.Attribute.String;
+    submittedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiHeroSlideHeroSlide extends Struct.CollectionTypeSchema {
   collectionName: 'hero_slides';
   info: {
@@ -1538,6 +1591,7 @@ declare module '@strapi/strapi' {
       'api::difference-box.difference-box': ApiDifferenceBoxDifferenceBox;
       'api::enquiry.enquiry': ApiEnquiryEnquiry;
       'api::faq.faq': ApiFaqFaq;
+      'api::form-submission.form-submission': ApiFormSubmissionFormSubmission;
       'api::hero-slide.hero-slide': ApiHeroSlideHeroSlide;
       'api::homepage.homepage': ApiHomepageHomepage;
       'api::otp-request.otp-request': ApiOtpRequestOtpRequest;
