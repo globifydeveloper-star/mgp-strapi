@@ -41,6 +41,15 @@
     "sourceForm": {
       "type": "string"
     },
+    "purity": {
+      "type": "string"
+    },
+    "weight": {
+      "type": "string"
+    },
+    "details": {
+      "type": "json"
+    },
     "submittedAt": {
       "type": "datetime"
     },
