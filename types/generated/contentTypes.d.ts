@@ -985,7 +985,7 @@ export interface ApiJobPositionJobPosition extends Struct.CollectionTypeSchema {
   collectionName: 'job_positions';
   info: {
     description: 'Job vacancies and open opportunities';
-    displayName: 'Job Position';
+    displayName: 'Job Openings';
     pluralName: 'job-positions';
     singularName: 'job-position';
   };

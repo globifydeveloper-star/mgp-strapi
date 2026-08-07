@@ -4,12 +4,13 @@
   "info": {
     "singularName": "job-position",
     "pluralName": "job-positions",
-    "displayName": "Job Position",
+    "displayName": "Job Openings",
     "description": "Job vacancies and open opportunities"
   },
   "options": {
     "draftAndPublish": false
   },
+  "pluginOptions": {},
   "attributes": {
     "title": {
       "type": "string",
@@ -30,13 +31,13 @@
     },
     "employmentType": {
       "type": "enumeration",
+      "default": "Full-time",
       "enum": [
         "Full-time",
         "Part-time",
         "Contract",
         "Internship"
-      ],
-      "default": "Full-time"
+      ]
     },
     "experienceLevel": {
       "type": "string"
