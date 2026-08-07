@@ -943,6 +943,10 @@ export interface ApiJobApplicationJobApplication
     phone: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     resume: Schema.Attribute.Media<'files' | 'images'>;
+    status: Schema.Attribute.Enumeration<
+      ['New', 'Shortlisted', 'Rejected', 'Hired']
+    > &
+      Schema.Attribute.DefaultTo<'New'>;
     submittedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &

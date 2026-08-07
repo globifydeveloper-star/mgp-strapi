@@ -10,6 +10,12 @@ const config: Core.Config.Middlewares = [
         useDefaults: true,
         directives: {
           'connect-src': ["'self'", 'https:'],
+          'frame-src': [
+            "'self'",
+            'http://localhost:3000',
+            'http://127.0.0.1:3000',
+            'https://mgp-web-q2au.vercel.app',
+          ],
           'img-src': [
             "'self'",
             'data:',
