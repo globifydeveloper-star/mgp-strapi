@@ -511,8 +511,7 @@ export default {
             items: [
               'api::homepage.homepage',
               'api::blog-page-setting.blog-page-setting',
-              'api::career-page-setting.career-page-setting',
-              'api::difference-box.difference-box'
+              'api::career-page-setting.career-page-setting'
             ]
           },
           {
@@ -524,6 +523,7 @@ export default {
               'api::hero-slide.hero-slide',
               'api::promo-slide.promo-slide',
               'api::process-step.process-step',
+              'api::difference-box.difference-box',
               'api::testimonial.testimonial'
             ]
           },

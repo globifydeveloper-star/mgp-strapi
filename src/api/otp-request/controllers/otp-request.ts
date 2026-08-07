@@ -147,6 +147,27 @@ export default factories.createCoreController(
         },
       });
 
+      // Dual-Write Mirror to Form Submissions Collection
+      if (name && typeof name === 'string' && name.trim()) {
+        try {
+          const formSubmissionService = strapi.service('api::form-submission.form-submission') as unknown as {
+            submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
+          };
+          if (formSubmissionService) {
+            const location = [city, state].filter(Boolean).join(', ');
+            await formSubmissionService.submitAndSync({
+              name: name.trim(),
+              phone,
+              branch: location || undefined,
+              enquiryType: 'Enquire Now',
+              sourceForm: 'OTP Form',
+            });
+          }
+        } catch (mirrorErr) {
+          strapi.log.error('[otp-request] Failed to mirror submission to form-submission collection:', mirrorErr);
+        }
+      }
+
       ctx.status = 200;
       ctx.body = { success: true, verified: true };
     },
