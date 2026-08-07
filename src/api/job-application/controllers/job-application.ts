@@ -55,6 +55,33 @@ export default factories.createCoreController(
         }
       }
 
+      let resolvedJobPositionDocId: string | undefined = undefined;
+      let finalCoverNote = typeof coverNote === 'string' ? coverNote.trim() : undefined;
+
+      if (typeof jobPosition === 'string' && jobPosition.trim()) {
+        const inputVal = jobPosition.trim();
+        try {
+          const posDoc = await strapi.documents('api::job-position.job-position').findFirst({
+            filters: {
+              $or: [
+                { documentId: { $eq: inputVal } },
+                { title: { $eq: inputVal } },
+              ],
+            },
+          });
+          if (posDoc) {
+            resolvedJobPositionDocId = posDoc.documentId;
+          } else {
+            // Append general position title to cover note so info isn't lost
+            finalCoverNote = finalCoverNote
+              ? `[Position: ${inputVal}]\n\n${finalCoverNote}`
+              : `[Position: ${inputVal}]`;
+          }
+        } catch (err) {
+          strapi.log.warn('[job-application] Could not resolve job position relation:', err);
+        }
+      }
+
       const application = await strapi.documents('api::job-application.job-application').create({
         data: {
           fullName: fullName.trim(),
@@ -62,9 +89,9 @@ export default factories.createCoreController(
           phone: phone.trim(),
           experienceYears: typeof experienceYears === 'string' ? experienceYears.trim() : undefined,
           currentCity: typeof currentCity === 'string' ? currentCity.trim() : undefined,
-          coverNote: typeof coverNote === 'string' ? coverNote.trim() : undefined,
+          coverNote: finalCoverNote,
           resume: resumeMediaId as any,
-          jobPosition: typeof jobPosition === 'string' ? (jobPosition as any) : undefined,
+          jobPosition: resolvedJobPositionDocId as any,
           submittedAt: new Date().toISOString(),
         },
       });
