@@ -93,6 +93,7 @@ export default factories.createCoreController(
           resume: resumeMediaId as any,
           jobPosition: resolvedJobPositionDocId as any,
           submittedAt: new Date().toISOString(),
+          status: 'New',
         },
       });
 

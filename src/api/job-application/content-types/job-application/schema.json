@@ -44,6 +44,16 @@
     },
     "submittedAt": {
       "type": "datetime"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "New",
+        "Shortlisted",
+        "Rejected",
+        "Hired"
+      ],
+      "default": "New"
     }
   }
 }
