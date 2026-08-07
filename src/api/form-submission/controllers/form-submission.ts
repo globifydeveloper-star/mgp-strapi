@@ -8,9 +8,12 @@ export default factories.createCoreController(
   'api::form-submission.form-submission',
   ({ strapi }) => ({
     async create(ctx: Context) {
-      const body = ctx.request.body;
+      let body = ctx.request.body;
       if (!body || typeof body !== 'object' || Array.isArray(body)) {
         throw new ValidationError('A JSON request body is required.');
+      }
+      if ('data' in body && body.data && typeof body.data === 'object' && !Array.isArray(body.data)) {
+        body = body.data;
       }
 
       const service = strapi.service('api::form-submission.form-submission') as unknown as {

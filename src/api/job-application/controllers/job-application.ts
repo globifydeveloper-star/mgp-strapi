@@ -8,9 +8,16 @@ export default factories.createCoreController(
   'api::job-application.job-application',
   ({ strapi }) => ({
     async create(ctx: Context) {
-      const body = ctx.request.body;
-      if (!body || typeof body !== 'object' || Array.isArray(body)) {
-        throw new ValidationError('A valid JSON request body is required.');
+      let body = ctx.request.body ?? {};
+      
+      // Handle wrapped body.data if present
+      if (typeof body === 'object' && body !== null && 'data' in body && body.data && typeof body.data === 'object') {
+        body = body.data;
+      }
+      if (typeof body === 'string') {
+        try {
+          body = JSON.parse(body);
+        } catch (_) {}
       }
 
       const { fullName, email, phone, experienceYears, currentCity, coverNote, resume, jobPosition } = body as Record<string, unknown>;
@@ -25,6 +32,29 @@ export default factories.createCoreController(
         throw new ValidationError('phone is required.');
       }
 
+      let resumeMediaId: number | string | undefined =
+        typeof resume === 'number' || typeof resume === 'string' ? resume : undefined;
+
+      // Check if file was uploaded via multipart/form-data
+      const files = ctx.request.files as Record<string, any> | undefined;
+      const uploadedFile = files?.resume || files?.file || files?.['files.resume'];
+
+      if (uploadedFile) {
+        try {
+          const uploadService = strapi.plugin('upload').service('upload');
+          const uploaded = await uploadService.upload({
+            data: {},
+            files: uploadedFile,
+          });
+          const fileEntry = Array.isArray(uploaded) ? uploaded[0] : uploaded;
+          if (fileEntry) {
+            resumeMediaId = fileEntry.id ?? fileEntry.documentId;
+          }
+        } catch (uploadErr) {
+          strapi.log.error('[job-application] Failed to upload resume file:', uploadErr);
+        }
+      }
+
       const application = await strapi.documents('api::job-application.job-application').create({
         data: {
           fullName: fullName.trim(),
@@ -33,7 +63,7 @@ export default factories.createCoreController(
           experienceYears: typeof experienceYears === 'string' ? experienceYears.trim() : undefined,
           currentCity: typeof currentCity === 'string' ? currentCity.trim() : undefined,
           coverNote: typeof coverNote === 'string' ? coverNote.trim() : undefined,
-          resume: typeof resume === 'number' || typeof resume === 'string' ? (resume as any) : undefined,
+          resume: resumeMediaId as any,
           jobPosition: typeof jobPosition === 'string' ? (jobPosition as any) : undefined,
           submittedAt: new Date().toISOString(),
         },
