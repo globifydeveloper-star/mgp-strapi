@@ -582,14 +582,6 @@ export default {
           }
         });
         strapi.log.info('Seeded Content Manager Organizer configuration successfully.');
-      } else {
-        await strapi.db.query(organizerUid).update({
-          where: { key: 'main' },
-          data: {
-            config: organizerConfig
-          }
-        });
-        strapi.log.info('Updated Content Manager Organizer configuration successfully.');
       }
     } catch (err: any) {
       strapi.log.warn('Could not auto-configure Content Manager Organizer:', err.message || err);
