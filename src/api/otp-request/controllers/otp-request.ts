@@ -84,12 +84,14 @@ export default factories.createCoreController(
     },
 
     async verifyOtp(ctx: Context) {
-      const { phone, otp, name, state, city, message, consent } = (ctx.request.body ?? {}) as {
+      const { phone, otp, name, state, city, purity, weight, message, consent } = (ctx.request.body ?? {}) as {
         phone?: string;
         otp?: string;
         name?: string;
         state?: string;
         city?: string;
+        purity?: string;
+        weight?: string;
         message?: string;
         consent?: boolean;
       };
@@ -160,7 +162,10 @@ export default factories.createCoreController(
               phone,
               branch: location || undefined,
               enquiryType: 'Enquire Now',
-              sourceForm: 'OTP Form',
+              sourceForm: purity || weight ? `Sell Gold Modal (Purity: ${purity || 'N/A'}, Weight: ${weight || '0'}g)` : 'OTP Form',
+              purity: purity || undefined,
+              weight: weight || undefined,
+              details: { purity, weight, city, state, message },
             });
           }
         } catch (mirrorErr) {

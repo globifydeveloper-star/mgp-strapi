@@ -19,6 +19,9 @@ export interface FormSubmissionInput {
   branch?: string;
   enquiryType?: EnquiryType;
   sourceForm?: string;
+  purity?: string;
+  weight?: string;
+  details?: Record<string, unknown>;
 }
 
 const requiredString = (value: unknown, field: string): string => {
@@ -42,6 +45,9 @@ export default factories.createCoreService(
       const email = typeof input.email === 'string' && input.email.trim() ? input.email.trim() : undefined;
       const branch = typeof input.branch === 'string' && input.branch.trim() ? input.branch.trim() : undefined;
       const sourceForm = typeof input.sourceForm === 'string' && input.sourceForm.trim() ? input.sourceForm.trim() : (input.source as string ?? 'Form');
+      const purity = typeof input.purity === 'string' && input.purity.trim() ? input.purity.trim() : undefined;
+      const weight = input.weight !== undefined && input.weight !== null ? String(input.weight).trim() : undefined;
+      const details = typeof input.details === 'object' && input.details !== null ? (input.details as Record<string, unknown>) : undefined;
       
       const enquiryType = (typeof input.enquiryType === 'string' ? input.enquiryType : 'Enquire Now') as EnquiryType;
 
@@ -56,6 +62,9 @@ export default factories.createCoreService(
           branch,
           enquiryType,
           sourceForm,
+          purity,
+          weight,
+          details: details ? JSON.parse(JSON.stringify(details)) : undefined,
           submittedAt: new Date().toISOString(),
           crmPushStatus: 'Pending',
         },

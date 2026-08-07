@@ -805,6 +805,7 @@ export interface ApiFormSubmissionFormSubmission
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'Pending'>;
     crmResponse: Schema.Attribute.JSON;
+    details: Schema.Attribute.JSON;
     email: Schema.Attribute.Email;
     enquiryType: Schema.Attribute.Enumeration<
       [
@@ -827,11 +828,13 @@ export interface ApiFormSubmissionFormSubmission
     name: Schema.Attribute.String & Schema.Attribute.Required;
     phone: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
+    purity: Schema.Attribute.String;
     sourceForm: Schema.Attribute.String;
     submittedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    weight: Schema.Attribute.String;
   };
 }
 
