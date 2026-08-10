@@ -29,6 +29,53 @@ export class CrmServiceError extends Error {
   }
 }
 
+let cachedCrmToken: { token: string; expiresAt: number } | null = null;
+
+async function resolveCrmToken(staticToken?: string, baseUrl?: string): Promise<string | null> {
+  if (staticToken && staticToken.trim()) {
+    return staticToken.trim();
+  }
+
+  const envToken = process.env.CRM_TOKEN || process.env.CHANNEL_LEAD_TOKEN;
+  if (envToken && envToken.trim()) {
+    return envToken.trim();
+  }
+
+  if (cachedCrmToken && Date.now() < cachedCrmToken.expiresAt) {
+    return cachedCrmToken.token;
+  }
+
+  const u = process.env.CRM_USERNAME || process.env.CHANNEL_LEAD_USERNAME || process.env.BRANCH_MASTER_USERNAME;
+  const p = process.env.CRM_PASSWORD || process.env.CHANNEL_LEAD_PASSWORD || process.env.BRANCH_MASTER_PASSWORD;
+
+  if (!u || !p || !baseUrl) {
+    return null;
+  }
+
+  try {
+    const rootUrl = baseUrl.includes('/ChannelLead') ? baseUrl.split('/ChannelLead')[0] : baseUrl.replace(/\/$/, '');
+    const loginUrl = `${rootUrl}/Auth/Login`;
+    const res = await fetch(loginUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ username: u, password: p }),
+    });
+
+    if (!res.ok) return null;
+
+    const data = (await res.json()) as any;
+    const token = data?.token || data?.access_token || data?.respData?.token || data?.respData?.access_token;
+    if (token) {
+      cachedCrmToken = { token, expiresAt: Date.now() + 23 * 60 * 60 * 1000 };
+      return token;
+    }
+    return null;
+  } catch (e) {
+    console.error('[mgp-strapi] CRM Auth/Login error:', e);
+    return null;
+  }
+}
+
 const getLeadId = (payload: unknown): string | undefined => {
   if (!payload || typeof payload !== 'object') return undefined;
 
@@ -53,14 +100,16 @@ const readResponse = async (response: Response): Promise<unknown> => {
 };
 
 export const createCrmService = (config: CrmConfig) => {
-  const getHeaders = () => ({
-    Authorization: `Bearer ${config.token}`,
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  });
+  const getHeaders = async () => {
+    const token = await resolveCrmToken(config.token, config.baseUrl);
+    return {
+      Authorization: `Bearer ${token || ''}`,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    };
+  };
 
   const getBaseUrl = () => {
-    // If baseUrl contains /ChannelLead/Upsert or similar path, normalize to root domain
     const url = config.baseUrl.trim();
     if (url.includes('/ChannelLead')) {
       return url.split('/ChannelLead')[0];
@@ -74,8 +123,13 @@ export const createCrmService = (config: CrmConfig) => {
      * Primary endpoint: Create or update a lead with full details
      */
     async syncEnquiry(enquiry: EnquiryForCrm): Promise<CrmSyncResult> {
-      if (!config.baseUrl || !config.token) {
-        throw new CrmServiceError('CRM integration is not configured. Token is missing.');
+      if (!config.baseUrl) {
+        throw new CrmServiceError('CRM integration is not configured. Base URL is missing.');
+      }
+
+      const headers = await getHeaders();
+      if (!headers.Authorization || headers.Authorization === 'Bearer ') {
+        throw new CrmServiceError('CRM integration is not configured. Token or login credentials missing.');
       }
 
       const controller = new AbortController();
@@ -85,7 +139,7 @@ export const createCrmService = (config: CrmConfig) => {
         const targetUrl = `${getBaseUrl()}/ChannelLead/Upsert`;
         const response = await fetch(targetUrl, {
           method: 'POST',
-          headers: getHeaders(),
+          headers,
           body: JSON.stringify(mapEnquiryToCrm(enquiry)),
           signal: controller.signal,
         });
@@ -110,52 +164,52 @@ export const createCrmService = (config: CrmConfig) => {
 
     /**
      * 2. GET /ChannelLead/Fetch/{leadId}
-     * Fetch details of a specific lead by its ID
      */
     async fetchLead(leadId: string | number): Promise<unknown> {
       const targetUrl = `${getBaseUrl()}/ChannelLead/Fetch/${leadId}`;
+      const headers = await getHeaders();
       const response = await fetch(targetUrl, {
         method: 'GET',
-        headers: getHeaders(),
+        headers,
       });
       return readResponse(response);
     },
 
     /**
      * 3. GET /ChannelLead/List/{pageSize}/{pageNumber}
-     * Retrieve a paginated list of leads
      */
     async listLeads(pageSize: number = 10, pageNumber: number = 1): Promise<unknown> {
       const targetUrl = `${getBaseUrl()}/ChannelLead/List/${pageSize}/${pageNumber}`;
+      const headers = await getHeaders();
       const response = await fetch(targetUrl, {
         method: 'GET',
-        headers: getHeaders(),
+        headers,
       });
       return readResponse(response);
     },
 
     /**
      * 4. GET /ChannelLead/FollowUpList/{channelId}
-     * Get the follow-up list for a specific channel
      */
     async getFollowUpList(channelId: string | number): Promise<unknown> {
       const targetUrl = `${getBaseUrl()}/ChannelLead/FollowUpList/${channelId}`;
+      const headers = await getHeaders();
       const response = await fetch(targetUrl, {
         method: 'GET',
-        headers: getHeaders(),
+        headers,
       });
       return readResponse(response);
     },
 
     /**
      * 5. POST /ChannelLead/QuickUpdate/{leadId}
-     * Quickly update a lead's status, losing reason, follow-up date, comments
      */
     async quickUpdateLead(leadId: string | number, payload: QuickUpdatePayload): Promise<unknown> {
       const targetUrl = `${getBaseUrl()}/ChannelLead/QuickUpdate/${leadId}`;
+      const headers = await getHeaders();
       const response = await fetch(targetUrl, {
         method: 'POST',
-        headers: getHeaders(),
+        headers,
         body: JSON.stringify({
           leadStatus: payload.leadStatus ?? 'Open',
           losingReason: payload.losingReason ?? '',
