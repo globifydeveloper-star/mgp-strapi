@@ -31,7 +31,7 @@ export class CrmServiceError extends Error {
 
 let cachedCrmToken: { token: string; expiresAt: number } | null = null;
 
-async function resolveCrmToken(staticToken?: string, baseUrl?: string): Promise<string | null> {
+async function resolveCrmToken(staticToken?: string, _baseUrl?: string): Promise<string | null> {
   if (staticToken && staticToken.trim()) {
     return staticToken.trim();
   }
@@ -48,14 +48,13 @@ async function resolveCrmToken(staticToken?: string, baseUrl?: string): Promise<
   const u = process.env.CRM_USERNAME || process.env.CHANNEL_LEAD_USERNAME || process.env.BRANCH_MASTER_USERNAME;
   const p = process.env.CRM_PASSWORD || process.env.CHANNEL_LEAD_PASSWORD || process.env.BRANCH_MASTER_PASSWORD;
 
-  if (!u || !p || !baseUrl) {
+  if (!u || !p) {
     return null;
   }
 
   try {
-    const rootUrl = baseUrl.includes('/ChannelLead') ? baseUrl.split('/ChannelLead')[0] : baseUrl.replace(/\/$/, '');
-    const loginUrl = `${rootUrl}/Auth/Login`;
-    const res = await fetch(loginUrl, {
+    const authUrl = process.env.CRM_AUTH_URL || 'https://mgpauthext-mgpuat.muthootexim.com/channel/channellogin';
+    const res = await fetch(authUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({ username: u, password: p }),
@@ -64,7 +63,7 @@ async function resolveCrmToken(staticToken?: string, baseUrl?: string): Promise<
     if (!res.ok) return null;
 
     const data = (await res.json()) as any;
-    const token = data?.token || data?.access_token || data?.respData?.token || data?.respData?.access_token;
+    const token = data?.respData?.accessToken || data?.token || data?.access_token || data?.respData?.token || data?.respData?.access_token;
     if (token) {
       cachedCrmToken = { token, expiresAt: Date.now() + 23 * 60 * 60 * 1000 };
       return token;
@@ -83,7 +82,10 @@ const getLeadId = (payload: unknown): string | undefined => {
   const data = body.data && typeof body.data === 'object'
     ? body.data as Record<string, unknown>
     : undefined;
-  const value = body.leadId ?? body.id ?? data?.leadId ?? data?.id;
+  const respData = body.respData && typeof body.respData === 'object'
+    ? body.respData as Record<string, unknown>
+    : undefined;
+  const value = body.leadId ?? body.id ?? data?.leadId ?? data?.id ?? respData?.leadId ?? respData?.id;
 
   return typeof value === 'string' || typeof value === 'number' ? String(value) : undefined;
 };
