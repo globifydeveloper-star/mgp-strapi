@@ -5,6 +5,14 @@ import { factories } from '@strapi/strapi';
 const { ValidationError } = errors;
 
 export default factories.createCoreController('api::enquiry.enquiry', ({ strapi }) => ({
+  async find(ctx: Context) {
+    ctx.query = {
+      ...ctx.query,
+      sort: ctx.query.sort || { createdAt: 'desc' },
+    };
+    return await super.find(ctx);
+  },
+
   async create(ctx: Context) {
     let body = ctx.request.body;
     if (!body || typeof body !== 'object' || Array.isArray(body)) {

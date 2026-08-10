@@ -28,7 +28,7 @@ export default factories.createCoreController(
 
     async find(ctx: Context) {
       const submissions = await strapi.documents('api::form-submission.form-submission').findMany({
-        sort: { submittedAt: 'desc' },
+        sort: ['submittedAt:desc', 'createdAt:desc'],
       });
       ctx.status = 200;
       ctx.body = { data: submissions };
