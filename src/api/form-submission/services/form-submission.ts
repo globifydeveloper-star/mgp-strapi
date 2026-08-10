@@ -104,6 +104,29 @@ export default factories.createCoreService(
         if (updated) submission = updated;
       }
 
+      // 3. Automatically route to dedicated collection types (Blog Enquiry, Contact, Mobile Van, Gold Valuation)
+      try {
+        const isBlog = enquiryType === 'Blog Enquiry' || (sourceForm && sourceForm.toLowerCase().includes('blog'));
+        const isContact = enquiryType === 'Contact Us' || (sourceForm && sourceForm.toLowerCase().includes('contact'));
+        const isVan = enquiryType === 'Mobile Van' || (sourceForm && sourceForm.toLowerCase().includes('van'));
+
+        if (isBlog) {
+          const blogService = strapi.service('api::blog-enquiry.blog-enquiry') as any;
+          if (blogService) await blogService.submitAndSync({ name, mobile: phone, email, blogTitle: sourceForm });
+        } else if (isContact) {
+          const contactService = strapi.service('api::contact-submission.contact-submission') as any;
+          if (contactService) await contactService.submitAndSync({ name, phone, email, branch, message: details ? JSON.stringify(details) : sourceForm });
+        } else if (isVan) {
+          const vanService = strapi.service('api::mobile-van-submission.mobile-van-submission') as any;
+          if (vanService) await vanService.submitAndSync({ name, phone, email, city: branch, details });
+        } else {
+          const goldService = strapi.service('api::gold-valuation-submission.gold-valuation-submission') as any;
+          if (goldService) await goldService.submitAndSync({ name, phone, email, branch, purity, weight, sourceForm, details });
+        }
+      } catch (dispErr) {
+        strapi.log.warn('[form-submission] Dedicated collection dispatch notice:', dispErr);
+      }
+
       return submission;
     },
 
