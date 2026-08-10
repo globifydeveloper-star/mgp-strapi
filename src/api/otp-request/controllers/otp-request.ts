@@ -84,7 +84,7 @@ export default factories.createCoreController(
     },
 
     async verifyOtp(ctx: Context) {
-      const { phone, otp, name, state, city, purity, weight, message, consent } = (ctx.request.body ?? {}) as {
+      const { phone, otp, name, state, city, purity, weight, message, consent, sourceForm, enquiryType } = (ctx.request.body ?? {}) as {
         phone?: string;
         otp?: string;
         name?: string;
@@ -94,6 +94,8 @@ export default factories.createCoreController(
         weight?: string;
         message?: string;
         consent?: boolean;
+        sourceForm?: string;
+        enquiryType?: string;
       };
 
       if (typeof phone !== 'string' || !PHONE_REGEX.test(phone) || typeof otp !== 'string') {
@@ -161,8 +163,8 @@ export default factories.createCoreController(
               name: name.trim(),
               phone,
               branch: location || undefined,
-              enquiryType: 'Enquire Now',
-              sourceForm: purity || weight ? `Sell Gold Modal (Purity: ${purity || 'N/A'}, Weight: ${weight || '0'}g)` : 'OTP Form',
+              enquiryType: enquiryType || (purity || weight ? 'Enquire Now' : 'Enquire Now'),
+              sourceForm: sourceForm || (purity || weight ? `Sell Gold Modal (Purity: ${purity || 'N/A'}, Weight: ${weight || '0'}g)` : 'OTP Form'),
               purity: purity || undefined,
               weight: weight || undefined,
               details: { purity, weight, city, state, message },
