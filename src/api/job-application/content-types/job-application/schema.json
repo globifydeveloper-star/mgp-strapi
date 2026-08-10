@@ -45,7 +45,7 @@
     "submittedAt": {
       "type": "datetime"
     },
-    "status": {
+    "applicationStatus": {
       "type": "enumeration",
       "enum": [
         "New",

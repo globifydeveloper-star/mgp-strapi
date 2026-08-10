@@ -78,8 +78,16 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
       },
     });
 
-    // Dual-Write Mirror to Form Submissions Collection
+    // Dual-Write Mirror to Form Submissions & Specialized Collections
     try {
+      if (input.source === 'BLOG') {
+        const blogService = strapi.service('api::blog-enquiry.blog-enquiry') as any;
+        if (blogService) await blogService.submitAndSync({ name: input.name, mobile: input.mobile, email: input.email, blogTitle: input.blog });
+      } else if (input.source === 'CONTACT_US') {
+        const contactService = strapi.service('api::contact-submission.contact-submission') as any;
+        if (contactService) await contactService.submitAndSync({ name: input.name, phone: input.mobile, email: input.email });
+      }
+      
       const formSubmissionService = strapi.service('api::form-submission.form-submission') as unknown as {
         submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
       };
@@ -93,7 +101,7 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
         });
       }
     } catch (mirrorErr) {
-      strapi.log.error('[enquiry] Failed to mirror to form-submission collection:', mirrorErr);
+      strapi.log.error('[enquiry] Failed to mirror to specialized collection:', mirrorErr);
     }
 
     const crmConfig = strapi.config.get('crm') as {

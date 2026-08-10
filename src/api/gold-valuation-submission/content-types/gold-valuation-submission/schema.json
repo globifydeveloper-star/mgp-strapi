@@ -1,0 +1,63 @@
+{
+  "kind": "collectionType",
+  "collectionName": "gold_valuation_submissions",
+  "info": {
+    "singularName": "gold-valuation-submission",
+    "pluralName": "gold-valuation-submissions",
+    "displayName": "Gold Valuation Submission",
+    "description": "Submissions received from Gold Calculator and Selling forms"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email"
+    },
+    "purity": {
+      "type": "string"
+    },
+    "weight": {
+      "type": "string"
+    },
+    "branch": {
+      "type": "string"
+    },
+    "sourceForm": {
+      "type": "string"
+    },
+    "details": {
+      "type": "json"
+    },
+    "submittedAt": {
+      "type": "datetime"
+    },
+    "crmPushStatus": {
+      "type": "enumeration",
+      "enum": [
+        "Sent",
+        "Pending",
+        "Failed"
+      ],
+      "default": "Pending",
+      "required": true
+    },
+    "crmLeadId": {
+      "type": "string"
+    },
+    "crmResponse": {
+      "type": "json"
+    },
+    "crmError": {
+      "type": "text"
+    }
+  }
+}

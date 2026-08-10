@@ -480,6 +480,46 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiBlogEnquiryBlogEnquiry extends Struct.CollectionTypeSchema {
+  collectionName: 'blog_enquiries';
+  info: {
+    description: 'Enquiries received specifically from Blog posts';
+    displayName: 'Blog Enquiry';
+    pluralName: 'blog-enquiries';
+    singularName: 'blog-enquiry';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    blogTitle: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    crmError: Schema.Attribute.Text;
+    crmLeadId: Schema.Attribute.String;
+    crmPushStatus: Schema.Attribute.Enumeration<['Sent', 'Pending', 'Failed']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Pending'>;
+    crmResponse: Schema.Attribute.JSON;
+    email: Schema.Attribute.Email;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::blog-enquiry.blog-enquiry'
+    > &
+      Schema.Attribute.Private;
+    mobile: Schema.Attribute.String & Schema.Attribute.Required;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    source: Schema.Attribute.String & Schema.Attribute.DefaultTo<'BLOG'>;
+    submittedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiBlogPageSettingBlogPageSetting
   extends Struct.SingleTypeSchema {
   collectionName: 'blog_page_settings';
@@ -664,6 +704,47 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiContactSubmissionContactSubmission
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'contact_submissions';
+  info: {
+    description: 'Submissions received from Contact Us forms';
+    displayName: 'Contact Submission';
+    pluralName: 'contact-submissions';
+    singularName: 'contact-submission';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    branch: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    crmError: Schema.Attribute.Text;
+    crmLeadId: Schema.Attribute.String;
+    crmPushStatus: Schema.Attribute.Enumeration<['Sent', 'Pending', 'Failed']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Pending'>;
+    crmResponse: Schema.Attribute.JSON;
+    email: Schema.Attribute.Email;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::contact-submission.contact-submission'
+    > &
+      Schema.Attribute.Private;
+    message: Schema.Attribute.Text;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    phone: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    submittedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiDifferenceBoxDifferenceBox
   extends Struct.CollectionTypeSchema {
   collectionName: 'difference_boxes';
@@ -838,6 +919,50 @@ export interface ApiFormSubmissionFormSubmission
   };
 }
 
+export interface ApiGoldValuationSubmissionGoldValuationSubmission
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'gold_valuation_submissions';
+  info: {
+    description: 'Submissions received from Gold Calculator and Selling forms';
+    displayName: 'Gold Valuation Submission';
+    pluralName: 'gold-valuation-submissions';
+    singularName: 'gold-valuation-submission';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    branch: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    crmError: Schema.Attribute.Text;
+    crmLeadId: Schema.Attribute.String;
+    crmPushStatus: Schema.Attribute.Enumeration<['Sent', 'Pending', 'Failed']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Pending'>;
+    crmResponse: Schema.Attribute.JSON;
+    details: Schema.Attribute.JSON;
+    email: Schema.Attribute.Email;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::gold-valuation-submission.gold-valuation-submission'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    phone: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    purity: Schema.Attribute.String;
+    sourceForm: Schema.Attribute.String;
+    submittedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    weight: Schema.Attribute.String;
+  };
+}
+
 export interface ApiHeroSlideHeroSlide extends Struct.CollectionTypeSchema {
   collectionName: 'hero_slides';
   info: {
@@ -925,6 +1050,10 @@ export interface ApiJobApplicationJobApplication
     draftAndPublish: false;
   };
   attributes: {
+    applicationStatus: Schema.Attribute.Enumeration<
+      ['New', 'Shortlisted', 'Rejected', 'Hired']
+    > &
+      Schema.Attribute.DefaultTo<'New'>;
     coverNote: Schema.Attribute.Text;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -946,10 +1075,6 @@ export interface ApiJobApplicationJobApplication
     phone: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     resume: Schema.Attribute.Media<'files' | 'images'>;
-    status: Schema.Attribute.Enumeration<
-      ['New', 'Shortlisted', 'Rejected', 'Hired']
-    > &
-      Schema.Attribute.DefaultTo<'New'>;
     submittedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1029,6 +1154,48 @@ export interface ApiJobPositionJobPosition extends Struct.CollectionTypeSchema {
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     summary: Schema.Attribute.Text;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMobileVanSubmissionMobileVanSubmission
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'mobile_van_submissions';
+  info: {
+    description: 'Submissions received for Mobile Van service requests';
+    displayName: 'Mobile Van Submission';
+    pluralName: 'mobile-van-submissions';
+    singularName: 'mobile-van-submission';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    city: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    crmError: Schema.Attribute.Text;
+    crmLeadId: Schema.Attribute.String;
+    crmPushStatus: Schema.Attribute.Enumeration<['Sent', 'Pending', 'Failed']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Pending'>;
+    crmResponse: Schema.Attribute.JSON;
+    details: Schema.Attribute.JSON;
+    email: Schema.Attribute.Email;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::mobile-van-submission.mobile-van-submission'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    phone: Schema.Attribute.String & Schema.Attribute.Required;
+    preferredDate: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    submittedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1747,20 +1914,24 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::blog-enquiry.blog-enquiry': ApiBlogEnquiryBlogEnquiry;
       'api::blog-page-setting.blog-page-setting': ApiBlogPageSettingBlogPageSetting;
       'api::blog-post.blog-post': ApiBlogPostBlogPost;
       'api::branch.branch': ApiBranchBranch;
       'api::career-page-setting.career-page-setting': ApiCareerPageSettingCareerPageSetting;
       'api::category.category': ApiCategoryCategory;
+      'api::contact-submission.contact-submission': ApiContactSubmissionContactSubmission;
       'api::difference-box.difference-box': ApiDifferenceBoxDifferenceBox;
       'api::enquiry.enquiry': ApiEnquiryEnquiry;
       'api::faq.faq': ApiFaqFaq;
       'api::form-submission.form-submission': ApiFormSubmissionFormSubmission;
+      'api::gold-valuation-submission.gold-valuation-submission': ApiGoldValuationSubmissionGoldValuationSubmission;
       'api::hero-slide.hero-slide': ApiHeroSlideHeroSlide;
       'api::homepage.homepage': ApiHomepageHomepage;
       'api::job-application.job-application': ApiJobApplicationJobApplication;
       'api::job-department.job-department': ApiJobDepartmentJobDepartment;
       'api::job-position.job-position': ApiJobPositionJobPosition;
+      'api::mobile-van-submission.mobile-van-submission': ApiMobileVanSubmissionMobileVanSubmission;
       'api::otp-request.otp-request': ApiOtpRequestOtpRequest;
       'api::process-step.process-step': ApiProcessStepProcessStep;
       'api::promo-slide.promo-slide': ApiPromoSlidePromoSlide;
