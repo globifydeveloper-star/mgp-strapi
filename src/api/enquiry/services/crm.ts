@@ -53,7 +53,11 @@ async function resolveCrmToken(staticToken?: string, _baseUrl?: string): Promise
   }
 
   try {
-    const authUrl = process.env.CRM_AUTH_URL || 'https://mgpauthext-mgpuat.muthootexim.com/channel/channellogin';
+    const authUrl = process.env.CRM_AUTH_URL;
+    if (!authUrl) {
+      console.error('[mgp-strapi] CRM_AUTH_URL environment variable is missing.');
+      return null;
+    }
     const res = await fetch(authUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
