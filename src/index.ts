@@ -403,7 +403,12 @@ export default {
           'api::job-department.job-department.find',
           'api::job-position.job-position.find',
           'api::job-position.job-position.findOne',
-          'api::job-application.job-application.create'
+          'api::job-application.job-application.create',
+          'api::form-submission.form-submission.create',
+          'api::enquiry.enquiry.create',
+          'api::mobile-van-submission.mobile-van-submission.create',
+          'api::gold-valuation-submission.gold-valuation-submission.create',
+          'api::otp-request.otp-request.create'
         ];
 
         for (const action of actions) {
