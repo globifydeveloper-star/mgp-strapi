@@ -14,7 +14,9 @@ const config: Core.Config.Middlewares = [
             "'self'",
             'http://localhost:3000',
             'http://127.0.0.1:3000',
+            'https://mgp-web.vercel.app',
             'https://mgp-web-q2au.vercel.app',
+            'https://*.vercel.app',
           ],
           'img-src': [
             "'self'",
@@ -35,7 +37,15 @@ const config: Core.Config.Middlewares = [
       },
     },
   },
-  'strapi::cors',
+  {
+    name: 'strapi::cors',
+    config: {
+      enabled: true,
+      origin: ['*'],
+      headers: ['*'],
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+    },
+  },
   'strapi::poweredBy',
   'strapi::query',
   'strapi::body',
