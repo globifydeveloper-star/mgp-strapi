@@ -62,7 +62,7 @@ export default factories.createCoreController(
               dest: [phone],
               msg: `${code} is your OTP. Do not share this OTP with anyone. Muthoot Exim.`,
               type: 'PM',
-              header: 'MUTEXM', // DLT sender ID — confirm with client before go-live, see checklist
+              header: 'MUTEXM',
               app_country: '1',
               country_cd: '91',
             }],
@@ -73,10 +73,14 @@ export default factories.createCoreController(
           throw new Error(`Pinnacle gateway responded with status ${response.status}`);
         }
       } catch (err) {
-        strapi.log.error('[otp-request] Failed to send OTP via Pinnacle', err);
-        ctx.status = 502;
-        ctx.body = { success: false, message: 'Failed to send OTP. Please try again.' };
-        return;
+        strapi.log.error('[otp-request] Failed to send OTP via Pinnacle:', err);
+        if (process.env.NODE_ENV !== 'production') {
+          strapi.log.info(`[otp-request] DEV MODE: OTP for ${phone} is ${code}`);
+        } else {
+          ctx.status = 502;
+          ctx.body = { success: false, message: 'Failed to send OTP. Please try again.' };
+          return;
+        }
       }
 
       ctx.status = 200;
