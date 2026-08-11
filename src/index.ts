@@ -408,6 +408,7 @@ export default {
           'api::enquiry.enquiry.create',
           'api::mobile-van-submission.mobile-van-submission.create',
           'api::gold-valuation-submission.gold-valuation-submission.create',
+          'api::contact-submission.contact-submission.create',
           'api::otp-request.otp-request.create'
         ];
 

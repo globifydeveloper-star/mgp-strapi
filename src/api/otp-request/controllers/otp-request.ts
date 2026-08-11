@@ -88,10 +88,11 @@ export default factories.createCoreController(
     },
 
     async verifyOtp(ctx: Context) {
-      const { phone, otp, name, state, city, purity, weight, message, consent, sourceForm, enquiryType } = (ctx.request.body ?? {}) as {
+      const { phone, otp, name, email, state, city, purity, weight, message, consent, sourceForm, enquiryType } = (ctx.request.body ?? {}) as {
         phone?: string;
         otp?: string;
         name?: string;
+        email?: string;
         state?: string;
         city?: string;
         purity?: string;
@@ -155,27 +156,64 @@ export default factories.createCoreController(
         },
       });
 
-      // Dual-Write Mirror to Form Submissions Collection
+      // Dual-Write Mirror to Target Collection (Mobile Van Submission, Contact Submission, or Form Submission)
       if (name && typeof name === 'string' && name.trim()) {
         try {
-          const formSubmissionService = strapi.service('api::form-submission.form-submission') as unknown as {
-            submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
-          };
-          if (formSubmissionService) {
-            const location = [city, state].filter(Boolean).join(', ');
-            await formSubmissionService.submitAndSync({
-              name: name.trim(),
-              phone,
-              branch: location || undefined,
-              enquiryType: enquiryType || (purity || weight ? 'Enquire Now' : 'Enquire Now'),
-              sourceForm: sourceForm || (purity || weight ? `Sell Gold Modal (Purity: ${purity || 'N/A'}, Weight: ${weight || '0'}g)` : 'OTP Form'),
-              purity: purity || undefined,
-              weight: weight || undefined,
-              details: { purity, weight, city, state, message },
-            });
+          const srcStr = `${sourceForm || ''} ${enquiryType || ''}`.toLowerCase();
+          const location = [city, state].filter(Boolean).join(', ');
+
+          if (srcStr.includes('van') || srcStr.includes('mobile')) {
+            const vanService = strapi.service('api::mobile-van-submission.mobile-van-submission') as unknown as {
+              submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
+            };
+            if (vanService) {
+              await vanService.submitAndSync({
+                name: name.trim(),
+                phone,
+                email,
+                city: city || undefined,
+                state: state || undefined,
+                purity: purity || undefined,
+                weight: weight || undefined,
+                details: { purity, weight, city, state, message },
+                submittedAt: new Date().toISOString(),
+              });
+            }
+          } else if (srcStr.includes('contact')) {
+            const contactService = strapi.service('api::contact-submission.contact-submission') as unknown as {
+              submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
+            };
+            if (contactService) {
+              await contactService.submitAndSync({
+                name: name.trim(),
+                phone,
+                email,
+                branch: location || undefined,
+                message: message || undefined,
+                submittedAt: new Date().toISOString(),
+              });
+            }
+          } else {
+            const formSubmissionService = strapi.service('api::form-submission.form-submission') as unknown as {
+              submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
+            };
+            if (formSubmissionService) {
+              await formSubmissionService.submitAndSync({
+                name: name.trim(),
+                phone,
+                email,
+                branch: location || undefined,
+                enquiryType: enquiryType || (purity || weight ? 'Enquire Now' : 'Enquire Now'),
+                sourceForm: sourceForm || (purity || weight ? `Sell Gold Modal (Purity: ${purity || 'N/A'}, Weight: ${weight || '0'}g)` : 'OTP Form'),
+                purity: purity || undefined,
+                weight: weight || undefined,
+                details: { purity, weight, city, state, message },
+                submittedAt: new Date().toISOString(),
+              });
+            }
           }
         } catch (mirrorErr) {
-          strapi.log.error('[otp-request] Failed to mirror submission to form-submission collection:', mirrorErr);
+          strapi.log.error('[otp-request] Failed to mirror submission to target collection:', mirrorErr);
         }
       }
 

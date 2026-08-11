@@ -25,6 +25,12 @@
     "city": {
       "type": "string"
     },
+    "state": {
+      "type": "string"
+    },
+    "address": {
+      "type": "text"
+    },
     "preferredDate": {
       "type": "string"
     },

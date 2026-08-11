@@ -1173,6 +1173,7 @@ export interface ApiMobileVanSubmissionMobileVanSubmission
     draftAndPublish: false;
   };
   attributes: {
+    address: Schema.Attribute.Text;
     city: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1195,6 +1196,7 @@ export interface ApiMobileVanSubmissionMobileVanSubmission
     phone: Schema.Attribute.String & Schema.Attribute.Required;
     preferredDate: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    state: Schema.Attribute.String;
     submittedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
