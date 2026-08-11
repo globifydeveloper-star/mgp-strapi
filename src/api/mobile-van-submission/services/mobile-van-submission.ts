@@ -24,6 +24,8 @@ export default factories.createCoreService(
       const phone = requiredString(input.phone ?? input.mobile, 'phone');
       const email = typeof input.email === 'string' && input.email.trim() ? input.email.trim() : undefined;
       const city = typeof input.city === 'string' && input.city.trim() ? input.city.trim() : (input.branch as string ?? undefined);
+      const state = typeof input.state === 'string' && input.state.trim() ? input.state.trim() : undefined;
+      const address = typeof input.address === 'string' && input.address.trim() ? input.address.trim() : undefined;
       const preferredDate = typeof input.preferredDate === 'string' ? input.preferredDate.trim() : undefined;
       const details = typeof input.details === 'object' && input.details !== null ? (input.details as Record<string, unknown>) : undefined;
 
@@ -35,6 +37,8 @@ export default factories.createCoreService(
           phone,
           email,
           city,
+          state,
+          address,
           preferredDate,
           details: details ? JSON.parse(JSON.stringify(details)) : undefined,
           submittedAt: new Date().toISOString(),
