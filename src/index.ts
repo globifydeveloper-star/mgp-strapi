@@ -275,62 +275,8 @@ export default {
       }
     }
 
-    // 8. Seed States and Relational Branches (Fix 5: Handle 11-vs-9 Maharashtra discrepancy comment)
-    /*
-     * NOTE ON FIX 5 (BRANCH DISCREPANCY):
-     * The client claims there are 11 branches in Maharashtra, but the standard dataset
-     * seeded below from "branchesData.ts" contains exactly 9 branches for Maharashtra.
-     * The remaining 2 branches are missing/unconfirmed from the client's static data pool
-     * and must be added manually in the Strapi Content Manager by the client.
-     */
-    const stateUid = 'api::state.state';
-    const branchUid = 'api::branch.branch';
-    const statesExisting = await strapi.documents(stateUid).findMany({ limit: 1 });
-    if (statesExisting.length === 0) {
-      strapi.log.info('Seeding States and Relational Branches...');
-      
-      const frontendDataPath = path.resolve(process.cwd(), '../MGP-WEB/src/data/branchesData.ts');
-      if (fs.existsSync(frontendDataPath)) {
-        const fileContent = fs.readFileSync(frontendDataPath, 'utf8');
-        const parsedBranches = parseBranches(fileContent);
-        
-        // Group by stateName
-        const stateMap = new Map<string, any[]>();
-        for (const b of parsedBranches) {
-          if (!stateMap.has(b.stateName)) {
-            stateMap.set(b.stateName, []);
-          }
-          stateMap.get(b.stateName)!.push(b);
-        }
-        
-        // Create state records and link branches
-        for (const [stateName, branches] of stateMap.entries()) {
-          const stateRecord = await strapi.documents(stateUid).create({
-            data: { name: stateName }
-          });
-          
-          for (const b of branches) {
-            await strapi.documents(branchUid).create({
-              data: {
-                name: b.name,
-                address: b.address,
-                city: b.city,
-                pincode: b.pincode,
-                timing: b.timing,
-                lat: b.lat,
-                lng: b.lng,
-                viewDirectionsLink: b.url,
-                contactInfo: '',
-                state: stateRecord.documentId
-              }
-            });
-          }
-        }
-        strapi.log.info(`Successfully seeded ${stateMap.size} states and relational branches.`);
-      } else {
-        strapi.log.warn(`Frontend branch data file not found at ${frontendDataPath}. Skipping relational branch seed.`);
-      }
-    }
+    // 8. States & Branches: Branch data is dynamically fetched directly from Muthoot Branch Master API.
+    // Static database seeding is disabled to prevent stale data.
 
     // 8b. Seed Career Page Settings and Departments
     const careerSettingUid = 'api::career-page-setting.career-page-setting';
