@@ -1204,6 +1204,41 @@ export interface ApiMobileVanSubmissionMobileVanSubmission
   };
 }
 
+export interface ApiNavbarSettingNavbarSetting extends Struct.SingleTypeSchema {
+  collectionName: 'navbar_settings';
+  info: {
+    description: 'Global header navigation links and actions';
+    displayName: 'Navbar Setting';
+    pluralName: 'navbar-settings';
+    singularName: 'navbar-setting';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    ctaLabel: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Sell Your Gold'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::navbar-setting.navbar-setting'
+    > &
+      Schema.Attribute.Private;
+    navLinks: Schema.Attribute.Component<'navigation.nav-item', true>;
+    phoneNumber: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'+91 9037 921 192'>;
+    phoneRaw: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'+919037921192'>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiOtpRequestOtpRequest extends Struct.CollectionTypeSchema {
   collectionName: 'otp_requests';
   info: {
@@ -1974,6 +2009,7 @@ declare module '@strapi/strapi' {
       'api::job-department.job-department': ApiJobDepartmentJobDepartment;
       'api::job-position.job-position': ApiJobPositionJobPosition;
       'api::mobile-van-submission.mobile-van-submission': ApiMobileVanSubmissionMobileVanSubmission;
+      'api::navbar-setting.navbar-setting': ApiNavbarSettingNavbarSetting;
       'api::otp-request.otp-request': ApiOtpRequestOtpRequest;
       'api::page.page': ApiPagePage;
       'api::process-step.process-step': ApiProcessStepProcessStep;

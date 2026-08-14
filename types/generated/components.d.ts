@@ -13,6 +13,21 @@ export interface BlogCta extends Struct.ComponentSchema {
   };
 }
 
+export interface NavigationNavItem extends Struct.ComponentSchema {
+  collectionName: 'components_navigation_nav_items';
+  info: {
+    description: 'Navigation link item';
+    displayName: 'Nav Item';
+    icon: 'link';
+  };
+  attributes: {
+    isButton: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    isExternal: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    url: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface SectionsFaqSection extends Struct.ComponentSchema {
   collectionName: 'components_sections_faq_sections';
   info: {
@@ -130,6 +145,7 @@ declare module '@strapi/strapi' {
   export namespace Public {
     export interface ComponentSchemas {
       'blog.cta': BlogCta;
+      'navigation.nav-item': NavigationNavItem;
       'sections.faq-section': SectionsFaqSection;
       'sections.feedback-section': SectionsFeedbackSection;
       'sections.gold-sell-process-section': SectionsGoldSellProcessSection;
