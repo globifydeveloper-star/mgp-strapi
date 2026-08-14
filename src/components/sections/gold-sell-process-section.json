@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_sections_gold_sell_process_sections",
+  "info": {
+    "displayName": "Gold Sell Process Section",
+    "icon": "list",
+    "description": "Gold selling process steps section"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "process_steps": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::process-step.process-step"
+    }
+  }
+}

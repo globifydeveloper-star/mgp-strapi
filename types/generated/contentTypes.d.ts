@@ -1241,6 +1241,46 @@ export interface ApiOtpRequestOtpRequest extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiPagePage extends Struct.CollectionTypeSchema {
+  collectionName: 'pages';
+  info: {
+    description: 'Dynamic client-driven pages with dynamic zone sections';
+    displayName: 'Page';
+    pluralName: 'pages';
+    singularName: 'page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::page.page'> &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    sections: Schema.Attribute.DynamicZone<
+      [
+        'sections.hero-section',
+        'sections.gold-sell-process-section',
+        'sections.gp-difference-section',
+        'sections.promo-slider-section',
+        'sections.feedback-section',
+        'sections.faq-section',
+        'sections.otp-enquiry-section',
+      ]
+    >;
+    seoDescription: Schema.Attribute.Text;
+    seoTitle: Schema.Attribute.String;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiProcessStepProcessStep extends Struct.CollectionTypeSchema {
   collectionName: 'process_steps';
   info: {
@@ -1935,6 +1975,7 @@ declare module '@strapi/strapi' {
       'api::job-position.job-position': ApiJobPositionJobPosition;
       'api::mobile-van-submission.mobile-van-submission': ApiMobileVanSubmissionMobileVanSubmission;
       'api::otp-request.otp-request': ApiOtpRequestOtpRequest;
+      'api::page.page': ApiPagePage;
       'api::process-step.process-step': ApiProcessStepProcessStep;
       'api::promo-slide.promo-slide': ApiPromoSlidePromoSlide;
       'api::state.state': ApiStateState;
