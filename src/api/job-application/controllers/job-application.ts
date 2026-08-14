@@ -226,14 +226,33 @@ export default factories.createCoreController(
         return;
       }
 
-      if (typeof resume.url === 'string' && (resume.url.startsWith('http://') || resume.url.startsWith('https://'))) {
-        ctx.redirect(resume.url);
-        return;
+      let fileUrl = resume.url;
+      if (typeof fileUrl === 'string' && !fileUrl.startsWith('http://') && !fileUrl.startsWith('https://')) {
+        let host = (process.env.STRAPI_URL || 'http://localhost:1337').trim();
+        if (host.endsWith('/')) {
+          host = host.slice(0, -1);
+        }
+        fileUrl = fileUrl.startsWith('/') ? `${host}${fileUrl}` : `${host}/${fileUrl}`;
       }
 
-      const host = process.env.STRAPI_URL || 'http://localhost:1337';
-      const fullUrl = resume.url.startsWith('/') ? `${host}${resume.url}` : resume.url;
-      ctx.redirect(fullUrl);
+      try {
+        const response = await fetch(fileUrl);
+        if (!response.ok) {
+          ctx.status = response.status;
+          ctx.body = { error: `Failed to fetch file: ${response.statusText}` };
+          return;
+        }
+        
+        ctx.set('Content-Type', response.headers.get('content-type') || 'application/octet-stream');
+        ctx.set('Content-Disposition', `attachment; filename="${(resume.name || 'resume').replace(/"/g, '')}${resume.ext || ''}"`);
+        
+        const { Readable } = require('stream');
+        ctx.body = Readable.fromWeb(response.body);
+      } catch (err) {
+        strapi.log.error('[job-application] Failed to stream resume:', err);
+        ctx.status = 500;
+        ctx.body = { error: 'Failed to retrieve the resume file from storage.' };
+      }
     },
 
     async generateSinglePdf(ctx: Context) {
