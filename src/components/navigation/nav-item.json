@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_navigation_nav_items",
+  "info": {
+    "displayName": "Nav Item",
+    "icon": "link",
+    "description": "Navigation link item"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "isExternal": {
+      "type": "boolean",
+      "default": false
+    },
+    "isButton": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

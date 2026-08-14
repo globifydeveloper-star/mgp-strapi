@@ -1,0 +1,32 @@
+{
+  "kind": "singleType",
+  "collectionName": "navbar_settings",
+  "info": {
+    "singularName": "navbar-setting",
+    "pluralName": "navbar-settings",
+    "displayName": "Navbar Setting",
+    "description": "Global header navigation links and actions"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "navLinks": {
+      "type": "component",
+      "component": "navigation.nav-item",
+      "repeatable": true
+    },
+    "phoneNumber": {
+      "type": "string",
+      "default": "+91 9037 921 192"
+    },
+    "phoneRaw": {
+      "type": "string",
+      "default": "+919037921192"
+    },
+    "ctaLabel": {
+      "type": "string",
+      "default": "Sell Your Gold"
+    }
+  }
+}
