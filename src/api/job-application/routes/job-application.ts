@@ -8,5 +8,29 @@ export default {
         auth: false,
       },
     },
+    {
+      method: 'GET',
+      path: '/job-applications/export/pdf',
+      handler: 'job-application.exportBulkPdf',
+      config: {
+        auth: false,
+      },
+    },
+    {
+      method: 'GET',
+      path: '/job-applications/:id/resume',
+      handler: 'job-application.downloadResume',
+      config: {
+        auth: false,
+      },
+    },
+    {
+      method: 'GET',
+      path: '/job-applications/:id/pdf',
+      handler: 'job-application.generateSinglePdf',
+      config: {
+        auth: false,
+      },
+    },
   ],
 };
