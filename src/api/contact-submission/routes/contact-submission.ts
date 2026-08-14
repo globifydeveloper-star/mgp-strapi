@@ -10,6 +10,22 @@ export default {
     },
     {
       method: 'GET',
+      path: '/contact-submissions/export/pdf',
+      handler: 'contact-submission.exportBulkPdf',
+      config: {
+        auth: false,
+      },
+    },
+    {
+      method: 'GET',
+      path: '/contact-submissions/:id/pdf',
+      handler: 'contact-submission.generateSinglePdf',
+      config: {
+        auth: false,
+      },
+    },
+    {
+      method: 'GET',
       path: '/contact-submissions',
       handler: 'contact-submission.find',
       config: {
