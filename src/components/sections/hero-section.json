@@ -1,0 +1,42 @@
+{
+  "collectionName": "components_sections_hero_sections",
+  "info": {
+    "displayName": "Hero Section",
+    "icon": "landscape",
+    "description": "Hero section banner with full or half width layout"
+  },
+  "options": {},
+  "attributes": {
+    "heroText": {
+      "type": "string"
+    },
+    "heroSubtext": {
+      "type": "text"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "layout": {
+      "type": "enumeration",
+      "enum": [
+        "full",
+        "half"
+      ],
+      "default": "full"
+    },
+    "button1": {
+      "type": "component",
+      "component": "blog.cta",
+      "repeatable": false
+    },
+    "button2": {
+      "type": "component",
+      "component": "blog.cta",
+      "repeatable": false
+    }
+  }
+}

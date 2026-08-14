@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_sections_gp_difference_sections",
+  "info": {
+    "displayName": "The Gold Point Difference Section",
+    "icon": "shield",
+    "description": "The Gold Point Difference section"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "difference_boxes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::difference-box.difference-box"
+    }
+  }
+}

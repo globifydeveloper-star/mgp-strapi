@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_sections_promo_slider_sections",
+  "info": {
+    "displayName": "Promo Slider Section",
+    "icon": "slideshow",
+    "description": "Promo slider section"
+  },
+  "options": {},
+  "attributes": {
+    "promo_slides": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::promo-slide.promo-slide"
+    }
+  }
+}

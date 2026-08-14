@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_sections_faq_sections",
+  "info": {
+    "displayName": "FAQ Section",
+    "icon": "question",
+    "description": "Frequently asked questions section"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "faqs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::faq.faq"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_sections_feedback_sections",
+  "info": {
+    "displayName": "Feedback Section",
+    "icon": "star",
+    "description": "Customer testimonials feedback section"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "testimonials": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::testimonial.testimonial"
+    }
+  }
+}

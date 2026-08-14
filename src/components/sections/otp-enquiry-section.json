@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_sections_otp_enquiry_sections",
+  "info": {
+    "displayName": "OTP Enquiry Form Section",
+    "icon": "mail",
+    "description": "OTP Enquiry form section"
+  },
+  "options": {},
+  "attributes": {
+    "sourceForm": {
+      "type": "string",
+      "default": "Dynamic Page Enquiry Form"
+    },
+    "enquiryType": {
+      "type": "string",
+      "default": "Enquire Now"
+    }
+  }
+}

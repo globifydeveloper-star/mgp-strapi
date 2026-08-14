@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pages",
+  "info": {
+    "singularName": "page",
+    "pluralName": "pages",
+    "displayName": "Page",
+    "description": "Dynamic client-driven pages with dynamic zone sections"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "sections": {
+      "type": "dynamiczone",
+      "components": [
+        "sections.hero-section",
+        "sections.gold-sell-process-section",
+        "sections.gp-difference-section",
+        "sections.promo-slider-section",
+        "sections.feedback-section",
+        "sections.faq-section",
+        "sections.otp-enquiry-section"
+      ]
+    }
+  }
+}
