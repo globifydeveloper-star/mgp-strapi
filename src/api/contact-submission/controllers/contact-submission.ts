@@ -268,5 +268,42 @@ export default factories.createCoreController(
       ctx.set('Content-Disposition', `inline; filename="Contact_Submissions_Export_${Date.now()}.pdf"`);
       ctx.body = pdfBuffer;
     },
+
+    async exportBulkCsv(ctx: Context) {
+      if (!(await verifyAdminSession(ctx, strapi))) {
+        ctx.status = 403;
+        ctx.body = { error: 'Forbidden: Admin authentication required.' };
+        return;
+      }
+
+      const entries = (await strapi.documents('api::contact-submission.contact-submission').findMany({
+        sort: { submittedAt: 'desc' },
+      })) as any[];
+
+      const escapeCsv = (str: string) => {
+        if (str === null || str === undefined) return '""';
+        return `"${String(str).replace(/"/g, '""')}"`;
+      };
+
+      const header = ['ID', 'Name', 'Phone', 'Email', 'Branch', 'Message', 'CRM Status', 'CRM Lead ID', 'CRM Error', 'Submitted Date'];
+      const rows = entries.map((item) => [
+        escapeCsv(item.documentId),
+        escapeCsv(item.name),
+        escapeCsv(item.phone),
+        escapeCsv(item.email),
+        escapeCsv(item.branch),
+        escapeCsv(item.message),
+        escapeCsv(item.crmPushStatus || 'Pending'),
+        escapeCsv(item.crmLeadId),
+        escapeCsv(item.crmError),
+        escapeCsv(item.submittedAt ? new Date(item.submittedAt).toISOString() : ''),
+      ]);
+
+      const csvContent = [header.join(','), ...rows.map((row) => row.join(','))].join('\n');
+
+      ctx.type = 'text/csv';
+      ctx.set('Content-Disposition', `attachment; filename="Contact_Submissions_Export_${Date.now()}.csv"`);
+      ctx.body = csvContent;
+    },
   })
 );

@@ -18,6 +18,14 @@ export default {
     },
     {
       method: 'GET',
+      path: '/job-applications/export/csv',
+      handler: 'job-application.exportBulkCsv',
+      config: {
+        auth: false,
+      },
+    },
+    {
+      method: 'GET',
       path: '/job-applications/:id/resume',
       handler: 'job-application.downloadResume',
       config: {

@@ -445,5 +445,42 @@ export default factories.createCoreController(
       ctx.set('Content-Disposition', `inline; filename="Job_Applications_Export_${Date.now()}.pdf"`);
       ctx.body = pdfBuffer;
     },
+
+    async exportBulkCsv(ctx: Context) {
+      if (!(await verifyAdminSession(ctx, strapi))) {
+        ctx.status = 403;
+        ctx.body = { error: 'Forbidden: Admin authentication required.' };
+        return;
+      }
+
+      const apps = (await strapi.documents('api::job-application.job-application').findMany({
+        populate: ['jobPosition', 'jobPosition.department', 'resume'],
+        sort: { submittedAt: 'desc' },
+      })) as any[];
+
+      const escapeCsv = (str: string) => {
+        if (str === null || str === undefined) return '""';
+        return `"${String(str).replace(/"/g, '""')}"`;
+      };
+
+      const header = ['ID', 'Name', 'Email', 'Phone', 'Role', 'Department', 'Status', 'Applied Date', 'Has Resume'];
+      const rows = apps.map((app) => [
+        escapeCsv(app.documentId),
+        escapeCsv(app.fullName),
+        escapeCsv(app.email),
+        escapeCsv(app.phone),
+        escapeCsv(app.jobPosition?.title || ''),
+        escapeCsv(app.jobPosition?.department?.name || ''),
+        escapeCsv(app.applicationStatus || 'New'),
+        escapeCsv(app.submittedAt ? new Date(app.submittedAt).toISOString() : ''),
+        escapeCsv(app.resume ? 'Yes' : 'No'),
+      ]);
+
+      const csvContent = [header.join(','), ...rows.map((row) => row.join(','))].join('\n');
+
+      ctx.type = 'text/csv';
+      ctx.set('Content-Disposition', `attachment; filename="Job_Applications_Export_${Date.now()}.csv"`);
+      ctx.body = csvContent;
+    },
   })
 );

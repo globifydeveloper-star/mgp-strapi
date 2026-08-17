@@ -117,22 +117,26 @@ export default {
           return null;
         }
 
-        const handleExport = () => {
+        const handleExport = (e: any) => {
+          const type = e.target.value;
+          e.target.value = ''; // reset
+          if (!type) return;
+
           if (isJobApp) {
-            downloadAdminFile('/api/job-applications/export/pdf', `Job_Applications_Export_${Date.now()}.pdf`);
+            if (type === 'pdf') downloadAdminFile('/api/job-applications/export/pdf', `Job_Applications_Export_${Date.now()}.pdf`);
+            if (type === 'csv') downloadAdminFile('/api/job-applications/export/csv', `Job_Applications_Export_${Date.now()}.csv`);
           } else if (isContactSub) {
-            downloadAdminFile('/api/contact-submissions/export/pdf', `Contact_Submissions_Export_${Date.now()}.pdf`);
+            if (type === 'pdf') downloadAdminFile('/api/contact-submissions/export/pdf', `Contact_Submissions_Export_${Date.now()}.pdf`);
+            if (type === 'csv') downloadAdminFile('/api/contact-submissions/export/csv', `Contact_Submissions_Export_${Date.now()}.csv`);
           }
         };
 
         return (
-          <button
-            type="button"
-            onClick={handleExport}
+          <select
+            onChange={handleExport}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '6px',
               backgroundColor: '#0B1536',
               color: '#FFFFFF',
               border: '1px solid #EBAF20',
@@ -142,10 +146,13 @@ export default {
               fontWeight: 600,
               cursor: 'pointer',
               marginLeft: '8px',
+              outline: 'none',
             }}
           >
-            <span>📄 Export All (PDF)</span>
-          </button>
+            <option value="" style={{ display: 'none' }}>⬇️ Export As...</option>
+            <option value="pdf">📄 Export as PDF</option>
+            <option value="csv">📊 Export as CSV</option>
+          </select>
         );
       },
     });
