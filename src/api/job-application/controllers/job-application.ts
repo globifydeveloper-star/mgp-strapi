@@ -248,8 +248,14 @@ export default factories.createCoreController(
           return;
         }
         
+        const extension = typeof resume.ext === 'string' ? resume.ext : '';
+        let filename = String(resume.name || `resume${extension}`).replace(/[\r\n]/g, '');
+        if (extension && !filename.toLowerCase().endsWith(extension.toLowerCase())) {
+          filename += extension;
+        }
+
         ctx.set('Content-Type', response.headers.get('content-type') || 'application/octet-stream');
-        ctx.set('Content-Disposition', `attachment; filename="${(resume.name || 'resume').replace(/"/g, '')}${resume.ext || ''}"`);
+        ctx.attachment(filename);
         
         const { Readable } = require('stream');
         ctx.body = Readable.fromWeb(response.body);

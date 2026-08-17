@@ -1,4 +1,4 @@
-import type { StrapiApp } from '@strapi/strapi/admin';
+import { getFetchClient, type StrapiApp } from '@strapi/strapi/admin';
 
 export default {
   config: {
@@ -8,88 +8,30 @@ export default {
     const contentManager = app.getPlugin('content-manager');
     if (!contentManager) return;
 
-    // Comprehensive token retriever for Strapi Admin storage keys
-    const getAdminToken = (): string => {
-      if (typeof window === 'undefined') return '';
-      const keys = [
-        'jwtToken',
-        'strapi_admin_auth',
-        'STRAPI_ADMIN_AUTH_TOKEN',
-        'admin_jwtToken',
-        'token',
-        'jwt',
-      ];
-
-      for (const storage of [localStorage, sessionStorage]) {
-        for (const key of keys) {
-          try {
-            const raw = storage.getItem(key);
-            if (!raw) continue;
-            if (raw.startsWith('{') || raw.startsWith('[')) {
-              const parsed = JSON.parse(raw);
-              const t = parsed?.token || parsed?.jwt || parsed?.jwtToken || (typeof parsed === 'string' ? parsed : null);
-              if (t && typeof t === 'string' && t.trim()) return t.trim();
-            } else if (typeof raw === 'string' && raw.trim()) {
-              return raw.replace(/^"|"$/g, '').trim();
-            }
-          } catch (_) {}
-        }
-      }
-      return '';
-    };
-
-    // Authenticated Blob Download Helper
+    // Use Strapi's fetch client so cookie-based sessions, persisted sessions,
+    // custom backend URLs, and automatic access-token refresh all work.
     const downloadAdminFile = async (endpointPath: string, defaultFilename: string) => {
-      const token = getAdminToken();
-      const host = window.location.origin;
-      const fullUrl = `${host}${endpointPath}`;
-
-      const headers: Record<string, string> = {};
-      if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-      }
-
       try {
-        const res = await fetch(fullUrl, {
-          method: 'GET',
-          headers,
+        const { data: blob, headers } = await getFetchClient().get(endpointPath, {
+          responseType: 'blob',
         });
 
-        if (res.status === 403 || res.status === 401) {
-          const fallbackToken = token || prompt('Please enter your Strapi Admin API Token:');
-          if (fallbackToken) {
-            const retryRes = await fetch(`${fullUrl}${fullUrl.includes('?') ? '&' : '?'}token=${encodeURIComponent(fallbackToken.trim())}`);
-            if (retryRes.ok) {
-              const blob = await retryRes.blob();
-              const blobUrl = window.URL.createObjectURL(blob);
-              const a = document.createElement('a');
-              a.href = blobUrl;
-              a.download = defaultFilename;
-              document.body.appendChild(a);
-              a.click();
-              a.remove();
-              window.URL.revokeObjectURL(blobUrl);
-              return;
+        const disposition = headers?.get('content-disposition');
+        let filename = defaultFilename;
+        if (disposition) {
+          const encodedMatch = disposition.match(/filename\*=UTF-8''([^;]+)/i);
+          const plainMatch = disposition.match(/filename="?([^";]+)"?/i);
+          const responseFilename = encodedMatch?.[1] || plainMatch?.[1];
+
+          if (responseFilename) {
+            try {
+              filename = decodeURIComponent(responseFilename);
+            } catch {
+              filename = responseFilename;
             }
           }
-          alert('Access Forbidden (403): Admin authentication required. Please re-login to Strapi Admin Panel.');
-          return;
         }
 
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({}));
-          alert(errData.error || `Download failed with HTTP ${res.status}`);
-          return;
-        }
-
-        const disposition = res.headers.get('content-disposition');
-        let filename = defaultFilename;
-        if (disposition && disposition.includes('filename=')) {
-          const match = disposition.match(/filename="?([^";]+)"?/);
-          if (match && match[1]) filename = match[1];
-        }
-
-        const blob = await res.blob();
         const blobUrl = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = blobUrl;
@@ -100,7 +42,7 @@ export default {
         window.URL.revokeObjectURL(blobUrl);
       } catch (err) {
         console.error('[Admin Export] Download error:', err);
-        alert('Network error downloading file.');
+        alert('Download failed. Please sign in again and retry.');
       }
     };
 
@@ -157,14 +99,16 @@ export default {
       },
     });
 
-    // Injection for Edit View Right Links (Single Entry Detail Page)
-    contentManager.injectComponent('editView', 'right-links', {
-      name: 'pdf-single-actions',
-      Component: ({ document, documentId }: { document?: any; documentId?: string }) => {
-        if (typeof window === 'undefined') return null;
-        const path = window.location.pathname;
-        const isJobApp = path.includes('job-application');
-        const isContactSub = path.includes('contact-submission');
+    // Strapi 5 edit-view side panels receive the current document ID. The
+    // legacy editView/right-links injection zone only receives the model slug.
+    const contentManagerApis = contentManager.apis as {
+      addEditViewSidePanel: (panels: any[]) => void;
+    };
+
+    contentManagerApis.addEditViewSidePanel([
+      ({ model, document, documentId }: { model: string; document?: any; documentId?: string }) => {
+        const isJobApp = model === 'api::job-application.job-application';
+        const isContactSub = model === 'api::contact-submission.contact-submission';
 
         if (!isJobApp && !isContactSub) {
           return null;
@@ -185,54 +129,21 @@ export default {
           downloadAdminFile(`/api/job-applications/${docId}/resume`, `Resume_${docId}.pdf`);
         };
 
-        return (
-          <div
-            style={{
-              marginTop: '16px',
-              padding: '16px',
-              backgroundColor: '#FAFAFA',
-              border: '1px solid #EAEAEA',
-              borderRadius: '4px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px',
-            }}
-          >
-            <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 600, color: '#0B1536' }}>
-              HR Export Actions
-            </h4>
-            <button
-              type="button"
-              onClick={handleSinglePdf}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '6px',
-                backgroundColor: '#0B1536',
-                color: '#FFFFFF',
-                border: 'none',
-                borderRadius: '4px',
-                padding: '8px 12px',
-                fontSize: '12px',
-                fontWeight: 600,
-                cursor: 'pointer',
-              }}
-            >
-              <span>📄 Download {isContactSub ? 'Contact PDF' : 'Application PDF'}</span>
-            </button>
-            {isJobApp && (
+        return {
+          title: 'Downloads',
+          content: (
+            <div style={{ display: 'flex', width: '100%', flexDirection: 'column', gap: '8px' }}>
               <button
                 type="button"
-                onClick={handleResumeDownload}
+                onClick={handleSinglePdf}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '6px',
-                  backgroundColor: '#FFFFFF',
-                  color: '#0B1536',
-                  border: '1px solid #0B1536',
+                  width: '100%',
+                  backgroundColor: '#4945FF',
+                  color: '#FFFFFF',
+                  border: '1px solid #4945FF',
                   borderRadius: '4px',
                   padding: '8px 12px',
                   fontSize: '12px',
@@ -240,12 +151,37 @@ export default {
                   cursor: 'pointer',
                 }}
               >
-                <span>📎 Download Original Resume</span>
+                Download {isContactSub ? 'contact PDF' : 'application PDF'}
               </button>
-            )}
-          </div>
-        );
+
+              {isJobApp && (
+                <button
+                  type="button"
+                  onClick={handleResumeDownload}
+                  disabled={!document?.resume}
+                  title={!document?.resume ? 'No resume is attached to this application' : undefined}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%',
+                    backgroundColor: '#FFFFFF',
+                    color: document?.resume ? '#4945FF' : '#8E8EA9',
+                    border: `1px solid ${document?.resume ? '#4945FF' : '#DCDCE4'}`,
+                    borderRadius: '4px',
+                    padding: '8px 12px',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    cursor: document?.resume ? 'pointer' : 'not-allowed',
+                  }}
+                >
+                  Download original resume
+                </button>
+              )}
+            </div>
+          ),
+        };
       },
-    });
+    ]);
   },
 };
