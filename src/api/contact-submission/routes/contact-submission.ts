@@ -18,6 +18,14 @@ export default {
     },
     {
       method: 'GET',
+      path: '/contact-submissions/export/csv',
+      handler: 'contact-submission.exportBulkCsv',
+      config: {
+        auth: false,
+      },
+    },
+    {
+      method: 'GET',
       path: '/contact-submissions/:id/pdf',
       handler: 'contact-submission.generateSinglePdf',
       config: {
