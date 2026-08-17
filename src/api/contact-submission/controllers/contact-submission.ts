@@ -46,11 +46,16 @@ const verifyAdminSession = async (ctx: Context, strapi: any): Promise<boolean> =
     const secret = process.env.ADMIN_JWT_SECRET || strapi.config.get('admin.auth.secret');
     if (secret) {
       const decoded = jwt.verify(token, secret);
-      if (decoded && (decoded.id || decoded.userId)) {
+      strapi.log.info('[verifyAdminSession] Decoded token payload:', decoded);
+      if (decoded) {
         return true;
       }
+    } else {
+      strapi.log.warn('[verifyAdminSession] ADMIN_JWT_SECRET is missing or undefined.');
     }
-  } catch (_) {}
+  } catch (err) {
+    strapi.log.error('[verifyAdminSession] JWT Verification failed:', err);
+  }
 
   try {
     const apiTokenService = strapi.service('admin::api-token') || strapi.plugin('admin')?.service('api-token');
