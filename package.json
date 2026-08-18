@@ -15,6 +15,7 @@
     "upgrade:dry": "npx @strapi/upgrade latest --dry"
   },
   "dependencies": {
+    "@3xweb/strapi-provider-email-resend": "^1.2.1",
     "@strapi/database": "5.51.1",
     "@strapi/plugin-cloud": "5.51.1",
     "@strapi/plugin-users-permissions": "5.51.1",
@@ -30,7 +31,6 @@
     "react-router-dom": "^6.30.3",
     "resend": "^6.20.0",
     "strapi-plugin-content-manager-organizer": "^2.0.1",
-    "strapi-provider-email-resend": "^1.0.4",
     "styled-components": "^6.0.0"
   },
   "devDependencies": {
