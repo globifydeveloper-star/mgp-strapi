@@ -60,6 +60,18 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
       },
     },
   },
+  email: {
+    config: {
+      provider: 'resend',
+      providerOptions: {
+        apiKey: env('RESEND_API_KEY'),
+      },
+      settings: {
+        defaultFrom: env('EMAIL_DEFAULT_FROM', 'no-reply@mgp.globify.in'),
+        defaultReplyTo: env('EMAIL_DEFAULT_FROM', 'no-reply@mgp.globify.in'),
+      },
+    },
+  },
   'content-manager-organizer': {
     enabled: true,
   },
