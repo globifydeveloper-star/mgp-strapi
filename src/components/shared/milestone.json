@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_shared_milestones",
+  "info": {
+    "displayName": "Milestone",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "year": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "desc": {
+      "type": "text"
+    }
+  }
+}

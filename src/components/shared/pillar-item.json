@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_shared_pillar_items",
+  "info": {
+    "displayName": "Pillar Item",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "letter": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "desc": {
+      "type": "text"
+    },
+    "iconSvg": {
+      "type": "text"
+    }
+  }
+}

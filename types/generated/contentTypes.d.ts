@@ -480,6 +480,74 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiAboutUsPageAboutUsPage extends Struct.SingleTypeSchema {
+  collectionName: 'about_us_pages';
+  info: {
+    description: 'Content for the About Us page';
+    displayName: 'About Us Page';
+    pluralName: 'about-us-pages';
+    singularName: 'about-us-page';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    heroChecklist: Schema.Attribute.Component<'shared.check-item', true>;
+    heroDescription: Schema.Attribute.Text;
+    heroEyebrow: Schema.Attribute.String;
+    heroImages: Schema.Attribute.Media<'images', true>;
+    heroStats: Schema.Attribute.Component<'shared.stat-item', true>;
+    heroTitle: Schema.Attribute.String;
+    historyDescription: Schema.Attribute.Text;
+    historyMilestones: Schema.Attribute.Component<'shared.milestone', true>;
+    historySubtitle: Schema.Attribute.String;
+    historyTitle: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::about-us-page.about-us-page'
+    > &
+      Schema.Attribute.Private;
+    ogImage: Schema.Attribute.Media<'images'>;
+    parentChecklist: Schema.Attribute.Component<'shared.check-item', true>;
+    parentCompareHeading: Schema.Attribute.String;
+    parentDescription: Schema.Attribute.Text;
+    parentEyebrow: Schema.Attribute.String;
+    parentPortraitImage: Schema.Attribute.Media<'images'>;
+    parentStats: Schema.Attribute.Component<'shared.stat-item', true>;
+    parentTitle: Schema.Attribute.String;
+    philanthropyConclusion: Schema.Attribute.Text;
+    philanthropyDescription: Schema.Attribute.Text;
+    philanthropyInitiativeDesc: Schema.Attribute.Text;
+    philanthropyInitiativeTitle: Schema.Attribute.String;
+    philanthropyPillars: Schema.Attribute.Component<'shared.pillar-item', true>;
+    philanthropySubtitle: Schema.Attribute.String;
+    philanthropyTitle: Schema.Attribute.String;
+    presentCardDesc: Schema.Attribute.Text;
+    presentCardTag: Schema.Attribute.String;
+    presentCardTitle: Schema.Attribute.String;
+    presentDescription: Schema.Attribute.Text;
+    presentServices: Schema.Attribute.Component<'shared.service-item', true>;
+    presentServicesTitle: Schema.Attribute.String;
+    presentSubDescription: Schema.Attribute.Text;
+    presentSubtitle: Schema.Attribute.String;
+    presentTitle: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    recyclingDescription: Schema.Attribute.Text;
+    recyclingSteps: Schema.Attribute.Component<'shared.process-step', true>;
+    recyclingSubtitle: Schema.Attribute.String;
+    recyclingTitle: Schema.Attribute.String;
+    seoDescription: Schema.Attribute.Text;
+    seoTitle: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiBlogEnquiryBlogEnquiry extends Struct.CollectionTypeSchema {
   collectionName: 'blog_enquiries';
   info: {
@@ -647,6 +715,7 @@ export interface ApiCareerPageSettingCareerPageSetting
     draftAndPublish: false;
   };
   attributes: {
+    careerBenefits: Schema.Attribute.Component<'shared.benefit-card', true>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -739,6 +808,50 @@ export interface ApiContactSubmissionContactSubmission
     phone: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     submittedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiContactUsPageContactUsPage extends Struct.SingleTypeSchema {
+  collectionName: 'contact_us_pages';
+  info: {
+    description: 'Content for the Contact Us page';
+    displayName: 'Contact Us Page';
+    pluralName: 'contact-us-pages';
+    singularName: 'contact-us-page';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    formServices: Schema.Attribute.Component<'shared.check-item', true>;
+    formTitle: Schema.Attribute.String;
+    heroHeading: Schema.Attribute.String;
+    heroImage: Schema.Attribute.Media<'images'>;
+    heroLead: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::contact-us-page.contact-us-page'
+    > &
+      Schema.Attribute.Private;
+    officeAddress: Schema.Attribute.Text;
+    officeEmail: Schema.Attribute.String;
+    officeMapPopupText: Schema.Attribute.Text;
+    officeMapPopupTitle: Schema.Attribute.String;
+    officeMapUrl: Schema.Attribute.Text;
+    officeName: Schema.Attribute.String;
+    officePhone1: Schema.Attribute.String;
+    officePhone2: Schema.Attribute.String;
+    ogImage: Schema.Attribute.Media<'images'>;
+    publishedAt: Schema.Attribute.DateTime;
+    seoDescription: Schema.Attribute.Text;
+    seoTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1304,6 +1417,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
         'sections.feedback-section',
         'sections.faq-section',
         'sections.otp-enquiry-section',
+        'sections.rich-text',
       ]
     >;
     seoDescription: Schema.Attribute.Text;
@@ -1991,6 +2105,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::about-us-page.about-us-page': ApiAboutUsPageAboutUsPage;
       'api::blog-enquiry.blog-enquiry': ApiBlogEnquiryBlogEnquiry;
       'api::blog-page-setting.blog-page-setting': ApiBlogPageSettingBlogPageSetting;
       'api::blog-post.blog-post': ApiBlogPostBlogPost;
@@ -1998,6 +2113,7 @@ declare module '@strapi/strapi' {
       'api::career-page-setting.career-page-setting': ApiCareerPageSettingCareerPageSetting;
       'api::category.category': ApiCategoryCategory;
       'api::contact-submission.contact-submission': ApiContactSubmissionContactSubmission;
+      'api::contact-us-page.contact-us-page': ApiContactUsPageContactUsPage;
       'api::difference-box.difference-box': ApiDifferenceBoxDifferenceBox;
       'api::enquiry.enquiry': ApiEnquiryEnquiry;
       'api::faq.faq': ApiFaqFaq;

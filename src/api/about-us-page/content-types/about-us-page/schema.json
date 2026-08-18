@@ -1,0 +1,99 @@
+{
+  "kind": "singleType",
+  "collectionName": "about_us_pages",
+  "info": {
+    "singularName": "about-us-page",
+    "pluralName": "about-us-pages",
+    "displayName": "About Us Page",
+    "description": "Content for the About Us page"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "heroEyebrow": { "type": "string" },
+    "heroTitle": { "type": "string" },
+    "heroDescription": { "type": "text" },
+    "heroChecklist": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.check-item"
+    },
+    "heroStats": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.stat-item"
+    },
+    "heroImages": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["images"]
+    },
+    "recyclingSubtitle": { "type": "string" },
+    "recyclingTitle": { "type": "string" },
+    "recyclingDescription": { "type": "text" },
+    "recyclingSteps": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.process-step"
+    },
+    "historySubtitle": { "type": "string" },
+    "historyTitle": { "type": "string" },
+    "historyDescription": { "type": "text" },
+    "historyMilestones": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.milestone"
+    },
+    "parentEyebrow": { "type": "string" },
+    "parentTitle": { "type": "string" },
+    "parentDescription": { "type": "text" },
+    "parentChecklist": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.check-item"
+    },
+    "parentCompareHeading": { "type": "string" },
+    "parentStats": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.stat-item"
+    },
+    "parentPortraitImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "philanthropySubtitle": { "type": "string" },
+    "philanthropyTitle": { "type": "string" },
+    "philanthropyDescription": { "type": "text" },
+    "philanthropyInitiativeTitle": { "type": "string" },
+    "philanthropyInitiativeDesc": { "type": "text" },
+    "philanthropyPillars": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.pillar-item"
+    },
+    "philanthropyConclusion": { "type": "text" },
+    "presentSubtitle": { "type": "string" },
+    "presentTitle": { "type": "string" },
+    "presentDescription": { "type": "text" },
+    "presentSubDescription": { "type": "text" },
+    "presentCardTag": { "type": "string" },
+    "presentCardTitle": { "type": "string" },
+    "presentCardDesc": { "type": "text" },
+    "presentServicesTitle": { "type": "string" },
+    "presentServices": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.service-item"
+    },
+    "seoTitle": { "type": "string" },
+    "seoDescription": { "type": "text" },
+    "ogImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

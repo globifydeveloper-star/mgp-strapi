@@ -35,7 +35,8 @@
         "sections.promo-slider-section",
         "sections.feedback-section",
         "sections.faq-section",
-        "sections.otp-enquiry-section"
+        "sections.otp-enquiry-section",
+        "sections.rich-text"
       ]
     }
   }
