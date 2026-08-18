@@ -62,7 +62,7 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
   },
   email: {
     config: {
-      provider: '@3xweb/resend',
+      provider: '@3xweb/strapi-provider-email-resend',
       providerOptions: {
         apiKey: env('RESEND_API_KEY'),
       },
