@@ -38,6 +38,11 @@
       "type": "media",
       "multiple": false,
       "allowedTypes": ["images"]
+    },
+    "careerBenefits": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.benefit-card"
     }
   }
 }

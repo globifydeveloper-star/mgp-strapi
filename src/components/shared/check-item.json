@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_shared_check_items",
+  "info": {
+    "displayName": "Check Item",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string"
+    }
+  }
+}

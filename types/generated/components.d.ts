@@ -141,6 +141,104 @@ export interface SectionsPromoSliderSection extends Struct.ComponentSchema {
   };
 }
 
+export interface SectionsRichText extends Struct.ComponentSchema {
+  collectionName: 'components_sections_rich_texts';
+  info: {
+    description: 'A section for rendering markdown/rich text';
+    displayName: 'Rich Text Section';
+  };
+  attributes: {
+    content: Schema.Attribute.RichText;
+  };
+}
+
+export interface SharedBenefitCard extends Struct.ComponentSchema {
+  collectionName: 'components_shared_benefit_cards';
+  info: {
+    description: '';
+    displayName: 'Benefit Card';
+  };
+  attributes: {
+    desc: Schema.Attribute.Text;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface SharedCheckItem extends Struct.ComponentSchema {
+  collectionName: 'components_shared_check_items';
+  info: {
+    description: '';
+    displayName: 'Check Item';
+  };
+  attributes: {
+    text: Schema.Attribute.String;
+  };
+}
+
+export interface SharedMilestone extends Struct.ComponentSchema {
+  collectionName: 'components_shared_milestones';
+  info: {
+    description: '';
+    displayName: 'Milestone';
+  };
+  attributes: {
+    desc: Schema.Attribute.Text;
+    title: Schema.Attribute.String;
+    year: Schema.Attribute.String;
+  };
+}
+
+export interface SharedPillarItem extends Struct.ComponentSchema {
+  collectionName: 'components_shared_pillar_items';
+  info: {
+    description: '';
+    displayName: 'Pillar Item';
+  };
+  attributes: {
+    desc: Schema.Attribute.Text;
+    iconSvg: Schema.Attribute.Text;
+    letter: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface SharedProcessStep extends Struct.ComponentSchema {
+  collectionName: 'components_shared_process_steps';
+  info: {
+    description: '';
+    displayName: 'Process Step';
+  };
+  attributes: {
+    desc: Schema.Attribute.Text;
+    iconSvg: Schema.Attribute.Text;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface SharedServiceItem extends Struct.ComponentSchema {
+  collectionName: 'components_shared_service_items';
+  info: {
+    description: '';
+    displayName: 'Service Item';
+  };
+  attributes: {
+    icon: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface SharedStatItem extends Struct.ComponentSchema {
+  collectionName: 'components_shared_stat_items';
+  info: {
+    description: '';
+    displayName: 'Stat Item';
+  };
+  attributes: {
+    label: Schema.Attribute.String;
+    number: Schema.Attribute.String;
+  };
+}
+
 declare module '@strapi/strapi' {
   export namespace Public {
     export interface ComponentSchemas {
@@ -153,6 +251,14 @@ declare module '@strapi/strapi' {
       'sections.hero-section': SectionsHeroSection;
       'sections.otp-enquiry-section': SectionsOtpEnquirySection;
       'sections.promo-slider-section': SectionsPromoSliderSection;
+      'sections.rich-text': SectionsRichText;
+      'shared.benefit-card': SharedBenefitCard;
+      'shared.check-item': SharedCheckItem;
+      'shared.milestone': SharedMilestone;
+      'shared.pillar-item': SharedPillarItem;
+      'shared.process-step': SharedProcessStep;
+      'shared.service-item': SharedServiceItem;
+      'shared.stat-item': SharedStatItem;
     }
   }
 }

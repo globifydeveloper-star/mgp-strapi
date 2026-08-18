@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_shared_benefit_cards",
+  "info": {
+    "displayName": "Benefit Card",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "desc": {
+      "type": "text"
+    }
+  }
+}
