@@ -13,7 +13,12 @@
     },
     "url": {
       "type": "string",
-      "required": true
+      "required": false
+    },
+    "page": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::page.page"
     },
     "isExternal": {
       "type": "boolean",
