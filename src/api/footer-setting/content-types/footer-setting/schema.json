@@ -20,6 +20,46 @@
       "type": "component",
       "component": "navigation.nav-item",
       "repeatable": true
+    },
+    "footerDescription": {
+      "type": "text",
+      "default": "Muthoot Gold Point is the first National level organized sector venture to get into recycling of Gold, backed by a 133+ year legacy."
+    },
+    "facebookUrl": {
+      "type": "string",
+      "default": "https://www.facebook.com/MGoldPoint/"
+    },
+    "instagramUrl": {
+      "type": "string",
+      "default": "https://www.instagram.com/muthoot.goldpoint/"
+    },
+    "youtubeUrl": {
+      "type": "string",
+      "default": "https://www.youtube.com/watch?v=qntmLoXsN_c"
+    },
+    "linkedinUrl": {
+      "type": "string",
+      "default": "https://www.linkedin.com/company/muthoot-exim-private-limited/"
+    },
+    "twitterUrl": {
+      "type": "string",
+      "default": "https://x.com/muthootindia?lang=en"
+    },
+    "officeAddress": {
+      "type": "text",
+      "default": "Muthoot Exim Private Limited Ground Floor Muthoot Towers, M.G.Road, Opposite Abad Plaza Ernakulam, Kerala, 682035"
+    },
+    "officeHours": {
+      "type": "string",
+      "default": "9:00 AM - 6:00 PM"
+    },
+    "tollFreeNumber": {
+      "type": "string",
+      "default": "1800 102 1616"
+    },
+    "copyrightText": {
+      "type": "string",
+      "default": "Copyright © Muthoot Exim {year}. All Rights Reserved."
     }
   }
 }

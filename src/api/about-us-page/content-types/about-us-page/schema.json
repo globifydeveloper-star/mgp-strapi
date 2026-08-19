@@ -11,9 +11,15 @@
     "draftAndPublish": false
   },
   "attributes": {
-    "heroEyebrow": { "type": "string" },
-    "heroTitle": { "type": "string" },
-    "heroDescription": { "type": "text" },
+    "heroEyebrow": {
+      "type": "string"
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroDescription": {
+      "type": "text"
+    },
     "heroChecklist": {
       "type": "component",
       "repeatable": true,
@@ -27,33 +33,56 @@
     "heroImages": {
       "type": "media",
       "multiple": true,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Recommended: 1920x1080 px (16:9 Desktop) / 800x800 px (Mobile)"
     },
-    "recyclingSubtitle": { "type": "string" },
-    "recyclingTitle": { "type": "string" },
-    "recyclingDescription": { "type": "text" },
+    "recyclingSubtitle": {
+      "type": "string"
+    },
+    "recyclingTitle": {
+      "type": "string"
+    },
+    "recyclingDescription": {
+      "type": "text"
+    },
     "recyclingSteps": {
       "type": "component",
       "repeatable": true,
       "component": "shared.process-step"
     },
-    "historySubtitle": { "type": "string" },
-    "historyTitle": { "type": "string" },
-    "historyDescription": { "type": "text" },
+    "historySubtitle": {
+      "type": "string"
+    },
+    "historyTitle": {
+      "type": "string"
+    },
+    "historyDescription": {
+      "type": "text"
+    },
     "historyMilestones": {
       "type": "component",
       "repeatable": true,
       "component": "shared.milestone"
     },
-    "parentEyebrow": { "type": "string" },
-    "parentTitle": { "type": "string" },
-    "parentDescription": { "type": "text" },
+    "parentEyebrow": {
+      "type": "string"
+    },
+    "parentTitle": {
+      "type": "string"
+    },
+    "parentDescription": {
+      "type": "text"
+    },
     "parentChecklist": {
       "type": "component",
       "repeatable": true,
       "component": "shared.check-item"
     },
-    "parentCompareHeading": { "type": "string" },
+    "parentCompareHeading": {
+      "type": "string"
+    },
     "parentStats": {
       "type": "component",
       "repeatable": true,
@@ -62,38 +91,81 @@
     "parentPortraitImage": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Recommended: 800x1200 px (2:3 Portrait)"
     },
-    "philanthropySubtitle": { "type": "string" },
-    "philanthropyTitle": { "type": "string" },
-    "philanthropyDescription": { "type": "text" },
-    "philanthropyInitiativeTitle": { "type": "string" },
-    "philanthropyInitiativeDesc": { "type": "text" },
+    "philanthropySubtitle": {
+      "type": "string"
+    },
+    "philanthropyTitle": {
+      "type": "string"
+    },
+    "philanthropyDescription": {
+      "type": "text"
+    },
+    "philanthropyInitiativeTitle": {
+      "type": "string"
+    },
+    "philanthropyInitiativeDesc": {
+      "type": "text"
+    },
     "philanthropyPillars": {
       "type": "component",
       "repeatable": true,
       "component": "shared.pillar-item"
     },
-    "philanthropyConclusion": { "type": "text" },
-    "presentSubtitle": { "type": "string" },
-    "presentTitle": { "type": "string" },
-    "presentDescription": { "type": "text" },
-    "presentSubDescription": { "type": "text" },
-    "presentCardTag": { "type": "string" },
-    "presentCardTitle": { "type": "string" },
-    "presentCardDesc": { "type": "text" },
-    "presentServicesTitle": { "type": "string" },
+    "philanthropyConclusion": {
+      "type": "text"
+    },
+    "presentSubtitle": {
+      "type": "string"
+    },
+    "presentTitle": {
+      "type": "string"
+    },
+    "presentDescription": {
+      "type": "text"
+    },
+    "presentSubDescription": {
+      "type": "text"
+    },
+    "presentCardTag": {
+      "type": "string"
+    },
+    "presentCardTitle": {
+      "type": "string"
+    },
+    "presentCardDesc": {
+      "type": "text"
+    },
+    "presentServicesTitle": {
+      "type": "string"
+    },
     "presentServices": {
       "type": "component",
       "repeatable": true,
       "component": "shared.service-item"
     },
-    "seoTitle": { "type": "string" },
-    "seoDescription": { "type": "text" },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
     "ogImage": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Recommended: 1200x630 px (Standard OG Image)"
+    },
+    "hideFooter": {
+      "type": "boolean",
+      "default": false,
+      "description": "Check this box to completely hide the Footer on this page"
     }
   }
 }

@@ -29,7 +29,10 @@
     "ogImage": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Recommended: 1200x630 px (Standard OG Image)"
     },
     "sections": {
       "type": "dynamiczone",
@@ -48,6 +51,11 @@
       "relation": "oneToMany",
       "target": "api::faq.faq",
       "mappedBy": "page"
+    },
+    "hideFooter": {
+      "type": "boolean",
+      "default": false,
+      "description": "Check this box to completely hide the Footer on this page"
     }
   }
 }

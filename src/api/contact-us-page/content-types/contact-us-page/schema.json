@@ -11,33 +11,70 @@
     "draftAndPublish": false
   },
   "attributes": {
-    "heroHeading": { "type": "string" },
-    "heroLead": { "type": "text" },
+    "heroHeading": {
+      "type": "string"
+    },
+    "heroLead": {
+      "type": "text"
+    },
     "heroImage": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Recommended: 1920x1080 px (16:9 Desktop) / 800x800 px (Mobile)"
     },
-    "formTitle": { "type": "string" },
+    "formTitle": {
+      "type": "string"
+    },
     "formServices": {
       "type": "component",
       "repeatable": true,
       "component": "shared.check-item"
     },
-    "officeName": { "type": "string" },
-    "officeAddress": { "type": "text" },
-    "officePhone1": { "type": "string" },
-    "officePhone2": { "type": "string" },
-    "officeEmail": { "type": "string" },
-    "officeMapUrl": { "type": "text" },
-    "officeMapPopupTitle": { "type": "string" },
-    "officeMapPopupText": { "type": "text" },
-    "seoTitle": { "type": "string" },
-    "seoDescription": { "type": "text" },
+    "officeName": {
+      "type": "string"
+    },
+    "officeAddress": {
+      "type": "text"
+    },
+    "officePhone1": {
+      "type": "string"
+    },
+    "officePhone2": {
+      "type": "string"
+    },
+    "officeEmail": {
+      "type": "string"
+    },
+    "officeMapUrl": {
+      "type": "text"
+    },
+    "officeMapPopupTitle": {
+      "type": "string"
+    },
+    "officeMapPopupText": {
+      "type": "text"
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
     "ogImage": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Recommended: 1200x630 px (Standard OG Image)"
+    },
+    "hideFooter": {
+      "type": "boolean",
+      "default": false,
+      "description": "Check this box to completely hide the Footer on this page"
     }
   }
 }

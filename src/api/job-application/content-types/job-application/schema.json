@@ -35,7 +35,11 @@
     "resume": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["files", "images"]
+      "allowedTypes": [
+        "files",
+        "images"
+      ],
+      "description": "Recommended: 800x800 px"
     },
     "jobPosition": {
       "type": "relation",
