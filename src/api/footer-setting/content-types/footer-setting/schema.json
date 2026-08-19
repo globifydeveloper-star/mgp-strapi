@@ -1,0 +1,25 @@
+{
+  "kind": "singleType",
+  "collectionName": "footer_settings",
+  "info": {
+    "singularName": "footer-setting",
+    "pluralName": "footer-settings",
+    "displayName": "Footer Setting",
+    "description": "Global footer settings including quick links and legal links"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "quickLinks": {
+      "type": "component",
+      "component": "navigation.nav-item",
+      "repeatable": true
+    },
+    "legalLinks": {
+      "type": "component",
+      "component": "navigation.nav-item",
+      "repeatable": true
+    }
+  }
+}

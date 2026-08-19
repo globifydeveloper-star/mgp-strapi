@@ -967,9 +967,40 @@ export interface ApiFaqFaq extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::faq.faq'> &
       Schema.Attribute.Private;
     order: Schema.Attribute.Integer;
+    page: Schema.Attribute.Relation<'manyToOne', 'api::page.page'>;
     publishedAt: Schema.Attribute.DateTime;
     question: Schema.Attribute.String;
     section: Schema.Attribute.Enumeration<['home', 'gold-rate']>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiFooterSettingFooterSetting extends Struct.SingleTypeSchema {
+  collectionName: 'footer_settings';
+  info: {
+    description: 'Global footer settings including quick links and legal links';
+    displayName: 'Footer Setting';
+    pluralName: 'footer-settings';
+    singularName: 'footer-setting';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    legalLinks: Schema.Attribute.Component<'navigation.nav-item', true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::footer-setting.footer-setting'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    quickLinks: Schema.Attribute.Component<'navigation.nav-item', true>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1404,20 +1435,21 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    faqs: Schema.Attribute.Relation<'oneToMany', 'api::faq.faq'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::page.page'> &
       Schema.Attribute.Private;
+    ogImage: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
     sections: Schema.Attribute.DynamicZone<
       [
-        'sections.hero-section',
-        'sections.gold-sell-process-section',
-        'sections.gp-difference-section',
-        'sections.promo-slider-section',
-        'sections.feedback-section',
-        'sections.faq-section',
-        'sections.otp-enquiry-section',
-        'sections.rich-text',
+        'page-section.hero-banner',
+        'page-section.gold-process',
+        'page-section.difference-grid',
+        'page-section.promo-slider',
+        'page-section.testimonials',
+        'page-section.faq',
+        'page-section.contact-form',
       ]
     >;
     seoDescription: Schema.Attribute.Text;
@@ -2117,6 +2149,7 @@ declare module '@strapi/strapi' {
       'api::difference-box.difference-box': ApiDifferenceBoxDifferenceBox;
       'api::enquiry.enquiry': ApiEnquiryEnquiry;
       'api::faq.faq': ApiFaqFaq;
+      'api::footer-setting.footer-setting': ApiFooterSettingFooterSetting;
       'api::form-submission.form-submission': ApiFormSubmissionFormSubmission;
       'api::gold-valuation-submission.gold-valuation-submission': ApiGoldValuationSubmissionGoldValuationSubmission;
       'api::hero-slide.hero-slide': ApiHeroSlideHeroSlide;
