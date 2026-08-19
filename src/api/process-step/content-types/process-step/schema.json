@@ -27,7 +27,8 @@
       "multiple": false,
       "allowedTypes": [
         "images"
-      ]
+      ],
+      "description": "Recommended: 800x800 px"
     }
   }
 }

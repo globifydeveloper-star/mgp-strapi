@@ -20,7 +20,10 @@
     "heroImage": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Recommended: 1920x1080 px (16:9 Desktop) / 800x800 px (Mobile)"
     },
     "cultureHeading": {
       "type": "string"
@@ -37,7 +40,10 @@
     "ogImage": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Recommended: 1200x630 px (Standard OG Image)"
     },
     "careerBenefits": {
       "type": "component",

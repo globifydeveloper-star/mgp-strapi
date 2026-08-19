@@ -15,7 +15,8 @@
       "multiple": false,
       "allowedTypes": [
         "images"
-      ]
+      ],
+      "description": "Recommended: 1920x1080 px (16:9 Desktop) / 800x800 px (Mobile)"
     },
     "heroHeading": {
       "type": "string"

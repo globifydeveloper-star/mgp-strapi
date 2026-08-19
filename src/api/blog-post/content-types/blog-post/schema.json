@@ -1,55 +1,56 @@
 {
-    "kind": "collectionType",
-    "collectionName": "blog_posts",
-    "info": {
-        "singularName": "blog-post",
-        "pluralName": "blog-posts",
-        "displayName": "Blog Post"
+  "kind": "collectionType",
+  "collectionName": "blog_posts",
+  "info": {
+    "singularName": "blog-post",
+    "pluralName": "blog-posts",
+    "displayName": "Blog Post"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
     },
-    "options": {
-        "draftAndPublish": true
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
     },
-    "attributes": {
-        "title": {
-            "type": "string",
-            "required": true
-        },
-        "slug": {
-            "type": "uid",
-            "targetField": "title",
-            "required": true
-        },
-        "coverMedia": {
-            "type": "media",
-            "multiple": false,
-            "allowedTypes": [
-                "images",
-                "videos"
-            ]
-        },
-        "category": {
-            "type": "relation",
-            "relation": "manyToOne",
-            "target": "api::category.category",
-            "inversedBy": "blog_posts"
-        },
-        "excerpt": {
-            "type": "text"
-        },
-        "body": {
-            "type": "richtext",
-            "required": true
-        },
-        "metaTitle": {
-            "type": "string"
-        },
-        "metaDescription": {
-            "type": "text"
-        },
-        "cta": {
-            "type": "component",
-            "component": "blog.cta",
-            "repeatable": false
-        }
+    "coverMedia": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "videos"
+      ],
+      "description": "Recommended: 800x800 px"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category",
+      "inversedBy": "blog_posts"
+    },
+    "excerpt": {
+      "type": "text"
+    },
+    "body": {
+      "type": "richtext",
+      "required": true
+    },
+    "metaTitle": {
+      "type": "string"
+    },
+    "metaDescription": {
+      "type": "text"
+    },
+    "cta": {
+      "type": "component",
+      "component": "blog.cta",
+      "repeatable": false
     }
+  }
 }

@@ -501,6 +501,7 @@ export interface ApiAboutUsPageAboutUsPage extends Struct.SingleTypeSchema {
     heroImages: Schema.Attribute.Media<'images', true>;
     heroStats: Schema.Attribute.Component<'shared.stat-item', true>;
     heroTitle: Schema.Attribute.String;
+    hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     historyDescription: Schema.Attribute.Text;
     historyMilestones: Schema.Attribute.Component<'shared.milestone', true>;
     historySubtitle: Schema.Attribute.String;
@@ -834,6 +835,7 @@ export interface ApiContactUsPageContactUsPage extends Struct.SingleTypeSchema {
     heroHeading: Schema.Attribute.String;
     heroImage: Schema.Attribute.Media<'images'>;
     heroLead: Schema.Attribute.Text;
+    hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -989,21 +991,41 @@ export interface ApiFooterSettingFooterSetting extends Struct.SingleTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
+    copyrightText: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Copyright \u00A9 Muthoot Exim {year}. All Rights Reserved.'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    facebookUrl: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'https://www.facebook.com/MGoldPoint/'>;
+    footerDescription: Schema.Attribute.Text &
+      Schema.Attribute.DefaultTo<'Muthoot Gold Point is the first National level organized sector venture to get into recycling of Gold, backed by a 133+ year legacy.'>;
+    instagramUrl: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'https://www.instagram.com/muthoot.goldpoint/'>;
     legalLinks: Schema.Attribute.Component<'navigation.nav-item', true>;
+    linkedinUrl: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'https://www.linkedin.com/company/muthoot-exim-private-limited/'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::footer-setting.footer-setting'
     > &
       Schema.Attribute.Private;
+    officeAddress: Schema.Attribute.Text &
+      Schema.Attribute.DefaultTo<'Muthoot Exim Private Limited Ground Floor Muthoot Towers, M.G.Road, Opposite Abad Plaza Ernakulam, Kerala, 682035'>;
+    officeHours: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'9:00 AM - 6:00 PM'>;
     publishedAt: Schema.Attribute.DateTime;
     quickLinks: Schema.Attribute.Component<'navigation.nav-item', true>;
+    tollFreeNumber: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'1800 102 1616'>;
+    twitterUrl: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'https://x.com/muthootindia?lang=en'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    youtubeUrl: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'https://www.youtube.com/watch?v=qntmLoXsN_c'>;
   };
 }
 
@@ -1159,6 +1181,7 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
     estimateGoldImage: Schema.Attribute.Media<'images'>;
     estimateGoldNote: Schema.Attribute.String;
     heroFirstSlideImage: Schema.Attribute.Media<'images'>;
+    hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1436,6 +1459,7 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     faqs: Schema.Attribute.Relation<'oneToMany', 'api::faq.faq'>;
+    hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::page.page'> &
       Schema.Attribute.Private;
