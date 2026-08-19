@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_shared_difference_boxes",
+  "info": {
+    "displayName": "Difference Box",
+    "icon": "apps"
+  },
+  "options": {},
+  "attributes": {
+    "boxTitle": {
+      "type": "string"
+    },
+    "boxDescription": {
+      "type": "text"
+    },
+    "boxImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "iconType": {
+      "type": "enumeration",
+      "enum": ["flask", "scale", "rupee", "default"],
+      "default": "default"
+    }
+  }
+}

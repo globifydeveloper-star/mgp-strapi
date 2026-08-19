@@ -25,6 +25,12 @@
     },
     "order": {
       "type": "integer"
+    },
+    "page": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::page.page",
+      "inversedBy": "faqs"
     }
   }
 }
