@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_page_section_hero_slides",
+  "info": {
+    "displayName": "Hero Slide",
+    "icon": "image"
+  },
+  "options": {},
+  "attributes": {
+    "heroText": {
+      "type": "text"
+    },
+    "media": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images", "videos"]
+    },
+    "slideLink": {
+      "type": "string"
+    },
+    "button1": {
+      "type": "component",
+      "repeatable": false,
+      "component": "blog.cta"
+    },
+    "button2": {
+      "type": "component",
+      "repeatable": false,
+      "component": "blog.cta"
+    }
+  }
+}

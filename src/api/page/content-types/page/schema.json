@@ -26,18 +26,28 @@
     "seoDescription": {
       "type": "text"
     },
+    "ogImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
     "sections": {
       "type": "dynamiczone",
       "components": [
-        "sections.hero-section",
-        "sections.gold-sell-process-section",
-        "sections.gp-difference-section",
-        "sections.promo-slider-section",
-        "sections.feedback-section",
-        "sections.faq-section",
-        "sections.otp-enquiry-section",
-        "sections.rich-text"
+        "page-section.hero-banner",
+        "page-section.gold-process",
+        "page-section.difference-grid",
+        "page-section.promo-slider",
+        "page-section.testimonials",
+        "page-section.faq",
+        "page-section.contact-form"
       ]
+    },
+    "faqs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::faq.faq",
+      "mappedBy": "page"
     }
   }
 }

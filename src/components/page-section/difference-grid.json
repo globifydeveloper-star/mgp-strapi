@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_page_section_difference_grids",
+  "info": {
+    "displayName": "Difference Grid",
+    "icon": "shield"
+  },
+  "options": {},
+  "attributes": {
+    "boxes": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.difference-box"
+    }
+  }
+}

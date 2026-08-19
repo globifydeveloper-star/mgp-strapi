@@ -175,6 +175,23 @@ export interface SharedCheckItem extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedDifferenceBox extends Struct.ComponentSchema {
+  collectionName: 'components_shared_difference_boxes';
+  info: {
+    displayName: 'Difference Box';
+    icon: 'apps';
+  };
+  attributes: {
+    boxDescription: Schema.Attribute.Text;
+    boxImage: Schema.Attribute.Media<'images'>;
+    boxTitle: Schema.Attribute.String;
+    iconType: Schema.Attribute.Enumeration<
+      ['flask', 'scale', 'rupee', 'default']
+    > &
+      Schema.Attribute.DefaultTo<'default'>;
+  };
+}
+
 export interface SharedMilestone extends Struct.ComponentSchema {
   collectionName: 'components_shared_milestones';
   info: {
@@ -254,6 +271,7 @@ declare module '@strapi/strapi' {
       'sections.rich-text': SectionsRichText;
       'shared.benefit-card': SharedBenefitCard;
       'shared.check-item': SharedCheckItem;
+      'shared.difference-box': SharedDifferenceBox;
       'shared.milestone': SharedMilestone;
       'shared.pillar-item': SharedPillarItem;
       'shared.process-step': SharedProcessStep;

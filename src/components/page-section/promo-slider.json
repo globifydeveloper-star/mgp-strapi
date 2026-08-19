@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_page_section_promo_sliders",
+  "info": {
+    "displayName": "Promo Slider",
+    "icon": "slideshow"
+  },
+  "options": {},
+  "attributes": {
+    "slides": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.promo-slide"
+    }
+  }
+}
