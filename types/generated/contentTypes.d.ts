@@ -666,43 +666,6 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiBranchBranch extends Struct.CollectionTypeSchema {
-  collectionName: 'branches';
-  info: {
-    displayName: 'Branch';
-    pluralName: 'branches';
-    singularName: 'branch';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    address: Schema.Attribute.Text;
-    city: Schema.Attribute.String;
-    contactInfo: Schema.Attribute.String;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    lat: Schema.Attribute.Decimal;
-    lng: Schema.Attribute.Decimal;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::branch.branch'
-    > &
-      Schema.Attribute.Private;
-    name: Schema.Attribute.String;
-    pincode: Schema.Attribute.String;
-    publishedAt: Schema.Attribute.DateTime;
-    state: Schema.Attribute.Relation<'manyToOne', 'api::state.state'>;
-    timing: Schema.Attribute.String;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    viewDirectionsLink: Schema.Attribute.String;
-  };
-}
-
 export interface ApiCareerPageSettingCareerPageSetting
   extends Struct.SingleTypeSchema {
   collectionName: 'career_page_settings';
@@ -1550,32 +1513,6 @@ export interface ApiPromoSlidePromoSlide extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiStateState extends Struct.CollectionTypeSchema {
-  collectionName: 'states';
-  info: {
-    displayName: 'State';
-    pluralName: 'states';
-    singularName: 'state';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    branches: Schema.Attribute.Relation<'oneToMany', 'api::branch.branch'>;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'api::state.state'> &
-      Schema.Attribute.Private;
-    name: Schema.Attribute.String;
-    publishedAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
 export interface ApiTestimonialTestimonial extends Struct.CollectionTypeSchema {
   collectionName: 'testimonials';
   info: {
@@ -2165,7 +2102,6 @@ declare module '@strapi/strapi' {
       'api::blog-enquiry.blog-enquiry': ApiBlogEnquiryBlogEnquiry;
       'api::blog-page-setting.blog-page-setting': ApiBlogPageSettingBlogPageSetting;
       'api::blog-post.blog-post': ApiBlogPostBlogPost;
-      'api::branch.branch': ApiBranchBranch;
       'api::career-page-setting.career-page-setting': ApiCareerPageSettingCareerPageSetting;
       'api::category.category': ApiCategoryCategory;
       'api::contact-submission.contact-submission': ApiContactSubmissionContactSubmission;
@@ -2187,7 +2123,6 @@ declare module '@strapi/strapi' {
       'api::page.page': ApiPagePage;
       'api::process-step.process-step': ApiProcessStepProcessStep;
       'api::promo-slide.promo-slide': ApiPromoSlidePromoSlide;
-      'api::state.state': ApiStateState;
       'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'plugin::content-manager-organizer.content-manager-configuration': PluginContentManagerOrganizerContentManagerConfiguration;
       'plugin::content-releases.release': PluginContentReleasesRelease;
