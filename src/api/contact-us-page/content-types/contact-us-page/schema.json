@@ -75,6 +75,10 @@
       "type": "boolean",
       "default": false,
       "description": "Check this box to completely hide the Footer on this page"
+    },
+    "hideNavbar": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
