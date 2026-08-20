@@ -1,0 +1,48 @@
+{
+  "kind": "singleType",
+  "collectionName": "gold_rate_pages",
+  "info": {
+    "singularName": "gold-rate-page",
+    "pluralName": "gold-rate-pages",
+    "displayName": "Gold Rate Page",
+    "description": "Content for the Gold Rate page"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "ogImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Recommended: 1200x630 px (Standard OG Image)"
+    },
+    "hideFooter": {
+      "type": "boolean",
+      "default": false
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroDescription": {
+      "type": "text"
+    },
+    "faqs": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.faq-item"
+    },
+    "hideNavbar": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}
