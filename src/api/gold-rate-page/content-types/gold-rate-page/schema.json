@@ -36,9 +36,9 @@
       "type": "text"
     },
     "faqs": {
-      "type": "component",
-      "repeatable": true,
-      "component": "shared.faq-item"
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::faq.faq"
     },
     "hideNavbar": {
       "type": "boolean",
