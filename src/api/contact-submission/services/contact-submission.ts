@@ -46,8 +46,10 @@ export default factories.createCoreService(
         timeout: number;
       };
 
-      try {
-        const crm = createCrmService(crmConfig);
+      // Background CRM Push
+      (async () => {
+        try {
+          const crm = createCrmService(crmConfig);
         const result = await crm.syncEnquiry({ name, mobile: phone, email, leadSource: 'CONTACT_US' });
 
         const updated = await documents.update({
@@ -71,7 +73,8 @@ export default factories.createCoreService(
           },
         });
         if (updated) entry = updated;
-      }
+        }
+      })().catch(e => strapi.log.error('CRM async error:', e));
 
       return entry;
     },

@@ -77,8 +77,10 @@ export default factories.createCoreService(
         timeout: number;
       };
 
-      try {
-        const crm = createCrmService(crmConfig);
+      // Background CRM Push
+      (async () => {
+        try {
+          const crm = createCrmService(crmConfig);
         const result = await crm.syncEnquiry({ name, mobile: phone, email });
 
         const updated = await documents.update({
@@ -102,10 +104,12 @@ export default factories.createCoreService(
           },
         });
         if (updated) submission = updated;
-      }
+        }
+      })().catch(e => strapi.log.error('CRM async error:', e));
 
-      // 3. Automatically route to dedicated collection types (Blog Enquiry, Contact, Mobile Van, Gold Valuation)
-      try {
+      // 3. Automatically route
+      (async () => {
+        try {
         const isBlog = enquiryType === 'Blog Enquiry' || (sourceForm && sourceForm.toLowerCase().includes('blog'));
         const isContact = enquiryType === 'Contact Us' || (sourceForm && sourceForm.toLowerCase().includes('contact'));
         const isVan = enquiryType === 'Mobile Van' || (sourceForm && sourceForm.toLowerCase().includes('van'));
@@ -126,6 +130,7 @@ export default factories.createCoreService(
       } catch (dispErr) {
         strapi.log.warn('[form-submission] Dedicated collection dispatch notice:', dispErr);
       }
+      })().catch(e => strapi.log.error('Routing async error:', e));
 
       return submission;
     },
