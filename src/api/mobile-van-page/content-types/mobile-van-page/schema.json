@@ -1,0 +1,64 @@
+{
+  "kind": "singleType",
+  "collectionName": "mobile_van_pages",
+  "info": {
+    "singularName": "mobile-van-page",
+    "pluralName": "mobile-van-pages",
+    "displayName": "Mobile Van Page",
+    "description": "Content for the Mobile Van tab"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "heroHeadingLight1": {
+      "type": "string"
+    },
+    "heroHeadingLight2": {
+      "type": "string"
+    },
+    "heroHeadingBold": {
+      "type": "string"
+    },
+    "heroDescription": {
+      "type": "text"
+    },
+    "howItWorksSubtitle": {
+      "type": "string"
+    },
+    "howItWorksTitle": {
+      "type": "string"
+    },
+    "howItWorksSteps": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.process-step"
+    },
+    "testingMethodsTitle": {
+      "type": "string"
+    },
+    "testingMethods": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.benefit-card"
+    },
+    "locationsTitle": {
+      "type": "string"
+    },
+    "locationsDescription": {
+      "type": "text"
+    },
+    "appointmentTitle": {
+      "type": "string"
+    },
+    "appointmentDescription": {
+      "type": "text"
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    }
+  }
+}
