@@ -502,6 +502,7 @@ export interface ApiAboutUsPageAboutUsPage extends Struct.SingleTypeSchema {
     heroStats: Schema.Attribute.Component<'shared.stat-item', true>;
     heroTitle: Schema.Attribute.String;
     hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     historyDescription: Schema.Attribute.Text;
     historyMilestones: Schema.Attribute.Component<'shared.milestone', true>;
     historySubtitle: Schema.Attribute.String;
@@ -799,6 +800,7 @@ export interface ApiContactUsPageContactUsPage extends Struct.SingleTypeSchema {
     heroImage: Schema.Attribute.Media<'images'>;
     heroLead: Schema.Attribute.Text;
     hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1048,6 +1050,42 @@ export interface ApiFormSubmissionFormSubmission
   };
 }
 
+export interface ApiGoldRatePageGoldRatePage extends Struct.SingleTypeSchema {
+  collectionName: 'gold_rate_pages';
+  info: {
+    description: 'Content for the Gold Rate page';
+    displayName: 'Gold Rate Page';
+    pluralName: 'gold-rate-pages';
+    singularName: 'gold-rate-page';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    faqs: Schema.Attribute.Relation<'oneToMany', 'api::faq.faq'>;
+    heroDescription: Schema.Attribute.Text;
+    heroTitle: Schema.Attribute.String;
+    hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::gold-rate-page.gold-rate-page'
+    > &
+      Schema.Attribute.Private;
+    ogImage: Schema.Attribute.Media<'images'>;
+    publishedAt: Schema.Attribute.DateTime;
+    seoDescription: Schema.Attribute.Text;
+    seoTitle: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiGoldValuationSubmissionGoldValuationSubmission
   extends Struct.CollectionTypeSchema {
   collectionName: 'gold_valuation_submissions';
@@ -1145,6 +1183,7 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
     estimateGoldNote: Schema.Attribute.String;
     heroFirstSlideImage: Schema.Attribute.Media<'images'>;
     hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -2111,6 +2150,7 @@ declare module '@strapi/strapi' {
       'api::faq.faq': ApiFaqFaq;
       'api::footer-setting.footer-setting': ApiFooterSettingFooterSetting;
       'api::form-submission.form-submission': ApiFormSubmissionFormSubmission;
+      'api::gold-rate-page.gold-rate-page': ApiGoldRatePageGoldRatePage;
       'api::gold-valuation-submission.gold-valuation-submission': ApiGoldValuationSubmissionGoldValuationSubmission;
       'api::hero-slide.hero-slide': ApiHeroSlideHeroSlide;
       'api::homepage.homepage': ApiHomepageHomepage;
