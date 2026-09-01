@@ -80,34 +80,34 @@ export default factories.createCoreService(
         timeout: number;
       };
 
-      // Background CRM Push disabled as per client request (only contact forms should be sent)
+      // Background CRM Push disabled (delegated to specialized collections to avoid duplicates)
       /*
       (async () => {
         try {
           const crm = createCrmService(crmConfig);
-        const result = await crm.syncEnquiry({ name, mobile: phone, email, branchCode: branchCode ?? "" });
+          const result = await crm.syncEnquiry({ name, mobile: phone, email, branchCode: branchCode ?? "" });
 
-        const updated = await documents.update({
-          documentId: submission.documentId,
-          data: {
-            crmPushStatus: 'Sent',
-            crmLeadId: result.leadId,
-            crmResponse: JSON.parse(JSON.stringify(result.response)),
-          },
-        });
-        if (updated) submission = updated;
-      } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown CRM error.';
-        strapi.log.error(`[form-submission] CRM push failed for submission ${submission.documentId}: ${message}`);
+          const updated = await documents.update({
+            documentId: submission.documentId,
+            data: {
+              crmPushStatus: 'Sent',
+              crmLeadId: result.leadId,
+              crmResponse: JSON.parse(JSON.stringify(result.response)),
+            },
+          });
+          if (updated) submission = updated;
+        } catch (error) {
+          const message = error instanceof Error ? error.message : 'Unknown CRM error.';
+          strapi.log.error(`[form-submission] CRM push failed for submission ${submission.documentId}: ${message}`);
 
-        const updated = await documents.update({
-          documentId: submission.documentId,
-          data: {
-            crmPushStatus: 'Failed',
-            crmError: message,
-          },
-        });
-        if (updated) submission = updated;
+          const updated = await documents.update({
+            documentId: submission.documentId,
+            data: {
+              crmPushStatus: 'Failed',
+              crmError: message,
+            },
+          });
+          if (updated) submission = updated;
         }
       })().catch(e => strapi.log.error('CRM async error:', e));
       */
@@ -165,7 +165,7 @@ export default factories.createCoreService(
 
       for (const record of failedRecords) {
         try {
-          // CRM Sync disabled
+          // CRM Sync disabled (delegated to specialized collections)
           /*
           const result = await crm.syncEnquiry({
             name: record.name as string,
