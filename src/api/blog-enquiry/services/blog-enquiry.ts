@@ -9,6 +9,7 @@ export interface BlogEnquiryInput {
   mobile: string;
   email?: string;
   blogTitle?: string;
+  branchCode?: string;
 }
 
 const requiredString = (value: unknown, field: string): string => {
@@ -31,6 +32,7 @@ export default factories.createCoreService(
       const mobile = requiredString(input.mobile ?? input.phone, 'mobile');
       const email = typeof input.email === 'string' && input.email.trim() ? input.email.trim() : undefined;
       const blogTitle = typeof input.blogTitle === 'string' && input.blogTitle.trim() ? input.blogTitle.trim() : (input.sourceForm as string ?? undefined);
+      const branchCode = typeof input.branchCode === 'string' && input.branchCode.trim() ? input.branchCode.trim() : undefined;
 
       const documents = strapi.documents('api::blog-enquiry.blog-enquiry');
 
@@ -52,37 +54,35 @@ export default factories.createCoreService(
         timeout: number;
       };
 
-      // Background CRM Push disabled as per client request (only contact forms should be sent)
-      /*
+      // Background CRM Push Enabled
       (async () => {
         try {
           const crm = createCrmService(crmConfig);
-        const result = await crm.syncEnquiry({ name, mobile, email, leadSource: 'BLOG' });
+          const result = await crm.syncEnquiry({ name, mobile, email, leadSource: 'BLOG', branchCode: branchCode ?? "" });
 
-        const updated = await documents.update({
-          documentId: entry.documentId,
-          data: {
-            crmPushStatus: 'Sent',
-            crmLeadId: result.leadId,
-            crmResponse: JSON.parse(JSON.stringify(result.response)),
-          },
-        });
-        if (updated) entry = updated;
-      } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown CRM error.';
-        strapi.log.error(`[blog-enquiry] CRM push failed for entry ${entry.documentId}: ${message}`);
+          const updated = await documents.update({
+            documentId: entry.documentId,
+            data: {
+              crmPushStatus: 'Sent',
+              crmLeadId: result.leadId,
+              crmResponse: JSON.parse(JSON.stringify(result.response)),
+            },
+          });
+          if (updated) entry = updated;
+        } catch (error) {
+          const message = error instanceof Error ? error.message : 'Unknown CRM error.';
+          strapi.log.error(`[blog-enquiry] CRM push failed for entry ${entry.documentId}: ${message}`);
 
-        const updated = await documents.update({
-          documentId: entry.documentId,
-          data: {
-            crmPushStatus: 'Failed',
-            crmError: message,
-          },
-        });
-        if (updated) entry = updated;
+          const updated = await documents.update({
+            documentId: entry.documentId,
+            data: {
+              crmPushStatus: 'Failed',
+              crmError: message,
+            },
+          });
+          if (updated) entry = updated;
         }
       })().catch(e => strapi.log.error('CRM async error:', e));
-      */
 
       return entry;
     },
