@@ -59,6 +59,9 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::blog-post.blog-post"
+    },
+    "branchCode": {
+      "type": "string"
     }
   }
 }

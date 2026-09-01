@@ -52,7 +52,8 @@ export default factories.createCoreService(
         timeout: number;
       };
 
-      // Background CRM Push
+      // Background CRM Push disabled as per client request (only contact forms should be sent)
+      /*
       (async () => {
         try {
           const crm = createCrmService(crmConfig);
@@ -81,6 +82,7 @@ export default factories.createCoreService(
         if (updated) entry = updated;
         }
       })().catch(e => strapi.log.error('CRM async error:', e));
+      */
 
       return entry;
     },

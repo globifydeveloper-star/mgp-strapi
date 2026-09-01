@@ -8,15 +8,27 @@ export default {
     const contentManager = app.getPlugin('content-manager');
     if (!contentManager) return;
 
-    // Use Strapi's fetch client so cookie-based sessions, persisted sessions,
-    // custom backend URLs, and automatic access-token refresh all work.
     const downloadAdminFile = async (endpointPath: string, defaultFilename: string) => {
       try {
-        const { data: blob, headers } = await getFetchClient().get(endpointPath, {
-          responseType: 'blob',
+        const jwtToken = sessionStorage.getItem('jwtToken') || localStorage.getItem('jwtToken');
+        const cleanToken = jwtToken ? jwtToken.replace(/"/g, '') : '';
+        
+        const url = new URL(endpointPath, window.location.origin);
+        if (cleanToken) {
+          url.searchParams.set('token', cleanToken);
+        }
+
+        const response = await fetch(url.toString(), {
+          method: 'GET',
+          credentials: 'include',
         });
 
-        const disposition = headers?.get('content-disposition');
+        if (!response.ok) {
+          throw new Error('Download failed. Status: ' + response.status);
+        }
+
+        const blob = await response.blob();
+        const disposition = response.headers.get('content-disposition');
         let filename = defaultFilename;
         if (disposition) {
           const encodedMatch = disposition.match(/filename\*=UTF-8''([^;]+)/i);
@@ -151,7 +163,7 @@ export default {
                   cursor: 'pointer',
                 }}
               >
-                Download {isContactSub ? 'contact PDF' : 'application PDF'}
+                Download {isContactSub ? 'Contact Summary (PDF)' : 'Data Summary (PDF)'}
               </button>
 
               {isJobApp && (
@@ -159,7 +171,7 @@ export default {
                   type="button"
                   onClick={handleResumeDownload}
                   disabled={!document?.resume}
-                  title={!document?.resume ? 'No resume is attached to this application' : undefined}
+                  title={!document?.resume ? 'No CV/Resume was uploaded by this candidate' : undefined}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -175,7 +187,7 @@ export default {
                     cursor: document?.resume ? 'pointer' : 'not-allowed',
                   }}
                 >
-                  Download original resume
+                  Download Uploaded CV/Resume
                 </button>
               )}
             </div>

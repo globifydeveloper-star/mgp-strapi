@@ -25,6 +25,7 @@ export default factories.createCoreService(
       const email = typeof input.email === 'string' && input.email.trim() ? input.email.trim() : undefined;
       const city = typeof input.city === 'string' && input.city.trim() ? input.city.trim() : (input.branch as string ?? undefined);
       const state = typeof input.state === 'string' && input.state.trim() ? input.state.trim() : undefined;
+      const branchCode = typeof input.branchCode === 'string' && input.branchCode.trim() ? input.branchCode.trim() : undefined;
       const address = typeof input.address === 'string' && input.address.trim() ? input.address.trim() : undefined;
       const preferredDate = typeof input.preferredDate === 'string' ? input.preferredDate.trim() : undefined;
       const details = typeof input.details === 'object' && input.details !== null ? (input.details as Record<string, unknown>) : undefined;
@@ -52,11 +53,12 @@ export default factories.createCoreService(
         timeout: number;
       };
 
-      // Background CRM Push
+      // Background CRM Push disabled as per client request (only contact forms should be sent)
+      /*
       (async () => {
         try {
           const crm = createCrmService(crmConfig);
-        const result = await crm.syncEnquiry({ name, mobile: phone, email, leadSource: 'HOME_PAGE' });
+        const result = await crm.syncEnquiry({ name, mobile: phone, email, leadSource: 'HOME_PAGE', branchCode: branchCode ?? "" });
 
         const updated = await documents.update({
           documentId: entry.documentId,
@@ -81,6 +83,7 @@ export default factories.createCoreService(
         if (updated) entry = updated;
         }
       })().catch(e => strapi.log.error('CRM async error:', e));
+      */
 
       return entry;
     },

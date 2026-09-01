@@ -13,6 +13,7 @@ export interface CreateEnquiryInput {
   source: EnquirySource;
   otpVerified: true;
   blog?: string;
+  branchCode?: string;
 }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -56,7 +57,12 @@ const validateInput = (payload: unknown): CreateEnquiryInput => {
     blog = requiredString(input.blog, 'blog');
   }
 
-  return { name, mobile, email, source: source as EnquirySource, otpVerified: true, blog };
+  let branchCode: string | undefined;
+  if (input.branchCode !== undefined && input.branchCode !== null && input.branchCode !== '') {
+    branchCode = requiredString(input.branchCode, 'branchCode');
+  }
+
+  return { name, mobile, email, source: source as EnquirySource, otpVerified: true, blog, branchCode };
 };
 
 const publicEnquiry = (enquiry: Record<string, unknown>) => {
@@ -98,12 +104,15 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
           email: input.email,
           sourceForm: input.source,
           enquiryType: input.source === 'CONTACT_US' ? 'Contact Us' : (input.source === 'BLOG' ? 'Blog Enquiry' : 'Enquire Now'),
+          branchCode: input.branchCode,
         });
       }
     } catch (mirrorErr) {
       strapi.log.error('[enquiry] Failed to mirror to specialized collection:', mirrorErr);
     }
 
+    // CRM Sync disabled as per client request (only contact forms should be sent, which is handled via mirror to contact-submission)
+    /*
     const crmConfig = strapi.config.get('crm') as {
       baseUrl: string;
       token: string;
@@ -139,6 +148,7 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
       });
       if (updated) enquiry = updated;
     }
+    */
 
     return publicEnquiry(enquiry as unknown as Record<string, unknown>);
   },
