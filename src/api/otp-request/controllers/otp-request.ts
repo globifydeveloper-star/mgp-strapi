@@ -88,13 +88,14 @@ export default factories.createCoreController(
     },
 
     async verifyOtp(ctx: Context) {
-      const { phone, otp, name, email, state, city, purity, weight, message, consent, sourceForm, enquiryType } = (ctx.request.body ?? {}) as {
+      const { phone, otp, name, email, state, city, branchCode, purity, weight, message, consent, sourceForm, enquiryType } = (ctx.request.body ?? {}) as {
         phone?: string;
         otp?: string;
         name?: string;
         email?: string;
         state?: string;
         city?: string;
+        branchCode?: string;
         purity?: string;
         weight?: string;
         message?: string;
@@ -173,6 +174,7 @@ export default factories.createCoreController(
                 email,
                 city: city || undefined,
                 state: state || undefined,
+                branchCode: branchCode || undefined,
                 purity: purity || undefined,
                 weight: weight || undefined,
                 details: { purity, weight, city, state, message },
@@ -188,7 +190,8 @@ export default factories.createCoreController(
                 name: name.trim(),
                 phone,
                 email,
-                branch: location || undefined,
+                branch: branchName || location || undefined,
+                branchCode: branchCode || undefined,
                 message: message || undefined,
                 submittedAt: new Date().toISOString(),
               });
@@ -202,7 +205,8 @@ export default factories.createCoreController(
                 name: name.trim(),
                 phone,
                 email,
-                branch: location || undefined,
+                branch: branchName || location || undefined,
+                branchCode: branchCode || undefined,
                 enquiryType: enquiryType || (purity || weight ? 'Enquire Now' : 'Enquire Now'),
                 sourceForm: sourceForm || (purity || weight ? `Sell Gold Modal (Purity: ${purity || 'N/A'}, Weight: ${weight || '0'}g)` : 'OTP Form'),
                 purity: purity || undefined,

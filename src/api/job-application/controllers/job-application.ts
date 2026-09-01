@@ -140,7 +140,7 @@ export default factories.createCoreController(
           });
           const fileEntry = Array.isArray(uploaded) ? uploaded[0] : uploaded;
           if (fileEntry) {
-            resumeMediaId = fileEntry.id ?? fileEntry.documentId;
+            resumeMediaId = fileEntry.documentId ?? fileEntry.id;
           }
         } catch (uploadErr) {
           strapi.log.error('[job-application] Failed to upload resume file:', uploadErr);

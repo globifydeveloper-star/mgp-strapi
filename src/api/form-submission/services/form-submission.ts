@@ -22,6 +22,7 @@ export interface FormSubmissionInput {
   purity?: string;
   weight?: string;
   details?: Record<string, unknown>;
+  branchCode?: string;
 }
 
 const requiredString = (value: unknown, field: string): string => {
@@ -44,6 +45,7 @@ export default factories.createCoreService(
       const phone = requiredString(input.phone ?? input.mobile, 'phone');
       const email = typeof input.email === 'string' && input.email.trim() ? input.email.trim() : undefined;
       const branch = typeof input.branch === 'string' && input.branch.trim() ? input.branch.trim() : undefined;
+      const branchCode = typeof input.branchCode === 'string' && input.branchCode.trim() ? input.branchCode.trim() : undefined;
       const sourceForm = typeof input.sourceForm === 'string' && input.sourceForm.trim() ? input.sourceForm.trim() : (input.source as string ?? 'Form');
       const purity = typeof input.purity === 'string' && input.purity.trim() ? input.purity.trim() : undefined;
       const weight = input.weight !== undefined && input.weight !== null ? String(input.weight).trim() : undefined;
@@ -60,6 +62,7 @@ export default factories.createCoreService(
           phone,
           email,
           branch,
+          branchCode,
           enquiryType,
           sourceForm,
           purity,
@@ -77,11 +80,12 @@ export default factories.createCoreService(
         timeout: number;
       };
 
-      // Background CRM Push
+      // Background CRM Push disabled as per client request (only contact forms should be sent)
+      /*
       (async () => {
         try {
           const crm = createCrmService(crmConfig);
-        const result = await crm.syncEnquiry({ name, mobile: phone, email });
+        const result = await crm.syncEnquiry({ name, mobile: phone, email, branchCode: branchCode ?? "" });
 
         const updated = await documents.update({
           documentId: submission.documentId,
@@ -106,6 +110,7 @@ export default factories.createCoreService(
         if (updated) submission = updated;
         }
       })().catch(e => strapi.log.error('CRM async error:', e));
+      */
 
       // 3. Automatically route
       (async () => {
@@ -116,16 +121,16 @@ export default factories.createCoreService(
 
         if (isBlog) {
           const blogService = strapi.service('api::blog-enquiry.blog-enquiry') as any;
-          if (blogService) await blogService.submitAndSync({ name, mobile: phone, email, blogTitle: sourceForm });
+          if (blogService) await blogService.submitAndSync({ name, mobile: phone, email, blogTitle: sourceForm, branchCode });
         } else if (isContact) {
           const contactService = strapi.service('api::contact-submission.contact-submission') as any;
-          if (contactService) await contactService.submitAndSync({ name, phone, email, branch, message: details ? JSON.stringify(details) : sourceForm });
+          if (contactService) await contactService.submitAndSync({ name, phone, email, branch, branchCode, message: details ? JSON.stringify(details) : sourceForm });
         } else if (isVan) {
           const vanService = strapi.service('api::mobile-van-submission.mobile-van-submission') as any;
-          if (vanService) await vanService.submitAndSync({ name, phone, email, city: branch, details });
+          if (vanService) await vanService.submitAndSync({ name, phone, email, city: branch, branchCode, details });
         } else {
           const goldService = strapi.service('api::gold-valuation-submission.gold-valuation-submission') as any;
-          if (goldService) await goldService.submitAndSync({ name, phone, email, branch, purity, weight, sourceForm, details });
+          if (goldService) await goldService.submitAndSync({ name, phone, email, branch, branchCode, purity, weight, sourceForm, details });
         }
       } catch (dispErr) {
         strapi.log.warn('[form-submission] Dedicated collection dispatch notice:', dispErr);
@@ -160,10 +165,13 @@ export default factories.createCoreService(
 
       for (const record of failedRecords) {
         try {
+          // CRM Sync disabled
+          /*
           const result = await crm.syncEnquiry({
             name: record.name as string,
             mobile: record.phone as string,
             email: record.email as string | undefined,
+            branchCode: (record as any).branchCode ?? "",
           });
 
           const updated = await documents.update({
@@ -176,6 +184,8 @@ export default factories.createCoreService(
             },
           });
           results.push(updated ?? record);
+          */
+          results.push(record);
         } catch (error) {
           const message = error instanceof Error ? error.message : 'Unknown CRM error during retry.';
           strapi.log.error(`[form-submission] Retry failed for submission ${record.documentId}: ${message}`);

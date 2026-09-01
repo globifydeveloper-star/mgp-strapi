@@ -24,6 +24,7 @@ export default factories.createCoreService(
       const phone = requiredString(input.phone ?? input.mobile, 'phone');
       const email = typeof input.email === 'string' && input.email.trim() ? input.email.trim() : undefined;
       const branch = typeof input.branch === 'string' && input.branch.trim() ? input.branch.trim() : undefined;
+      const branchCode = typeof input.branchCode === 'string' && input.branchCode.trim() ? input.branchCode.trim() : undefined;
       const message = typeof input.message === 'string' ? input.message.trim() : (typeof input.details === 'string' ? input.details.trim() : undefined);
 
       const documents = strapi.documents('api::contact-submission.contact-submission');
@@ -50,7 +51,7 @@ export default factories.createCoreService(
       (async () => {
         try {
           const crm = createCrmService(crmConfig);
-        const result = await crm.syncEnquiry({ name, mobile: phone, email, leadSource: 'CONTACT_US' });
+        const result = await crm.syncEnquiry({ name, mobile: phone, email, leadSource: 'CONTACT_US', branchCode: branchCode ?? "" });
 
         const updated = await documents.update({
           documentId: entry.documentId,

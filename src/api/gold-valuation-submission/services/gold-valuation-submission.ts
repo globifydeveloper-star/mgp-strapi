@@ -24,6 +24,7 @@ export default factories.createCoreService(
       const phone = requiredString(input.phone ?? input.mobile, 'phone');
       const email = typeof input.email === 'string' && input.email.trim() ? input.email.trim() : undefined;
       const branch = typeof input.branch === 'string' && input.branch.trim() ? input.branch.trim() : undefined;
+      const branchCode = typeof input.branchCode === 'string' && input.branchCode.trim() ? input.branchCode.trim() : undefined;
       const purity = typeof input.purity === 'string' && input.purity.trim() ? input.purity.trim() : undefined;
       const weight = input.weight !== undefined && input.weight !== null ? String(input.weight).trim() : undefined;
       const sourceForm = typeof input.sourceForm === 'string' && input.sourceForm.trim() ? input.sourceForm.trim() : 'Gold Valuation Form';
@@ -52,33 +53,32 @@ export default factories.createCoreService(
         timeout: number;
       };
 
-      // Background CRM Push
       (async () => {
         try {
           const crm = createCrmService(crmConfig);
-        const result = await crm.syncEnquiry({ name, mobile: phone, email, leadSource: 'HOME_PAGE' });
+          const result = await crm.syncEnquiry({ name, mobile: phone, email, leadSource: 'HOME_PAGE', branchCode: branchCode ?? "" });
 
-        const updated = await documents.update({
-          documentId: entry.documentId,
-          data: {
-            crmPushStatus: 'Sent',
-            crmLeadId: result.leadId,
-            crmResponse: JSON.parse(JSON.stringify(result.response)),
-          },
-        });
-        if (updated) entry = updated;
-      } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown CRM error.';
-        strapi.log.error(`[gold-valuation-submission] CRM push failed for entry ${entry.documentId}: ${message}`);
+          const updated = await documents.update({
+            documentId: entry.documentId,
+            data: {
+              crmPushStatus: 'Sent',
+              crmLeadId: result.leadId,
+              crmResponse: JSON.parse(JSON.stringify(result.response)),
+            },
+          });
+          if (updated) entry = updated;
+        } catch (error) {
+          const message = error instanceof Error ? error.message : 'Unknown CRM error.';
+          strapi.log.error(`[gold-valuation-submission] CRM push failed for entry ${entry.documentId}: ${message}`);
 
-        const updated = await documents.update({
-          documentId: entry.documentId,
-          data: {
-            crmPushStatus: 'Failed',
-            crmError: message,
-          },
-        });
-        if (updated) entry = updated;
+          const updated = await documents.update({
+            documentId: entry.documentId,
+            data: {
+              crmPushStatus: 'Failed',
+              crmError: message,
+            },
+          });
+          if (updated) entry = updated;
         }
       })().catch(e => strapi.log.error('CRM async error:', e));
 

@@ -13,6 +13,7 @@ export interface EnquiryForCrm {
   losingReason?: string;
   followupDate?: string;
   remarks?: string;
+  branchCode?: string;
 }
 
 export interface CrmLeadPayload {
@@ -32,6 +33,7 @@ export interface CrmLeadPayload {
   losingReason: string;
   followupDate: string;
   remarks: string;
+  branchCode: string;
 }
 
 /** Pure mapping function matching Muthoot Exim CRM /ChannelLead/Upsert payload schema */
@@ -52,4 +54,5 @@ export const mapEnquiryToCrm = (enquiry: EnquiryForCrm): CrmLeadPayload => ({
   losingReason: enquiry.losingReason ?? '',
   followupDate: enquiry.followupDate ?? new Date().toISOString(),
   remarks: enquiry.remarks ?? '',
+  branchCode: enquiry.branchCode ?? '',
 });

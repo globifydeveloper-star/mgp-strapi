@@ -25,6 +25,9 @@
     "branch": {
       "type": "string"
     },
+    "branchCode": {
+      "type": "string"
+    },
     "enquiryType": {
       "type": "enumeration",
       "enum": [

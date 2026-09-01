@@ -873,6 +873,7 @@ export interface ApiEnquiryEnquiry extends Struct.CollectionTypeSchema {
   };
   attributes: {
     blog: Schema.Attribute.Relation<'manyToOne', 'api::blog-post.blog-post'>;
+    branchCode: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1008,6 +1009,7 @@ export interface ApiFormSubmissionFormSubmission
   };
   attributes: {
     branch: Schema.Attribute.String;
+    branchCode: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
