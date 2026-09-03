@@ -513,6 +513,58 @@ export interface ApiAboutUsPageAboutUsPage extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiAllLeadAllLead extends Struct.CollectionTypeSchema {
+  collectionName: 'all_leads';
+  info: {
+    description: 'Unified view of all form submissions categorised by their source form';
+    displayName: 'All Leads';
+    pluralName: 'all-leads';
+    singularName: 'all-lead';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    branch: Schema.Attribute.String;
+    branchCode: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    crmError: Schema.Attribute.Text;
+    crmLeadId: Schema.Attribute.String;
+    crmPushStatus: Schema.Attribute.Enumeration<['Sent', 'Pending', 'Failed']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Pending'>;
+    crmResponse: Schema.Attribute.JSON;
+    email: Schema.Attribute.Email;
+    extraData: Schema.Attribute.JSON;
+    formSource: Schema.Attribute.Enumeration<
+      [
+        'Contact Submission',
+        'Gold Rate Check',
+        'Mobile Van',
+        'Blog Enquiry',
+        'Enquiry',
+      ]
+    > &
+      Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::all-lead.all-lead'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    phone: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    sourceFormDetail: Schema.Attribute.String;
+    submittedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiBlogEnquiryBlogEnquiry extends Struct.CollectionTypeSchema {
   collectionName: 'blog_enquiries';
   info: {
@@ -2145,6 +2197,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::about-us-page.about-us-page': ApiAboutUsPageAboutUsPage;
+      'api::all-lead.all-lead': ApiAllLeadAllLead;
       'api::blog-enquiry.blog-enquiry': ApiBlogEnquiryBlogEnquiry;
       'api::blog-page-setting.blog-page-setting': ApiBlogPageSettingBlogPageSetting;
       'api::blog-post.blog-post': ApiBlogPostBlogPost;

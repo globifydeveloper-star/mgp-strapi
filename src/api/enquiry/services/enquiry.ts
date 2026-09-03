@@ -92,6 +92,23 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
       } else if (input.source === 'CONTACT_US') {
         const contactService = strapi.service('api::contact-submission.contact-submission') as any;
         if (contactService) await contactService.submitAndSync({ name: input.name, phone: input.mobile, email: input.email });
+      } else {
+        // HOME_PAGE / LANDING_PAGE / OTHER — mirror directly to All Leads
+        const allLeadService = strapi.service('api::all-lead.all-lead') as any;
+        if (allLeadService?.mirrorLead) {
+          allLeadService
+            .mirrorLead({
+              name: input.name,
+              phone: input.mobile,
+              email: input.email,
+              formSource: 'Enquiry',
+              sourceFormDetail: input.source,
+              branchCode: input.branchCode,
+              submittedAt: new Date().toISOString(),
+              crmPushStatus: 'Pending',
+            })
+            .catch((e: unknown) => strapi.log.error('[enquiry] All Leads mirror error:', e));
+        }
       }
       
       const formSubmissionService = strapi.service('api::form-submission.form-submission') as unknown as {

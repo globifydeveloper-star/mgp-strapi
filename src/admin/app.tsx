@@ -50,8 +50,9 @@ export default {
         const path = window.location.pathname;
         const isJobApp = path.includes('job-application');
         const isContactSub = path.includes('contact-submission');
+        const isAllLeads = path.includes('all-lead');
 
-        if (!isJobApp && !isContactSub) {
+        if (!isJobApp && !isContactSub && !isAllLeads) {
           return null;
         }
 
@@ -66,6 +67,9 @@ export default {
           } else if (isContactSub) {
             if (type === 'pdf') downloadAdminFile('/api/contact-submissions/export/pdf', `Contact_Submissions_Export_${Date.now()}.pdf`);
             if (type === 'csv') downloadAdminFile('/api/contact-submissions/export/csv', `Contact_Submissions_Export_${Date.now()}.csv`);
+          } else if (isAllLeads) {
+            if (type === 'pdf') downloadAdminFile('/api/all-leads/export/pdf', `All_Leads_Export_${Date.now()}.pdf`);
+            if (type === 'csv') downloadAdminFile('/api/all-leads/export/csv', `All_Leads_Export_${Date.now()}.csv`);
           }
         };
 
