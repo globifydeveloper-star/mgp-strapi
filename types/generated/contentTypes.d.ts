@@ -1201,6 +1201,7 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
     heroFirstSlideImage: Schema.Attribute.Media<'images'>;
     hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    homeVideos: Schema.Attribute.Component<'shared.home-video', true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',

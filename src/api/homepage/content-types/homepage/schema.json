@@ -43,6 +43,11 @@
     "estimateGoldNote": {
       "type": "string"
     },
+    "homeVideos": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.home-video"
+    },
     "vanHeadingLight": {
       "type": "string"
     },
