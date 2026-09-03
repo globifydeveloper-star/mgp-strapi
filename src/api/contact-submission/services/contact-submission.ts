@@ -47,6 +47,24 @@ export default factories.createCoreService(
         timeout: number;
       };
 
+      // Mirror to All Leads (fire-and-forget)
+      const allLeadService = strapi.service('api::all-lead.all-lead') as any;
+      if (allLeadService?.mirrorLead) {
+        allLeadService
+          .mirrorLead({
+            name,
+            phone,
+            email,
+            formSource: 'Contact Submission',
+            sourceFormDetail: message,
+            branch,
+            branchCode,
+            submittedAt: new Date().toISOString(),
+            crmPushStatus: 'Pending',
+          })
+          .catch((e: unknown) => strapi.log.error('[contact-submission] All Leads mirror error:', e));
+      }
+
       // Background CRM Push
       (async () => {
         try {

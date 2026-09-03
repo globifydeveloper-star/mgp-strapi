@@ -1,0 +1,71 @@
+{
+  "kind": "collectionType",
+  "collectionName": "all_leads",
+  "info": {
+    "singularName": "all-lead",
+    "pluralName": "all-leads",
+    "displayName": "All Leads",
+    "description": "Unified view of all form submissions categorised by their source form"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email"
+    },
+    "formSource": {
+      "type": "enumeration",
+      "enum": [
+        "Contact Submission",
+        "Gold Rate Check",
+        "Mobile Van",
+        "Blog Enquiry",
+        "Enquiry"
+      ],
+      "required": true
+    },
+    "sourceFormDetail": {
+      "type": "string"
+    },
+    "branch": {
+      "type": "string"
+    },
+    "branchCode": {
+      "type": "string"
+    },
+    "extraData": {
+      "type": "json"
+    },
+    "submittedAt": {
+      "type": "datetime"
+    },
+    "crmPushStatus": {
+      "type": "enumeration",
+      "enum": [
+        "Sent",
+        "Pending",
+        "Failed"
+      ],
+      "default": "Pending",
+      "required": true
+    },
+    "crmLeadId": {
+      "type": "string"
+    },
+    "crmResponse": {
+      "type": "json"
+    },
+    "crmError": {
+      "type": "text"
+    }
+  }
+}
