@@ -39,7 +39,7 @@ const verifyAdminSession = async (ctx: Context, strapi: any): Promise<boolean> =
         return true;
       }
     }
-  } catch (_) {}
+  } catch (_) { }
 
   try {
     const jwt = require('jsonwebtoken');
@@ -66,7 +66,7 @@ const verifyAdminSession = async (ctx: Context, strapi: any): Promise<boolean> =
       });
       if (tokenRow) return true;
     }
-  } catch (_) {}
+  } catch (_) { }
 
   return false;
 };
