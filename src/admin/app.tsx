@@ -10,41 +10,25 @@ export default {
 
     const downloadAdminFile = async (endpointPath: string, defaultFilename: string) => {
       try {
-        const jwtToken = sessionStorage.getItem('jwtToken') || localStorage.getItem('jwtToken');
-        const cleanToken = jwtToken ? jwtToken.replace(/"/g, '') : '';
-        
-        const url = new URL(endpointPath, window.location.origin);
-        if (cleanToken) {
-          url.searchParams.set('token', cleanToken);
-        }
+        // getFetchClient automatically attaches `Authorization: Bearer <token>`.
+        // It reads the token from localStorage('jwtToken') via JSON.parse, or falls back to the jwtToken cookie.
+        // With responseType 'blob' it returns: { data: Blob, status: number, headers: Headers }
+        const { get } = getFetchClient();
+        const { data: blob, headers } = await get(endpointPath, { responseType: 'blob' } as any);
 
-        const response = await fetch(url.toString(), {
-          method: 'GET',
-          credentials: 'include',
-        });
-
-        if (!response.ok) {
-          throw new Error('Download failed. Status: ' + response.status);
-        }
-
-        const blob = await response.blob();
-        const disposition = response.headers.get('content-disposition');
+        const disposition = (headers as Headers).get?.('content-disposition') ?? '';
         let filename = defaultFilename;
         if (disposition) {
           const encodedMatch = disposition.match(/filename\*=UTF-8''([^;]+)/i);
           const plainMatch = disposition.match(/filename="?([^";]+)"?/i);
-          const responseFilename = encodedMatch?.[1] || plainMatch?.[1];
-
-          if (responseFilename) {
-            try {
-              filename = decodeURIComponent(responseFilename);
-            } catch {
-              filename = responseFilename;
-            }
+          const raw = encodedMatch?.[1] || plainMatch?.[1];
+          if (raw) {
+            try { filename = decodeURIComponent(raw); }
+            catch { filename = raw; }
           }
         }
 
-        const blobUrl = window.URL.createObjectURL(blob);
+        const blobUrl = window.URL.createObjectURL(blob as Blob);
         const a = document.createElement('a');
         a.href = blobUrl;
         a.download = filename;
@@ -54,7 +38,7 @@ export default {
         window.URL.revokeObjectURL(blobUrl);
       } catch (err) {
         console.error('[Admin Export] Download error:', err);
-        alert('Download failed. Please sign in again and retry.');
+        alert('Download failed: ' + String(err));
       }
     };
 

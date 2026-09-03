@@ -196,7 +196,7 @@ export default factories.createCoreController(
       ctx.type = 'application/pdf';
       ctx.set(
         'Content-Disposition',
-        `inline; filename="Contact_Submission_${(appDoc.name || 'Contact').replace(/[^a-zA-Z0-9]/g, '_')}_${appDoc.documentId}.pdf"`
+        `attachment; filename="Contact_Submission_${(appDoc.name || 'Contact').replace(/[^a-zA-Z0-9]/g, '_')}_${appDoc.documentId}.pdf"`
       );
       ctx.body = pdfBuffer;
     },
@@ -270,7 +270,7 @@ export default factories.createCoreController(
       });
 
       ctx.type = 'application/pdf';
-      ctx.set('Content-Disposition', `inline; filename="Contact_Submissions_Export_${Date.now()}.pdf"`);
+      ctx.set('Content-Disposition', `attachment; filename="Contact_Submissions_Export_${Date.now()}.pdf"`);
       ctx.body = pdfBuffer;
     },
 
