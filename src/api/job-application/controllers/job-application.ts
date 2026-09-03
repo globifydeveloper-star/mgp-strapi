@@ -371,7 +371,7 @@ export default factories.createCoreController(
       ctx.type = 'application/pdf';
       ctx.set(
         'Content-Disposition',
-        `inline; filename="Application_${(appDoc.fullName || 'Candidate').replace(/[^a-zA-Z0-9]/g, '_')}_${appDoc.documentId}.pdf"`
+        `attachment; filename="Application_${(appDoc.fullName || 'Candidate').replace(/[^a-zA-Z0-9]/g, '_')}_${appDoc.documentId}.pdf"`
       );
       ctx.body = pdfBuffer;
     },
@@ -453,7 +453,7 @@ export default factories.createCoreController(
       });
 
       ctx.type = 'application/pdf';
-      ctx.set('Content-Disposition', `inline; filename="Job_Applications_Export_${Date.now()}.pdf"`);
+      ctx.set('Content-Disposition', `attachment; filename="Job_Applications_Export_${Date.now()}.pdf"`);
       ctx.body = pdfBuffer;
     },
 
