@@ -282,6 +282,22 @@ export interface SharedDifferenceBox extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedHomeVideo extends Struct.ComponentSchema {
+  collectionName: 'components_shared_home_videos';
+  info: {
+    description: 'Language video item for Homepage VideoSection';
+    displayName: 'Home Video';
+    icon: 'play';
+  };
+  attributes: {
+    code: Schema.Attribute.String & Schema.Attribute.Required;
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    poster: Schema.Attribute.Media<'images'>;
+    video: Schema.Attribute.Media<'videos'>;
+    videoUrl: Schema.Attribute.String;
+  };
+}
+
 export interface SharedMilestone extends Struct.ComponentSchema {
   collectionName: 'components_shared_milestones';
   info: {
@@ -382,6 +398,7 @@ declare module '@strapi/strapi' {
       'shared.benefit-card': SharedBenefitCard;
       'shared.check-item': SharedCheckItem;
       'shared.difference-box': SharedDifferenceBox;
+      'shared.home-video': SharedHomeVideo;
       'shared.milestone': SharedMilestone;
       'shared.pillar-item': SharedPillarItem;
       'shared.process-step': SharedProcessStep;

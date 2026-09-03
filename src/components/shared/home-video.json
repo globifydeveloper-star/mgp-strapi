@@ -1,0 +1,38 @@
+{
+  "collectionName": "components_shared_home_videos",
+  "info": {
+    "displayName": "Home Video",
+    "icon": "play",
+    "description": "Language video item for Homepage VideoSection"
+  },
+  "options": {},
+  "attributes": {
+    "code": {
+      "type": "string",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "poster": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "video": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "videos"
+      ]
+    },
+    "videoUrl": {
+      "type": "string"
+    }
+  }
+}

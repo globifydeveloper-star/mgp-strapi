@@ -46,6 +46,16 @@ export default {
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
     // 1. Seed Homepage Single Type
     const homepageUid = 'api::homepage.homepage';
+    const defaultHomeVideos = [
+      { code: 'hi', label: 'हिंदी', videoUrl: '/videos/goldpoint-hindi.mp4' },
+      { code: 'ml', label: 'മലയാളം', videoUrl: '/videos/goldpoint-malayalam.mp4' },
+      { code: 'ta', label: 'தமிழ்', videoUrl: '/videos/goldpoint-tamil.mp4' },
+      { code: 'kn', label: 'ಕನ್ನಡ', videoUrl: '/videos/goldpoint-kannada.mp4' },
+      { code: 'en', label: 'EN' },
+      { code: 'te', label: 'తెలుగు' },
+      { code: 'mr', label: 'मराठी' },
+      { code: 'bn', label: 'বাংলা' }
+    ];
     const homepageExisting = await strapi.documents(homepageUid).findFirst();
     if (!homepageExisting) {
       strapi.log.info('Seeding Homepage single type...');
@@ -59,9 +69,21 @@ export default {
           vanDescription: "Can't visit us? Our Mobile Van carries the full GoldPoint setup — XRF machines, precision balances, real-time rates — directly to your home or office.",
           vanButtonLabel: 'Book a Van Visit',
           seoTitle: 'Sell Gold For Cash | Online Gold Valuation | Gold Point',
-          seoDescription: 'Get the True Market Value of your old, unused or pledged gold through a transparent process conducted entirely in front of you.'
+          seoDescription: 'Get the True Market Value of your old, unused or pledged gold through a transparent process conducted entirely in front of you.',
+          homeVideos: defaultHomeVideos
         }
       });
+    } else {
+      const fullHomepage = await strapi.documents(homepageUid).findFirst({ populate: ['homeVideos'] });
+      if (!fullHomepage?.homeVideos || (Array.isArray(fullHomepage.homeVideos) && fullHomepage.homeVideos.length === 0)) {
+        strapi.log.info('Seeding default homeVideos for Homepage single type...');
+        await strapi.documents(homepageUid).update({
+          documentId: homepageExisting.documentId,
+          data: {
+            homeVideos: defaultHomeVideos
+          }
+        });
+      }
     }
 
     // 2. Seed Hero Slides
