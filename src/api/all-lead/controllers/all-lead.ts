@@ -61,10 +61,18 @@ export default factories.createCoreController(
   ({ strapi }) => ({
 
     async find(ctx: Context) {
-      const { source } = ctx.query as { source?: string };
+      const { source, fromDate, toDate, from, to } = ctx.query as { source?: string; fromDate?: string; toDate?: string; from?: string; to?: string };
+      const start = fromDate || from;
+      const end = toDate || to;
       const filters: Record<string, unknown> = {};
       if (source && typeof source === 'string') {
         filters['formSource'] = { $eq: source };
+      }
+      if (start || end) {
+        const dateFilter: Record<string, unknown> = {};
+        if (start) dateFilter['$gte'] = start.includes('T') ? start : `${start}T00:00:00.000Z`;
+        if (end) dateFilter['$lte'] = end.includes('T') ? end : `${end}T23:59:59.999Z`;
+        filters['submittedAt'] = dateFilter;
       }
 
       const entries = await strapi.documents('api::all-lead.all-lead').findMany({
@@ -83,10 +91,18 @@ export default factories.createCoreController(
         return;
       }
 
-      const { source } = ctx.query as { source?: string };
+      const { source, fromDate, toDate, from, to } = ctx.query as { source?: string; fromDate?: string; toDate?: string; from?: string; to?: string };
+      const start = fromDate || from;
+      const end = toDate || to;
       const filters: Record<string, unknown> = {};
       if (source && typeof source === 'string') {
         filters['formSource'] = { $eq: source };
+      }
+      if (start || end) {
+        const dateFilter: Record<string, unknown> = {};
+        if (start) dateFilter['$gte'] = start.includes('T') ? start : `${start}T00:00:00.000Z`;
+        if (end) dateFilter['$lte'] = end.includes('T') ? end : `${end}T23:59:59.999Z`;
+        filters['submittedAt'] = dateFilter;
       }
 
       const entries = (await strapi.documents('api::all-lead.all-lead').findMany({
@@ -144,10 +160,18 @@ export default factories.createCoreController(
         return;
       }
 
-      const { source } = ctx.query as { source?: string };
+      const { source, fromDate, toDate, from, to } = ctx.query as { source?: string; fromDate?: string; toDate?: string; from?: string; to?: string };
+      const start = fromDate || from;
+      const end = toDate || to;
       const filters: Record<string, unknown> = {};
       if (source && typeof source === 'string') {
         filters['formSource'] = { $eq: source };
+      }
+      if (start || end) {
+        const dateFilter: Record<string, unknown> = {};
+        if (start) dateFilter['$gte'] = start.includes('T') ? start : `${start}T00:00:00.000Z`;
+        if (end) dateFilter['$lte'] = end.includes('T') ? end : `${end}T23:59:59.999Z`;
+        filters['submittedAt'] = dateFilter;
       }
 
       const entries = (await strapi.documents('api::all-lead.all-lead').findMany({

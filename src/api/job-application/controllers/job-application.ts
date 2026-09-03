@@ -383,7 +383,24 @@ export default factories.createCoreController(
         return;
       }
 
+      const { fromDate, toDate, from, to } = ctx.query as { fromDate?: string; toDate?: string; from?: string; to?: string };
+      const start = fromDate || from;
+      const end = toDate || to;
+
+      const filters: Record<string, unknown> = {};
+      if (start || end) {
+        const dateFilter: Record<string, unknown> = {};
+        if (start) {
+          dateFilter['$gte'] = start.includes('T') ? start : `${start}T00:00:00.000Z`;
+        }
+        if (end) {
+          dateFilter['$lte'] = end.includes('T') ? end : `${end}T23:59:59.999Z`;
+        }
+        filters['submittedAt'] = dateFilter;
+      }
+
       const apps = (await strapi.documents('api::job-application.job-application').findMany({
+        filters: Object.keys(filters).length ? filters : undefined,
         populate: ['jobPosition', 'jobPosition.department', 'resume'],
         sort: { submittedAt: 'desc' },
       })) as any[];
@@ -395,7 +412,8 @@ export default factories.createCoreController(
         doc.fillColor('#FFFFFF').fontSize(11).font('Helvetica').text('Job Applications Summary Export', 330, 50, { align: 'right' });
         doc.moveDown(2.5);
 
-        doc.fillColor('#333333').fontSize(9).font('Helvetica').text(`Total Records: ${apps.length}  |  Export Date: ${new Date().toLocaleDateString('en-US', { dateStyle: 'medium' })}`);
+        const rangeStr = start && end ? `  |  Range: ${start} to ${end}` : start ? `  |  From: ${start}` : end ? `  |  To: ${end}` : '';
+        doc.fillColor('#333333').fontSize(9).font('Helvetica').text(`Total Records: ${apps.length}${rangeStr}  |  Export Date: ${new Date().toLocaleDateString('en-US', { dateStyle: 'medium' })}`);
         doc.moveDown(0.5);
 
         // Table Column Widths
@@ -464,7 +482,24 @@ export default factories.createCoreController(
         return;
       }
 
+      const { fromDate, toDate, from, to } = ctx.query as { fromDate?: string; toDate?: string; from?: string; to?: string };
+      const start = fromDate || from;
+      const end = toDate || to;
+
+      const filters: Record<string, unknown> = {};
+      if (start || end) {
+        const dateFilter: Record<string, unknown> = {};
+        if (start) {
+          dateFilter['$gte'] = start.includes('T') ? start : `${start}T00:00:00.000Z`;
+        }
+        if (end) {
+          dateFilter['$lte'] = end.includes('T') ? end : `${end}T23:59:59.999Z`;
+        }
+        filters['submittedAt'] = dateFilter;
+      }
+
       const apps = (await strapi.documents('api::job-application.job-application').findMany({
+        filters: Object.keys(filters).length ? filters : undefined,
         populate: ['jobPosition', 'jobPosition.department', 'resume'],
         sort: { submittedAt: 'desc' },
       })) as any[];

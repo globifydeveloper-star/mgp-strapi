@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { getFetchClient, type StrapiApp } from '@strapi/strapi/admin';
 
 export default {
@@ -10,9 +11,6 @@ export default {
 
     const downloadAdminFile = async (endpointPath: string, defaultFilename: string) => {
       try {
-        // getFetchClient automatically attaches `Authorization: Bearer <token>`.
-        // It reads the token from localStorage('jwtToken') via JSON.parse, or falls back to the jwtToken cookie.
-        // With responseType 'blob' it returns: { data: Blob, status: number, headers: Headers }
         const { get } = getFetchClient();
         const { data: blob, headers } = await get(endpointPath, { responseType: 'blob' } as any);
 
@@ -56,45 +54,418 @@ export default {
           return null;
         }
 
+        // Parse initial date filter values from URL search params
+        const getUrlDate = (keys: string[]) => {
+          const params = new URLSearchParams(window.location.search);
+          for (const key of keys) {
+            const val = params.get(key);
+            if (val) return val.slice(0, 10);
+          }
+          return '';
+        };
+
+        const initialFrom = getUrlDate([
+          'fromDate',
+          'from',
+          'filters[$and][0][submittedAt][$gte]',
+          'filters[submittedAt][$gte]',
+        ]);
+        const initialTo = getUrlDate([
+          'toDate',
+          'to',
+          'filters[$and][1][submittedAt][$lte]',
+          'filters[submittedAt][$lte]',
+        ]);
+
+        const [isFilterOpen, setIsFilterOpen] = useState(false);
+        const [selectedTab, setSelectedTab] = useState<'date'>('date');
+        const [fromDate, setFromDate] = useState(initialFrom);
+        const [toDate, setToDate] = useState(initialTo);
+        const [appliedFrom, setAppliedFrom] = useState(initialFrom);
+        const [appliedTo, setAppliedTo] = useState(initialTo);
+
+        const handleApplyDateFilter = (startVal = fromDate, endVal = toDate) => {
+          const params = new URLSearchParams(window.location.search);
+
+          // Clear previous date filter params
+          const keysToDelete: string[] = [];
+          params.forEach((_, key) => {
+            if (
+              key.includes('submittedAt') ||
+              key === 'fromDate' ||
+              key === 'toDate' ||
+              key === 'from' ||
+              key === 'to'
+            ) {
+              keysToDelete.push(key);
+            }
+          });
+          keysToDelete.forEach((k) => params.delete(k));
+
+          if (startVal) {
+            params.set('filters[$and][0][submittedAt][$gte]', `${startVal}T00:00:00.000Z`);
+            params.set('fromDate', startVal);
+          }
+          if (endVal) {
+            params.set('filters[$and][1][submittedAt][$lte]', `${endVal}T23:59:59.999Z`);
+            params.set('toDate', endVal);
+          }
+
+          params.set('page', '1');
+          setAppliedFrom(startVal);
+          setAppliedTo(endVal);
+          setIsFilterOpen(false);
+
+          window.location.href = `${window.location.pathname}?${params.toString()}`;
+        };
+
+        const handleClearFilter = () => {
+          const params = new URLSearchParams(window.location.search);
+          const keysToDelete: string[] = [];
+          params.forEach((_, key) => {
+            if (
+              key.includes('submittedAt') ||
+              key === 'fromDate' ||
+              key === 'toDate' ||
+              key === 'from' ||
+              key === 'to'
+            ) {
+              keysToDelete.push(key);
+            }
+          });
+          keysToDelete.forEach((k) => params.delete(k));
+
+          setFromDate('');
+          setToDate('');
+          setAppliedFrom('');
+          setAppliedTo('');
+          setIsFilterOpen(false);
+
+          window.location.href = `${window.location.pathname}?${params.toString()}`;
+        };
+
+        const handleQuickPreset = (preset: 'today' | '7days' | 'thisMonth') => {
+          const now = new Date();
+          const todayStr = now.toISOString().slice(0, 10);
+          let startStr = todayStr;
+          let endStr = todayStr;
+
+          if (preset === '7days') {
+            const d = new Date();
+            d.setDate(d.getDate() - 6);
+            startStr = d.toISOString().slice(0, 10);
+          } else if (preset === 'thisMonth') {
+            const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+            startStr = firstDay.toISOString().slice(0, 10);
+          }
+
+          setFromDate(startStr);
+          setToDate(endStr);
+          handleApplyDateFilter(startStr, endStr);
+        };
+
         const handleExport = (e: any) => {
           const type = e.target.value;
           e.target.value = ''; // reset
           if (!type) return;
 
+          let queryStr = '';
+          const activeFrom = appliedFrom || fromDate;
+          const activeTo = appliedTo || toDate;
+          if (activeFrom || activeTo) {
+            const q = new URLSearchParams();
+            if (activeFrom) q.set('fromDate', activeFrom);
+            if (activeTo) q.set('toDate', activeTo);
+            queryStr = `?${q.toString()}`;
+          }
+
           if (isJobApp) {
-            if (type === 'pdf') downloadAdminFile('/api/job-applications/export/pdf', `Job_Applications_Export_${Date.now()}.pdf`);
-            if (type === 'csv') downloadAdminFile('/api/job-applications/export/csv', `Job_Applications_Export_${Date.now()}.csv`);
+            if (type === 'pdf') downloadAdminFile(`/api/job-applications/export/pdf${queryStr}`, `Job_Applications_Export_${Date.now()}.pdf`);
+            if (type === 'csv') downloadAdminFile(`/api/job-applications/export/csv${queryStr}`, `Job_Applications_Export_${Date.now()}.csv`);
           } else if (isContactSub) {
-            if (type === 'pdf') downloadAdminFile('/api/contact-submissions/export/pdf', `Contact_Submissions_Export_${Date.now()}.pdf`);
-            if (type === 'csv') downloadAdminFile('/api/contact-submissions/export/csv', `Contact_Submissions_Export_${Date.now()}.csv`);
+            if (type === 'pdf') downloadAdminFile(`/api/contact-submissions/export/pdf${queryStr}`, `Contact_Submissions_Export_${Date.now()}.pdf`);
+            if (type === 'csv') downloadAdminFile(`/api/contact-submissions/export/csv${queryStr}`, `Contact_Submissions_Export_${Date.now()}.csv`);
           } else if (isAllLeads) {
-            if (type === 'pdf') downloadAdminFile('/api/all-leads/export/pdf', `All_Leads_Export_${Date.now()}.pdf`);
-            if (type === 'csv') downloadAdminFile('/api/all-leads/export/csv', `All_Leads_Export_${Date.now()}.csv`);
+            if (type === 'pdf') downloadAdminFile(`/api/all-leads/export/pdf${queryStr}`, `All_Leads_Export_${Date.now()}.pdf`);
+            if (type === 'csv') downloadAdminFile(`/api/all-leads/export/csv${queryStr}`, `All_Leads_Export_${Date.now()}.csv`);
           }
         };
 
+        const isFiltered = !!(appliedFrom || appliedTo);
+
         return (
-          <select
-            onChange={handleExport}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              backgroundColor: '#0B1536',
-              color: '#FFFFFF',
-              border: '1px solid #EBAF20',
-              borderRadius: '4px',
-              padding: '6px 12px',
-              fontSize: '13px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              marginLeft: '8px',
-              outline: 'none',
-            }}
-          >
-            <option value="" style={{ display: 'none' }}>⬇️ Export As...</option>
-            <option value="pdf">📄 Export as PDF</option>
-            <option value="csv">📊 Export as CSV</option>
-          </select>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', position: 'relative' }}>
+            {/* Active Filter Indicator Badge */}
+            {isFiltered && (
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  backgroundColor: '#FEF9E7',
+                  border: '1px solid #EBAF20',
+                  borderRadius: '16px',
+                  padding: '4px 10px',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  color: '#0B1536',
+                }}
+              >
+                <span>📅 Filtered: {appliedFrom || 'Any'} to {appliedTo || 'Any'}</span>
+                <button
+                  type="button"
+                  onClick={handleClearFilter}
+                  title="Clear Date Filter"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#C0392B',
+                    fontWeight: 700,
+                    fontSize: '14px',
+                    cursor: 'pointer',
+                    padding: 0,
+                    lineHeight: 1,
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+
+            {/* Filter Button */}
+            <button
+              type="button"
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                backgroundColor: isFiltered ? '#EBAF20' : '#0B1536',
+                color: isFiltered ? '#0B1536' : '#FFFFFF',
+                border: '1px solid #EBAF20',
+                borderRadius: '4px',
+                padding: '6px 12px',
+                fontSize: '13px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                outline: 'none',
+                boxShadow: isFiltered ? '0 0 8px rgba(235, 175, 32, 0.4)' : 'none',
+              }}
+            >
+              <span>🔍 Filter Options</span>
+              <span style={{ fontSize: '10px' }}>{isFilterOpen ? '▲' : '▼'}</span>
+            </button>
+
+            {/* Filter Dropdown Popover */}
+            {isFilterOpen && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '110%',
+                  right: 0,
+                  zIndex: 9999,
+                  width: '320px',
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid #E0E0E0',
+                  borderRadius: '8px',
+                  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
+                  padding: '16px',
+                  color: '#333333',
+                  fontFamily: 'system-ui, -apple-system, sans-serif',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                  <div style={{ fontWeight: 700, fontSize: '14px', color: '#0B1536' }}>
+                    Filter Submissions
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsFilterOpen(false)}
+                    style={{ background: 'none', border: 'none', fontSize: '16px', cursor: 'pointer', color: '#888' }}
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {/* Filter Option Tab Header */}
+                <div style={{ display: 'flex', borderBottom: '1px solid #EEE', marginBottom: '12px' }}>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedTab('date')}
+                    style={{
+                      padding: '6px 12px',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      border: 'none',
+                      borderBottom: selectedTab === 'date' ? '2px solid #EBAF20' : 'none',
+                      backgroundColor: 'transparent',
+                      color: selectedTab === 'date' ? '#0B1536' : '#888',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    📅 Date Range
+                  </button>
+                </div>
+
+                {/* Date Option Controls */}
+                {selectedTab === 'date' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: '#555', marginBottom: '4px' }}>
+                        From Date
+                      </label>
+                      <input
+                        type="date"
+                        value={fromDate}
+                        onChange={(e) => setFromDate(e.target.value)}
+                        style={{
+                          width: '100%',
+                          padding: '6px 10px',
+                          fontSize: '12px',
+                          border: '1px solid #CCC',
+                          borderRadius: '4px',
+                          outline: 'none',
+                          boxSizing: 'border-box',
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: '#555', marginBottom: '4px' }}>
+                        To Date
+                      </label>
+                      <input
+                        type="date"
+                        value={toDate}
+                        onChange={(e) => setToDate(e.target.value)}
+                        style={{
+                          width: '100%',
+                          padding: '6px 10px',
+                          fontSize: '12px',
+                          border: '1px solid #CCC',
+                          borderRadius: '4px',
+                          outline: 'none',
+                          boxSizing: 'border-box',
+                        }}
+                      />
+                    </div>
+
+                    {/* Quick Presets */}
+                    <div style={{ display: 'flex', gap: '4px', marginTop: '4px' }}>
+                      <button
+                        type="button"
+                        onClick={() => handleQuickPreset('today')}
+                        style={{
+                          flex: 1,
+                          padding: '4px 6px',
+                          fontSize: '10px',
+                          fontWeight: 600,
+                          backgroundColor: '#F4F6F8',
+                          border: '1px solid #DDD',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        Today
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleQuickPreset('7days')}
+                        style={{
+                          flex: 1,
+                          padding: '4px 6px',
+                          fontSize: '10px',
+                          fontWeight: 600,
+                          backgroundColor: '#F4F6F8',
+                          border: '1px solid #DDD',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        Last 7 Days
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleQuickPreset('thisMonth')}
+                        style={{
+                          flex: 1,
+                          padding: '4px 6px',
+                          fontSize: '10px',
+                          fontWeight: 600,
+                          backgroundColor: '#F4F6F8',
+                          border: '1px solid #DDD',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        This Month
+                      </button>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+                      <button
+                        type="button"
+                        onClick={() => handleApplyDateFilter(fromDate, toDate)}
+                        style={{
+                          flex: 2,
+                          backgroundColor: '#0B1536',
+                          color: '#FFFFFF',
+                          border: '1px solid #EBAF20',
+                          borderRadius: '4px',
+                          padding: '8px',
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        Apply Date Filter
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleClearFilter}
+                        style={{
+                          flex: 1,
+                          backgroundColor: '#F5F5F5',
+                          color: '#555',
+                          border: '1px solid #CCC',
+                          borderRadius: '4px',
+                          padding: '8px',
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        Reset
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Export Dropdown */}
+            <select
+              onChange={handleExport}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                backgroundColor: '#0B1536',
+                color: '#FFFFFF',
+                border: '1px solid #EBAF20',
+                borderRadius: '4px',
+                padding: '6px 12px',
+                fontSize: '13px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                outline: 'none',
+              }}
+            >
+              <option value="" style={{ display: 'none' }}>⬇️ Export As...</option>
+              <option value="pdf">📄 Export as PDF</option>
+              <option value="csv">📊 Export as CSV</option>
+            </select>
+          </div>
         );
       },
     });
@@ -185,3 +556,4 @@ export default {
     ]);
   },
 };
+
