@@ -46,7 +46,7 @@ const verifyAdminSession = async (ctx: Context, strapi: any): Promise<boolean> =
         return true;
       }
     }
-  } catch (_) {}
+  } catch (_) { }
 
   // 4. Try verifying JWT with ADMIN_JWT_SECRET
   try {
@@ -75,7 +75,7 @@ const verifyAdminSession = async (ctx: Context, strapi: any): Promise<boolean> =
       });
       if (tokenRow) return true;
     }
-  } catch (_) {}
+  } catch (_) { }
 
   return false;
 };
@@ -101,7 +101,7 @@ export default factories.createCoreController(
   ({ strapi }) => ({
     async create(ctx: Context) {
       let body = ctx.request.body ?? {};
-      
+
       // Handle wrapped body.data if present
       if (typeof body === 'object' && body !== null && 'data' in body && body.data && typeof body.data === 'object') {
         body = body.data;
@@ -109,7 +109,7 @@ export default factories.createCoreController(
       if (typeof body === 'string') {
         try {
           body = JSON.parse(body);
-        } catch (_) {}
+        } catch (_) { }
       }
 
       const { fullName, email, phone, experienceYears, currentCity, coverNote, resume, jobPosition } = body as Record<string, unknown>;
@@ -247,7 +247,7 @@ export default factories.createCoreController(
           ctx.body = { error: `Failed to fetch file: ${response.statusText}` };
           return;
         }
-        
+
         const extension = typeof resume.ext === 'string' ? resume.ext : '';
         let filename = String(resume.name || `resume${extension}`).replace(/[\r\n]/g, '');
         if (extension && !filename.toLowerCase().endsWith(extension.toLowerCase())) {
@@ -256,7 +256,7 @@ export default factories.createCoreController(
 
         ctx.set('Content-Type', response.headers.get('content-type') || 'application/octet-stream');
         ctx.attachment(filename);
-        
+
         const { Readable } = require('stream');
         ctx.body = Readable.fromWeb(response.body);
       } catch (err) {

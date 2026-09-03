@@ -36,7 +36,7 @@ const verifyAdminSession = async (ctx: Context, strapi: any): Promise<boolean> =
       const decoded = jwt.verify(token, secret);
       if (decoded) return true;
     }
-  } catch (_) {}
+  } catch (_) { }
 
   return false;
 };
