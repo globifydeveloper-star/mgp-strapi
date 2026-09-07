@@ -21,6 +21,7 @@
     "@strapi/plugin-users-permissions": "5.51.1",
     "@strapi/provider-upload-aws-s3": "^5.51.2",
     "@strapi/strapi": "5.51.1",
+    "@types/archiver": "^8.0.0",
     "@types/pdfkit": "^0.17.6",
     "archiver": "^8.0.0",
     "better-sqlite3": "12.8.0",
@@ -36,7 +37,6 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@types/archiver": "^8.0.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
