@@ -10,7 +10,24 @@ export default {
     if (!contentManager) return;
 
     const downloadAdminFile = async (endpointPath: string, defaultFilename: string) => {
+      const loaderId = `admin-download-loader-${Date.now()}`;
       try {
+        if (typeof document !== 'undefined') {
+          const loaderEl = document.createElement('div');
+          loaderEl.id = loaderId;
+          loaderEl.innerHTML = `
+            <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.4); z-index: 99999; display: flex; justify-content: center; align-items: center; color: white; font-family: system-ui, sans-serif;">
+              <div style="background: #181826; padding: 24px 40px; border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,0.3); display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                <div style="width: 28px; height: 28px; border: 3px solid rgba(255,255,255,0.2); border-top-color: #EBAF20; border-radius: 50%; animation: adminSpin 1s linear infinite;"></div>
+                <div style="font-size: 15px; font-weight: 600;">Generating File...</div>
+                <div style="font-size: 13px; color: #a5a5ba;">This may take a few moments.</div>
+              </div>
+              <style>@keyframes adminSpin { to { transform: rotate(360deg); } }</style>
+            </div>
+          `;
+          document.body.appendChild(loaderEl);
+        }
+
         const { get } = getFetchClient();
         const { data: blob, headers } = await get(endpointPath, { responseType: 'blob' } as any);
 
@@ -37,6 +54,11 @@ export default {
       } catch (err) {
         console.error('[Admin Export] Download error:', err);
         alert('Download failed: ' + String(err));
+      } finally {
+        if (typeof document !== 'undefined') {
+          const el = document.getElementById(loaderId);
+          if (el) el.remove();
+        }
       }
     };
 
@@ -182,6 +204,7 @@ export default {
           if (isJobApp) {
             if (type === 'pdf') downloadAdminFile(`/api/job-applications/export/pdf${queryStr}`, `Job_Applications_Export_${Date.now()}.pdf`);
             if (type === 'csv') downloadAdminFile(`/api/job-applications/export/csv${queryStr}`, `Job_Applications_Export_${Date.now()}.csv`);
+            if (type === 'zip') downloadAdminFile(`/api/job-applications/export/zip${queryStr}`, `Job_Applications_Resumes_${Date.now()}.zip`);
           } else if (isContactSub) {
             if (type === 'pdf') downloadAdminFile(`/api/contact-submissions/export/pdf${queryStr}`, `Contact_Submissions_Export_${Date.now()}.pdf`);
             if (type === 'csv') downloadAdminFile(`/api/contact-submissions/export/csv${queryStr}`, `Contact_Submissions_Export_${Date.now()}.csv`);
@@ -464,6 +487,7 @@ export default {
               <option value="" style={{ display: 'none' }}>⬇️ Export As...</option>
               <option value="pdf">📄 Export as PDF</option>
               <option value="csv">📊 Export as CSV</option>
+              {isJobApp && <option value="zip">🗂️ Export CVs as ZIP</option>}
             </select>
           </div>
         );

@@ -2,6 +2,8 @@ import type { Context } from 'koa';
 import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
 import PDFDocument from 'pdfkit';
+import { ZipArchive } from 'archiver';
+import { PassThrough } from 'stream';
 
 const { ValidationError } = errors;
 
@@ -527,6 +529,85 @@ export default factories.createCoreController(
       ctx.type = 'text/csv';
       ctx.set('Content-Disposition', `attachment; filename="Job_Applications_Export_${Date.now()}.csv"`);
       ctx.body = csvContent;
+    },
+
+    async exportBulkZip(ctx: Context) {
+      if (!(await verifyAdminSession(ctx, strapi))) {
+        ctx.status = 403;
+        ctx.body = { error: 'Forbidden: Admin authentication required.' };
+        return;
+      }
+
+      const { fromDate, toDate, from, to } = ctx.query as { fromDate?: string; toDate?: string; from?: string; to?: string };
+      const start = fromDate || from;
+      const end = toDate || to;
+
+      const filters: Record<string, unknown> = {};
+      if (start || end) {
+        const dateFilter: Record<string, unknown> = {};
+        if (start) {
+          dateFilter['$gte'] = start.includes('T') ? start : `${start}T00:00:00.000Z`;
+        }
+        if (end) {
+          dateFilter['$lte'] = end.includes('T') ? end : `${end}T23:59:59.999Z`;
+        }
+        filters['submittedAt'] = dateFilter;
+      }
+
+      const apps = (await strapi.documents('api::job-application.job-application').findMany({
+        filters: Object.keys(filters).length ? filters : undefined,
+        populate: ['resume'],
+      })) as any[];
+
+      const archive = new ZipArchive({ zlib: { level: 9 } });
+      const stream = new PassThrough();
+      archive.pipe(stream);
+
+      ctx.type = 'application/zip';
+      ctx.set('Content-Disposition', `attachment; filename="Job_Applications_Resumes_${Date.now()}.zip"`);
+      ctx.body = stream;
+
+      let host = (process.env.STRAPI_URL || 'http://localhost:1337').trim();
+      if (host.endsWith('/')) {
+        host = host.slice(0, -1);
+      }
+
+      // Run the loop in the background so Koa can start piping the stream immediately,
+      // avoiding backpressure deadlocks where the stream fills up and waits forever.
+      (async () => {
+        try {
+          for (const app of apps) {
+            const resume = app.resume;
+            if (resume && resume.url) {
+              let fileUrl = resume.url;
+              if (typeof fileUrl === 'string' && !fileUrl.startsWith('http://') && !fileUrl.startsWith('https://')) {
+                fileUrl = fileUrl.startsWith('/') ? `${host}${fileUrl}` : `${host}/${fileUrl}`;
+              }
+
+              try {
+                const response = await fetch(fileUrl);
+                if (response.ok) {
+                  const extension = typeof resume.ext === 'string' ? resume.ext : '';
+                  let filename = String(resume.name || `resume${extension}`).replace(/[\r\n]/g, '');
+                  if (extension && !filename.toLowerCase().endsWith(extension.toLowerCase())) {
+                    filename += extension;
+                  }
+                  const cleanName = (app.fullName || 'Applicant').replace(/[^a-zA-Z0-9]/g, '_');
+                  const finalName = `${app.documentId}_${cleanName}/${filename}`;
+
+                  const arrayBuffer = await response.arrayBuffer();
+                  const buffer = Buffer.from(arrayBuffer);
+                  archive.append(buffer, { name: finalName });
+                }
+              } catch (err) {
+                strapi.log.error(`[job-application] Failed to fetch resume for app ${app.documentId}:`, err);
+              }
+            }
+          }
+        } finally {
+          archive.finalize();
+        }
+      })();
     },
   })
 );

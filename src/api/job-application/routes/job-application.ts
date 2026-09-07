@@ -26,6 +26,14 @@ export default {
     },
     {
       method: 'GET',
+      path: '/job-applications/export/zip',
+      handler: 'job-application.exportBulkZip',
+      config: {
+        auth: false,
+      },
+    },
+    {
+      method: 'GET',
       path: '/job-applications/:id/resume',
       handler: 'job-application.downloadResume',
       config: {
