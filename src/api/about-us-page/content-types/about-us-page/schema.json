@@ -20,6 +20,12 @@
     "heroDescription": {
       "type": "text"
     },
+    "heroButtonText": {
+      "type": "string"
+    },
+    "heroButtonLink": {
+      "type": "string"
+    },
     "heroChecklist": {
       "type": "component",
       "repeatable": true,

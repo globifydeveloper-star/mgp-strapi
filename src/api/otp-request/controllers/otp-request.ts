@@ -196,6 +196,20 @@ export default factories.createCoreController(
                 submittedAt: new Date().toISOString(),
               });
             }
+          } else if (srcStr.includes('blog')) {
+            const blogEnquiryService = strapi.service('api::blog-enquiry.blog-enquiry') as unknown as {
+              submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
+            };
+            if (blogEnquiryService) {
+              await blogEnquiryService.submitAndSync({
+                name: name.trim(),
+                phone,
+                email,
+                branchCode: branchCode || undefined,
+                blogTitle: sourceForm?.replace(/^Blog:\s*/i, '') || 'Blog',
+                submittedAt: new Date().toISOString(),
+              });
+            }
           } else {
             const formSubmissionService = strapi.service('api::form-submission.form-submission') as unknown as {
               submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
