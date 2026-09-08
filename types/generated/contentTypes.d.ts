@@ -907,13 +907,7 @@ export interface ApiDifferenceBoxDifferenceBox
       'api::difference-box.difference-box'
     > &
       Schema.Attribute.Private;
-    order: Schema.Attribute.Integer &
-      Schema.Attribute.SetMinMax<
-        {
-          min: 0;
-        },
-        number
-      >;
+    order: Schema.Attribute.Integer;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -994,13 +988,7 @@ export interface ApiFaqFaq extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::faq.faq'> &
       Schema.Attribute.Private;
-    order: Schema.Attribute.Integer &
-      Schema.Attribute.SetMinMax<
-        {
-          min: 0;
-        },
-        number
-      >;
+    order: Schema.Attribute.Integer;
     page: Schema.Attribute.Relation<'manyToOne', 'api::page.page'>;
     publishedAt: Schema.Attribute.DateTime;
     question: Schema.Attribute.String;
@@ -1621,13 +1609,7 @@ export interface ApiProcessStepProcessStep extends Struct.CollectionTypeSchema {
       'api::process-step.process-step'
     > &
       Schema.Attribute.Private;
-    order: Schema.Attribute.Integer &
-      Schema.Attribute.SetMinMax<
-        {
-          min: 0;
-        },
-        number
-      >;
+    order: Schema.Attribute.Integer;
     publishedAt: Schema.Attribute.DateTime;
     stepDescription: Schema.Attribute.Text;
     stepImage: Schema.Attribute.Media<'images'>;
@@ -1694,15 +1676,7 @@ export interface ApiTestimonialTestimonial extends Struct.CollectionTypeSchema {
     location: Schema.Attribute.String;
     profilePicture: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
-    rating: Schema.Attribute.Integer &
-      Schema.Attribute.SetMinMax<
-        {
-          max: 5;
-          min: 0;
-        },
-        number
-      > &
-      Schema.Attribute.DefaultTo<5>;
+    rating: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<5>;
     testimonialText: Schema.Attribute.Text;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &

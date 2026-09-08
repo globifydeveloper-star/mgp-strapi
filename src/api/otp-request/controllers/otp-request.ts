@@ -88,7 +88,7 @@ export default factories.createCoreController(
     },
 
     async verifyOtp(ctx: Context) {
-      const { phone, otp, name, email, state, city, branchCode, purity, weight, message, consent, sourceForm, enquiryType } = (ctx.request.body ?? {}) as {
+      const { phone, otp, name, email, state, city, branchCode, address, purity, weight, message, consent, sourceForm, enquiryType } = (ctx.request.body ?? {}) as {
         phone?: string;
         otp?: string;
         name?: string;
@@ -96,6 +96,7 @@ export default factories.createCoreController(
         state?: string;
         city?: string;
         branchCode?: string;
+        address?: string;
         purity?: string;
         weight?: string;
         message?: string;
@@ -175,9 +176,10 @@ export default factories.createCoreController(
                 city: city || undefined,
                 state: state || undefined,
                 branchCode: branchCode || undefined,
+                address: address || undefined,
                 purity: purity || undefined,
                 weight: weight || undefined,
-                details: { purity, weight, city, state, message },
+                details: { purity, weight, city, state, address, message },
                 submittedAt: new Date().toISOString(),
               });
             }
