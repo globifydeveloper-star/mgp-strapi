@@ -1133,9 +1133,7 @@ export interface ApiGoldRatePageGoldRatePage extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    estimateGoldImage: Schema.Attribute.Media<'images'>;
     faqs: Schema.Attribute.Relation<'oneToMany', 'api::faq.faq'>;
-    goldRateFormImage: Schema.Attribute.Media<'images'>;
     heroDescription: Schema.Attribute.Text;
     heroImage: Schema.Attribute.Media<'images'>;
     heroTitle: Schema.Attribute.String;
@@ -1154,7 +1152,6 @@ export interface ApiGoldRatePageGoldRatePage extends Struct.SingleTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    whyGoldRateChangesImage: Schema.Attribute.Media<'images'>;
   };
 }
 
@@ -1251,7 +1248,6 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
       Schema.Attribute.Private;
     estimateGoldHeading: Schema.Attribute.String;
     estimateGoldHeadingHighlight: Schema.Attribute.String;
-    estimateGoldImage: Schema.Attribute.Media<'images'>;
     estimateGoldNote: Schema.Attribute.String;
     heroFirstSlideImage: Schema.Attribute.Media<'images'>;
     hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -1417,7 +1413,6 @@ export interface ApiMobileVanPageMobileVanPage extends Struct.SingleTypeSchema {
   attributes: {
     appointmentDescription: Schema.Attribute.Text;
     appointmentTitle: Schema.Attribute.String;
-    bookVanFormImage: Schema.Attribute.Media<'images'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1441,7 +1436,6 @@ export interface ApiMobileVanPageMobileVanPage extends Struct.SingleTypeSchema {
     seoDescription: Schema.Attribute.Text;
     seoTitle: Schema.Attribute.String;
     testingMethods: Schema.Attribute.Component<'shared.benefit-card', true>;
-    testingMethodsImage: Schema.Attribute.Media<'images'>;
     testingMethodsTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1669,35 +1663,6 @@ export interface ApiPromoSlidePromoSlide extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::promo-slide.promo-slide'
-    > &
-      Schema.Attribute.Private;
-    publishedAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
-export interface ApiSharedMediaSharedMedia extends Struct.SingleTypeSchema {
-  collectionName: 'shared_medias';
-  info: {
-    description: 'Images reused across multiple pages. Editing one here updates every page that uses it.';
-    displayName: 'Shared Media';
-    pluralName: 'shared-medias';
-    singularName: 'shared-media';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    goldValueFormImage: Schema.Attribute.Media<'images'>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::shared-media.shared-media'
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
@@ -2328,7 +2293,6 @@ declare module '@strapi/strapi' {
       'api::page.page': ApiPagePage;
       'api::process-step.process-step': ApiProcessStepProcessStep;
       'api::promo-slide.promo-slide': ApiPromoSlidePromoSlide;
-      'api::shared-media.shared-media': ApiSharedMediaSharedMedia;
       'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'plugin::content-manager-organizer.content-manager-configuration': PluginContentManagerOrganizerContentManagerConfiguration;
       'plugin::content-releases.release': PluginContentReleasesRelease;

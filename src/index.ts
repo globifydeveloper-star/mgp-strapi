@@ -485,6 +485,7 @@ export default {
             kind: 'singleType',
             items: [
               'api::homepage.homepage',
+              'api::shared-media.shared-media',
               'api::blog-page-setting.blog-page-setting',
               'api::career-page-setting.career-page-setting'
             ]
