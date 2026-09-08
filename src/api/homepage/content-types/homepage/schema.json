@@ -32,7 +32,7 @@
       "allowedTypes": [
         "images"
       ],
-      "description": "Recommended: 800x800 px"
+      "description": "Recommended: 1600 × 1050 px (16:10.5 Aspect Ratio)"
     },
     "estimateGoldHeading": {
       "type": "string"

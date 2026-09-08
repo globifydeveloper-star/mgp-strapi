@@ -29,7 +29,7 @@
       "allowedTypes": [
         "images"
       ],
-      "description": "Recommended: 1536 × 1024 px (Process step) or ~800 × 800 px (Value gold)"
+      "description": "Recommended: 1920 × 1080 px (16:9 Aspect Ratio)"
     }
   }
 }
