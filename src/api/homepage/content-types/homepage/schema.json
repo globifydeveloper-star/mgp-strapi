@@ -16,7 +16,7 @@
       "allowedTypes": [
         "images"
       ],
-      "description": "Recommended: 1920x1080 px (16:9 Desktop) / 800x800 px (Mobile)"
+      "description": "Recommended: 1978 × 3215 px"
     },
     "processSectionImage": {
       "type": "media",
@@ -66,7 +66,7 @@
       "allowedTypes": [
         "images"
       ],
-      "description": "Recommended: 800x800 px"
+      "description": "Recommended: 1825 × 941 px"
     },
     "seoTitle": {
       "type": "string"
