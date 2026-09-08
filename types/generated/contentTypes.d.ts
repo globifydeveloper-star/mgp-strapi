@@ -1672,6 +1672,35 @@ export interface ApiPromoSlidePromoSlide extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiSharedMediaSharedMedia extends Struct.SingleTypeSchema {
+  collectionName: 'shared_medias';
+  info: {
+    description: 'Images reused across multiple pages. Editing one here updates every page that uses it.';
+    displayName: 'Shared Media';
+    pluralName: 'shared-medias';
+    singularName: 'shared-media';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    goldValueFormImage: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::shared-media.shared-media'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiTestimonialTestimonial extends Struct.CollectionTypeSchema {
   collectionName: 'testimonials';
   info: {
@@ -2293,6 +2322,7 @@ declare module '@strapi/strapi' {
       'api::page.page': ApiPagePage;
       'api::process-step.process-step': ApiProcessStepProcessStep;
       'api::promo-slide.promo-slide': ApiPromoSlidePromoSlide;
+      'api::shared-media.shared-media': ApiSharedMediaSharedMedia;
       'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'plugin::content-manager-organizer.content-manager-configuration': PluginContentManagerOrganizerContentManagerConfiguration;
       'plugin::content-releases.release': PluginContentReleasesRelease;
