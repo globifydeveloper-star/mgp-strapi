@@ -22,7 +22,7 @@
       "allowedTypes": [
         "images"
       ],
-      "description": "Recommended: 800x800 px"
+      "description": "Recommended: 206 × 210 px"
     },
     "order": {
       "type": "integer",

@@ -22,7 +22,7 @@
       "allowedTypes": [
         "images"
       ],
-      "description": "Recommended: 1920x1080 px (16:9 Desktop) / 800x800 px (Mobile)"
+      "description": "Recommended: 1254 × 1254 px"
     },
     "slideLink": {
       "type": "string"

@@ -42,7 +42,7 @@
       "allowedTypes": [
         "images"
       ],
-      "description": "Recommended: 1920x1080 px (16:9 Desktop) / 800x800 px (Mobile)"
+      "description": "Recommended: 1536 × 1024 px"
     },
     "recyclingSubtitle": {
       "type": "string"
@@ -100,7 +100,7 @@
       "allowedTypes": [
         "images"
       ],
-      "description": "Recommended: 800x1200 px (2:3 Portrait)"
+      "description": "Recommended: 1978 × 3215 px"
     },
     "philanthropySubtitle": {
       "type": "string"

@@ -16,7 +16,7 @@
       "allowedTypes": [
         "images"
       ],
-      "description": "Recommended: 800x800 px"
+      "description": "Recommended: Varies"
     },
     "heading": {
       "type": "string"
