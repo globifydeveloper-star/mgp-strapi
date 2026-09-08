@@ -13,7 +13,8 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images", "videos"]
+      "allowedTypes": ["images", "videos"],
+      "description": "Recommended: 1254 × 1254 px"
     },
     "slideLink": {
       "type": "string"

@@ -26,7 +26,7 @@
         "images",
         "videos"
       ],
-      "description": "Recommended: Varies"
+      "description": "Recommended: 1920 × 1080 px (16:9 Aspect Ratio)"
     },
     "category": {
       "type": "relation",

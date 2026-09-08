@@ -22,7 +22,7 @@
       "allowedTypes": [
         "images"
       ],
-      "description": "Recommended: 206 × 210 px"
+      "description": "Recommended: 1280 × 800 px (16:10 Aspect Ratio)"
     },
     "order": {
       "type": "integer",

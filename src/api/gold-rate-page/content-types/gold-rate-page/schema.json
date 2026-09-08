@@ -48,10 +48,7 @@
       "type": "media",
       "multiple": false,
       "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
+        "images"
       ],
       "description": "Recommended: 1920 × 1080 px"
     },
@@ -59,10 +56,7 @@
       "type": "media",
       "multiple": false,
       "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
+        "images"
       ],
       "description": "Recommended: ~800 × 800 px"
     },
@@ -70,10 +64,7 @@
       "type": "media",
       "multiple": false,
       "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
+        "images"
       ],
       "description": "Recommended: ~800 × 800 px"
     },
@@ -81,10 +72,7 @@
       "type": "media",
       "multiple": false,
       "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
+        "images"
       ],
       "description": "Recommended: 1600 × 1050 px (16:10.5 Aspect Ratio)"
     }

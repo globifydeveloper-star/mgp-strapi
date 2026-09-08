@@ -40,7 +40,7 @@
         "files",
         "images"
       ],
-      "description": "Recommended: 800x800 px"
+      "description": "Candidate resume (PDF or DOC preferred)"
     },
     "jobPosition": {
       "type": "relation",

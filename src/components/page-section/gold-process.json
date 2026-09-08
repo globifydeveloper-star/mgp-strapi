@@ -9,7 +9,8 @@
     "sectionImage": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": ["images"],
+      "description": "Recommended: 800x800 px"
     },
     "steps": {
       "type": "component",

@@ -64,10 +64,7 @@
       "type": "media",
       "multiple": false,
       "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
+        "images"
       ],
       "description": "Recommended: 4096 × 1408 px (background)"
     },
@@ -75,10 +72,7 @@
       "type": "media",
       "multiple": false,
       "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
+        "images"
       ],
       "description": "Recommended: 1541 × 1021 px"
     },
@@ -86,10 +80,7 @@
       "type": "media",
       "multiple": false,
       "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
+        "images"
       ],
       "description": "Recommended: 1825 × 941 px"
     }

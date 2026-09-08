@@ -15,7 +15,8 @@
     "boxImage": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": ["images"],
+      "description": "Recommended: 1280 × 800 px (16:10 Aspect Ratio)"
     },
     "iconType": {
       "type": "enumeration",
