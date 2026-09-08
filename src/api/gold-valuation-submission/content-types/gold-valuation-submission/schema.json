@@ -23,10 +23,12 @@
       "type": "email"
     },
     "purity": {
-      "type": "string"
+      "type": "string",
+      "regex": "^[^-]*$"
     },
     "weight": {
-      "type": "string"
+      "type": "string",
+      "regex": "^[^-]*$"
     },
     "branch": {
       "type": "string"

@@ -45,10 +45,12 @@
       "type": "string"
     },
     "purity": {
-      "type": "string"
+      "type": "string",
+      "regex": "^[^-]*$"
     },
     "weight": {
-      "type": "string"
+      "type": "string",
+      "regex": "^[^-]*$"
     },
     "details": {
       "type": "json"
