@@ -16,7 +16,7 @@
       "allowedTypes": [
         "images"
       ],
-      "description": "Recommended: Varies"
+      "description": "Recommended: 1280 × 800 px (16:10 Aspect Ratio)"
     },
     "heading": {
       "type": "string"

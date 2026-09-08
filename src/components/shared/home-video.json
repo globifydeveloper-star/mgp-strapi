@@ -21,7 +21,8 @@
       "required": false,
       "allowedTypes": [
         "images"
-      ]
+      ],
+      "description": "Recommended: 1920 × 1080 px (16:9 Aspect Ratio)"
     },
     "video": {
       "type": "media",
@@ -29,7 +30,8 @@
       "required": false,
       "allowedTypes": [
         "videos"
-      ]
+      ],
+      "description": "Recommended: 1920 × 1080 px (16:9), MP4 / H.264"
     },
     "videoUrl": {
       "type": "string"
