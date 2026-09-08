@@ -416,6 +416,7 @@ export default {
           'api::branch.branch.find',
           'api::state.state.find',
           'api::homepage.homepage.find',
+          'api::shared-media.shared-media.find',
           'api::hero-slide.hero-slide.find',
           'api::process-step.process-step.find',
           'api::difference-box.difference-box.find',
