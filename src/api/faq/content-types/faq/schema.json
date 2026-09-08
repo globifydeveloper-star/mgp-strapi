@@ -24,7 +24,8 @@
       ]
     },
     "order": {
-      "type": "integer"
+      "type": "integer",
+      "min": 0
     },
     "page": {
       "type": "relation",

@@ -26,7 +26,9 @@
     },
     "rating": {
       "type": "integer",
-      "default": 5
+      "default": 5,
+      "min": 0,
+      "max": 5
     },
     "testimonialText": {
       "type": "text"

@@ -25,7 +25,8 @@
       "description": "Recommended: 800x800 px"
     },
     "order": {
-      "type": "integer"
+      "type": "integer",
+      "min": 0
     },
     "iconType": {
       "type": "enumeration",
