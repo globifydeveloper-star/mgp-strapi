@@ -67,22 +67,6 @@
         "images"
       ],
       "description": "Recommended: 4096 × 1408 px (background)"
-    },
-    "testingMethodsImage": {
-      "type": "media",
-      "multiple": false,
-      "allowedTypes": [
-        "images"
-      ],
-      "description": "Recommended: 1541 × 1021 px"
-    },
-    "bookVanFormImage": {
-      "type": "media",
-      "multiple": false,
-      "allowedTypes": [
-        "images"
-      ],
-      "description": "Recommended: 1825 × 941 px"
     }
   }
 }

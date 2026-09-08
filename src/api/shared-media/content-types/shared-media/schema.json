@@ -1,0 +1,23 @@
+{
+  "kind": "singleType",
+  "collectionName": "shared_medias",
+  "info": {
+    "singularName": "shared-media",
+    "pluralName": "shared-medias",
+    "displayName": "Shared Media",
+    "description": "Images reused across multiple pages. Editing one here updates every page that uses it."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "goldValueFormImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Shown beside the gold value form on both Homepage and Gold Rate Page. Recommended: 1600 × 1050 px (16:10.5 Aspect Ratio)"
+    }
+  }
+}
