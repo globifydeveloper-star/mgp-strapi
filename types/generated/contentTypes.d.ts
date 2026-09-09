@@ -500,7 +500,7 @@ export interface ApiAboutUsPageAboutUsPage extends Struct.SingleTypeSchema {
     heroChecklist: Schema.Attribute.Component<'shared.check-item', true>;
     heroDescription: Schema.Attribute.Text;
     heroEyebrow: Schema.Attribute.String;
-    heroImages: Schema.Attribute.Media<'images'>;
+    heroImages: Schema.Attribute.Media<'images', true>;
     heroStats: Schema.Attribute.Component<'shared.stat-item', true>;
     heroTitle: Schema.Attribute.String;
     hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -1152,6 +1152,7 @@ export interface ApiGoldRatePageGoldRatePage extends Struct.SingleTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    whyGoldRateChangesImage: Schema.Attribute.Media<'images'>;
   };
 }
 
@@ -1413,6 +1414,7 @@ export interface ApiMobileVanPageMobileVanPage extends Struct.SingleTypeSchema {
   attributes: {
     appointmentDescription: Schema.Attribute.Text;
     appointmentTitle: Schema.Attribute.String;
+    bookVanFormImage: Schema.Attribute.Media<'images'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1436,6 +1438,7 @@ export interface ApiMobileVanPageMobileVanPage extends Struct.SingleTypeSchema {
     seoDescription: Schema.Attribute.Text;
     seoTitle: Schema.Attribute.String;
     testingMethods: Schema.Attribute.Component<'shared.benefit-card', true>;
+    testingMethodsImage: Schema.Attribute.Media<'images'>;
     testingMethodsTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
