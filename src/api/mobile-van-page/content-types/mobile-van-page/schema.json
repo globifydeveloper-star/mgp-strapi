@@ -67,6 +67,22 @@
         "images"
       ],
       "description": "Recommended: 4096 × 1408 px (background)"
+    },
+    "testingMethodsImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Testing methods section. Falls back to the built-in image if empty. Recommended: 1541 × 1021 px"
+    },
+    "bookVanFormImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Van booking form. Falls back to the built-in image if empty. Recommended: 1825 × 941 px"
     }
   }
 }

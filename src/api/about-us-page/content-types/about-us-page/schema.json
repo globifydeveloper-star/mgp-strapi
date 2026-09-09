@@ -38,11 +38,11 @@
     },
     "heroImages": {
       "type": "media",
-      "multiple": false,
+      "multiple": true,
       "allowedTypes": [
         "images"
       ],
-      "description": "Recommended: 1536 × 1024 px"
+      "description": "Hero carousel — add 3 images. Falls back to the built-in slides if empty. Recommended: 1536 × 1024 px"
     },
     "recyclingSubtitle": {
       "type": "string"

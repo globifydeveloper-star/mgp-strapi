@@ -50,7 +50,15 @@
       "allowedTypes": [
         "images"
       ],
-      "description": "Recommended: 1920 × 1080 px"
+      "description": "Hero background. Falls back to the built-in image if empty. Recommended: 1920 × 1080 px"
+    },
+    "whyGoldRateChangesImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "\"Why rates change\" section. Falls back to the built-in image if empty. Recommended: ~800 × 800 px"
     }
   }
 }
