@@ -132,7 +132,6 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
     /*
     const crmConfig = strapi.config.get('crm') as {
       baseUrl: string;
-      token: string;
       timeout: number;
     };
     const crm = createCrmService(crmConfig);

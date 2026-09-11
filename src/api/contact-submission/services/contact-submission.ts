@@ -43,7 +43,6 @@ export default factories.createCoreService(
 
       const crmConfig = strapi.config.get('crm') as {
         baseUrl: string;
-        token: string;
         timeout: number;
       };
 

@@ -76,7 +76,6 @@ export default factories.createCoreService(
       // 2. Dual-Write Step B: Push to CRM asynchronously
       const crmConfig = strapi.config.get('crm') as {
         baseUrl: string;
-        token: string;
         timeout: number;
       };
 
@@ -157,7 +156,6 @@ export default factories.createCoreService(
 
       const crmConfig = strapi.config.get('crm') as {
         baseUrl: string;
-        token: string;
         timeout: number;
       };
       const crm = createCrmService(crmConfig);
