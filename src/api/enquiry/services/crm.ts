@@ -2,7 +2,6 @@ import { mapEnquiryToCrm, type EnquiryForCrm } from '../utils/crmMapper';
 
 interface CrmConfig {
   baseUrl: string;
-  token: string;
   timeout: number;
 }
 
@@ -31,22 +30,13 @@ export class CrmServiceError extends Error {
 
 let cachedCrmToken: { token: string; expiresAt: number } | null = null;
 
-async function resolveCrmToken(staticToken?: string, _baseUrl?: string): Promise<string | null> {
-  if (staticToken && staticToken.trim()) {
-    return staticToken.trim();
-  }
-
-  const envToken = process.env.CRM_TOKEN || process.env.CHANNEL_LEAD_TOKEN;
-  if (envToken && envToken.trim()) {
-    return envToken.trim();
-  }
-
+async function resolveCrmToken(): Promise<string | null> {
   if (cachedCrmToken && Date.now() < cachedCrmToken.expiresAt) {
     return cachedCrmToken.token;
   }
 
-  const u = process.env.CRM_USERNAME || process.env.CHANNEL_LEAD_USERNAME || process.env.BRANCH_MASTER_USERNAME;
-  const p = process.env.CRM_PASSWORD || process.env.CHANNEL_LEAD_PASSWORD || process.env.BRANCH_MASTER_PASSWORD;
+  const u = process.env.CRM_USERNAME;
+  const p = process.env.CRM_PASSWORD;
 
   if (!u || !p) {
     return null;
@@ -107,7 +97,7 @@ const readResponse = async (response: Response): Promise<unknown> => {
 
 export const createCrmService = (config: CrmConfig) => {
   const getHeaders = async () => {
-    const token = await resolveCrmToken(config.token, config.baseUrl);
+    const token = await resolveCrmToken();
     return {
       Authorization: `Bearer ${token || ''}`,
       'Content-Type': 'application/json',
@@ -135,7 +125,7 @@ export const createCrmService = (config: CrmConfig) => {
 
       const headers = await getHeaders();
       if (!headers.Authorization || headers.Authorization === 'Bearer ') {
-        throw new CrmServiceError('CRM integration is not configured. Token or login credentials missing.');
+        throw new CrmServiceError('CRM integration is not configured. CRM_USERNAME or CRM_PASSWORD is missing.');
       }
 
       const controller = new AbortController();
