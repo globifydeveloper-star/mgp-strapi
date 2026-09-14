@@ -212,23 +212,32 @@ export default factories.createCoreController(
                 submittedAt: new Date().toISOString(),
               });
             }
-          } else {
-            const formSubmissionService = strapi.service('api::form-submission.form-submission') as unknown as {
-              submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
-            };
-            if (formSubmissionService) {
-              await formSubmissionService.submitAndSync({
+          } else if (srcStr.includes('value') || srcStr.includes('valuation') || srcStr.includes('modal') || srcStr.includes('rate')) {
+            const goldService = strapi.service('api::gold-valuation-submission.gold-valuation-submission') as any;
+            if (goldService) {
+              await goldService.submitAndSync({
                 name: name.trim(),
                 phone,
                 email,
                 branch: location || undefined,
                 branchCode: branchCode || undefined,
-                enquiryType: enquiryType || (purity || weight ? 'Enquire Now' : 'Enquire Now'),
-                sourceForm: sourceForm || (purity || weight ? `Sell Gold Modal (Purity: ${purity || 'N/A'}, Weight: ${weight || '0'}g)` : 'OTP Form'),
                 purity: purity || undefined,
                 weight: weight || undefined,
+                sourceForm: sourceForm || `Sell Gold Modal (Purity: ${purity || 'N/A'}, Weight: ${weight || '0'}g)`,
                 details: { purity, weight, city, state, message },
                 submittedAt: new Date().toISOString(),
+              });
+            }
+          } else {
+            const enquiryService = strapi.service('api::enquiry.enquiry') as any;
+            if (enquiryService && enquiryService.createVerifiedEnquiry) {
+              await enquiryService.createVerifiedEnquiry({
+                name: name.trim(),
+                mobile: phone,
+                email: email || undefined,
+                source: 'HOME_PAGE',
+                otpVerified: true,
+                branchCode: branchCode || undefined,
               });
             }
           }

@@ -84,48 +84,25 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
       },
     });
 
-    // Dual-Write Mirror to Form Submissions & Specialized Collections
+    // Mirror directly to All Leads
     try {
-      if (input.source === 'BLOG') {
-        const blogService = strapi.service('api::blog-enquiry.blog-enquiry') as any;
-        if (blogService) await blogService.submitAndSync({ name: input.name, mobile: input.mobile, email: input.email, blogTitle: input.blog });
-      } else if (input.source === 'CONTACT_US') {
-        const contactService = strapi.service('api::contact-submission.contact-submission') as any;
-        if (contactService) await contactService.submitAndSync({ name: input.name, phone: input.mobile, email: input.email });
-      } else {
-        // HOME_PAGE / LANDING_PAGE / OTHER — mirror directly to All Leads
-        const allLeadService = strapi.service('api::all-lead.all-lead') as any;
-        if (allLeadService?.mirrorLead) {
-          allLeadService
-            .mirrorLead({
-              name: input.name,
-              phone: input.mobile,
-              email: input.email,
-              formSource: 'Enquiry',
-              sourceFormDetail: input.source,
-              branchCode: input.branchCode,
-              submittedAt: new Date().toISOString(),
-              crmPushStatus: 'Pending',
-            })
-            .catch((e: unknown) => strapi.log.error('[enquiry] All Leads mirror error:', e));
-        }
-      }
-      
-      const formSubmissionService = strapi.service('api::form-submission.form-submission') as unknown as {
-        submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
-      };
-      if (formSubmissionService) {
-        await formSubmissionService.submitAndSync({
-          name: input.name,
-          phone: input.mobile,
-          email: input.email,
-          sourceForm: input.source,
-          enquiryType: input.source === 'CONTACT_US' ? 'Contact Us' : (input.source === 'BLOG' ? 'Blog Enquiry' : 'Enquire Now'),
-          branchCode: input.branchCode,
-        });
+      const allLeadService = strapi.service('api::all-lead.all-lead') as any;
+      if (allLeadService?.mirrorLead) {
+        allLeadService
+          .mirrorLead({
+            name: input.name,
+            phone: input.mobile,
+            email: input.email,
+            formSource: 'Enquiry',
+            sourceFormDetail: input.source,
+            branchCode: input.branchCode,
+            submittedAt: new Date().toISOString(),
+            crmPushStatus: 'Pending',
+          })
+          .catch((e: unknown) => strapi.log.error('[enquiry] All Leads mirror error:', e));
       }
     } catch (mirrorErr) {
-      strapi.log.error('[enquiry] Failed to mirror to specialized collection:', mirrorErr);
+      strapi.log.error('[enquiry] Failed to mirror to all-leads:', mirrorErr);
     }
 
     // CRM Sync disabled as per client request (only contact forms should be sent, which is handled via mirror to contact-submission)

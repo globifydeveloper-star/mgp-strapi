@@ -1061,63 +1061,6 @@ export interface ApiFooterSettingFooterSetting extends Struct.SingleTypeSchema {
   };
 }
 
-export interface ApiFormSubmissionFormSubmission
-  extends Struct.CollectionTypeSchema {
-  collectionName: 'form_submissions';
-  info: {
-    description: 'Real-time mirror of lead form submissions in Strapi Admin';
-    displayName: 'Form Submission';
-    pluralName: 'form-submissions';
-    singularName: 'form-submission';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    branch: Schema.Attribute.String;
-    branchCode: Schema.Attribute.String;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    crmError: Schema.Attribute.Text;
-    crmLeadId: Schema.Attribute.String;
-    crmPushStatus: Schema.Attribute.Enumeration<['Sent', 'Pending', 'Failed']> &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'Pending'>;
-    crmResponse: Schema.Attribute.JSON;
-    details: Schema.Attribute.JSON;
-    email: Schema.Attribute.Email;
-    enquiryType: Schema.Attribute.Enumeration<
-      [
-        'Contact Us',
-        'Mobile Van',
-        'Enquire Now',
-        'Offers Popup',
-        'Blog Enquiry',
-        'Other',
-      ]
-    > &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'Enquire Now'>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::form-submission.form-submission'
-    > &
-      Schema.Attribute.Private;
-    name: Schema.Attribute.String & Schema.Attribute.Required;
-    phone: Schema.Attribute.String & Schema.Attribute.Required;
-    publishedAt: Schema.Attribute.DateTime;
-    purity: Schema.Attribute.String;
-    sourceForm: Schema.Attribute.String;
-    submittedAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    weight: Schema.Attribute.String;
-  };
-}
-
 export interface ApiGoldRatePageGoldRatePage extends Struct.SingleTypeSchema {
   collectionName: 'gold_rate_pages';
   info: {
@@ -2310,7 +2253,6 @@ declare module '@strapi/strapi' {
       'api::enquiry.enquiry': ApiEnquiryEnquiry;
       'api::faq.faq': ApiFaqFaq;
       'api::footer-setting.footer-setting': ApiFooterSettingFooterSetting;
-      'api::form-submission.form-submission': ApiFormSubmissionFormSubmission;
       'api::gold-rate-page.gold-rate-page': ApiGoldRatePageGoldRatePage;
       'api::gold-valuation-submission.gold-valuation-submission': ApiGoldValuationSubmissionGoldValuationSubmission;
       'api::hero-slide.hero-slide': ApiHeroSlideHeroSlide;
