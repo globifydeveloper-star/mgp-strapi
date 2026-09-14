@@ -28,7 +28,7 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Admin => 
 
         switch (uid) {
           case 'api::blog-post.blog-post': {
-            if (!documentId) return `${clientUrl}/blog`;
+            if (!documentId || typeof documentId !== 'string') return `${clientUrl}/blog`;
             const doc = await strapi.documents('api::blog-post.blog-post').findOne({
               documentId,
             });
