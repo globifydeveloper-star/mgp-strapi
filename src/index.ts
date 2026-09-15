@@ -401,6 +401,89 @@ export default {
       }
     }
 
+    // 8a. Seed About Us Page
+    const aboutUsUid = 'api::about-us-page.about-us-page';
+    const aboutUsData = {
+      heroEyebrow: "A Muthoot Exim (P) Ltd. Enterprise",
+      heroTitle: "Muthoot Gold Point — Precision You Can Trust",
+      heroDescription: "Muthoot Gold Point is a unit of Muthoot Exim (P) Ltd., the precious metal vertical of the Muthoot Pappachan Group, specialising in innovative products and offerings in the precious metal space. We are India's first national-level organised sector player in gold recycling — in sync with the Government of India's vision for the Indian gold industry — giving customers access to quality products at fair, transparent, and scientifically tested prices.",
+      heroButtonText: "Sell Your Gold",
+      heroButtonLink: "#what-we-do",
+      heroChecklist: [
+        { text: "133+ years of Muthoot Pappachan Group legacy" },
+        { text: "India's first organised-sector gold recycler" }
+      ],
+      recyclingSubtitle: "Closed-Loop Ecosystem",
+      recyclingTitle: "What Do We Do With \nThe Gold We Buy?",
+      recyclingDescription: "Every gram we buy is refined into 995 investment-grade gold bars and re-channeled into domestic markets — stabilizing local demand and curbing the nation's reliance on imports.",
+      recyclingSteps: [
+        { title: 'Scientific Valuation', desc: 'Our gold is valued transparently using ultrasonic cleaning and advanced XRF gold-testing machines right in front of you.' },
+        { title: 'Refinement into 995 Gold Bars', desc: 'All gold purchased from customers is sent to government-approved refineries and cast into pure 995 investment-grade gold bars.' },
+        { title: 'Reducing Import Dependence', desc: "By recycling domestic gold and supplying it back to local markets, we directly reduce India's heavy dependency on gold imports." }
+      ],
+      historySubtitle: "Legacy & Heritage",
+      historyTitle: "Our Historic Milestones",
+      historyDescription: "From a local Kerala grain trader in 1887 to a multi-billion dollar diversified conglomerate.",
+      historyMilestones: [
+        { year: "1887", title: "Humble Beginnings", desc: "Founded by Muthoot Ninan Mathai as a grain trading and chit fund business in Kozhencherry, Kerala." },
+        { year: "1950s", title: "Gold Loan Pioneer", desc: "Entered the gold loan business, making Kozhencherry the region's premier destination for trust-based lending." },
+        { year: "1979", title: "Muthoot Pappachan Group Formed", desc: "Led by Mathew M. Thomas, MPG was born with a strong focus on serving the common man." },
+        { year: "Today", title: "Modern Expansion", desc: "Diversified into Hospitality, Automotive, Real Estate, Healthcare, Precious Metals, and more." }
+      ],
+      parentEyebrow: "Parent Conglomerate",
+      parentTitle: "About The Muthoot Pappachan Group",
+      parentDescription: "Popularly known as Muthoot Blue, the group is built on the bedrock of Trust and shaped by the core values of Integrity, Collaboration, and Excellence. With its genesis in founder Shri Muthoot Pappachan's unwavering faith in love, respect, and duty towards humanity, it has evolved into a massive business conglomerate that places the well-being of the underserved masses of India at the very center of its purpose.",
+      parentCompareHeading: "A Massive Business Conglomerate",
+      parentChecklist: [
+        { text: "Trusted and reliable since 1887" },
+        { text: "Empowering millions of Indians to rise above their ordinariness" }
+      ],
+      parentStats: [
+        { number: "133+", label: "Years of Legacy" },
+        { number: "4,200+", label: "Branches" },
+        { number: "100k+", label: "Daily Customers" },
+        { number: "24,000+", label: "Employees" }
+      ],
+      philanthropySubtitle: "Social Commitment",
+      philanthropyTitle: "Our Unwavering Focus on Philanthropy",
+      philanthropyDescription: "Armed with a commitment to society, the Group set up the Muthoot Pappachan Foundation (MPF), a Public Charitable Trust and the CSR arm of MPG.",
+      philanthropyInitiativeTitle: "HEEL Initiative",
+      philanthropyInitiativeDesc: "The corporate social responsibility (CSR) programs of Muthoot Blue revolve around the signature theme HEEL, touching thousands of lives by enhancing capabilities, providing health relief, and establishing self-reliant livelihoods.",
+      philanthropyPillars: [
+        { letter: "H", title: "Health", desc: "Providing access to quality healthcare, diagnostics, and medical equipment in rural and economically backward regions." },
+        { letter: "E", title: "Education", desc: "Supporting primary education, establishing learning centers, providing scholarships, and supporting digital classroom infrastructures." },
+        { letter: "E", title: "Environment", desc: "Promoting green cover, driving clean energy solutions, encouraging organic farming methods, and supporting water harvesting programs." },
+        { letter: "L", title: "Livelihood", desc: "Empowering under-served communities, youth, and women through skill development, vocational courses, and self-employment training." }
+      ],
+      philanthropyConclusion: "We believe in building a \"Business Without Boundaries\", where obstacles are treated as stepping stones to growth. We strive to take the world forward with perseverance, commitment, and sincerity. Indeed, the possibilities are infinite!",
+      presentSubtitle: "Present Day",
+      presentTitle: "Where We Stand Today",
+      presentDescription: "Currently serving over 5 million customers through a nation-wide workforce of 24,000 employees.",
+      presentSubDescription: "Our customer-centric approach and constant innovation in products cater to changing customer needs, helping us secure lifelong loyalty. By adopting state-of-the-art technology without compromising our core ethics, we serve over 100,000 customers daily.",
+      presentCardTag: "One-Stop Solution",
+      presentCardTitle: "The Financial Supermarket",
+      presentCardDesc: "Each of our 4,200+ branches operates as a comprehensive financial hub, housing a diverse range of products designed to empower local ambitions under a single roof.",
+      presentServicesTitle: "Services Offered at Our Branches",
+      presentServices: [
+        { title: "Gold Loans & Precious Metals", icon: "💰" },
+        { title: "Small Business Loans", icon: "💼" },
+        { title: "Affordable Housing Loans", icon: "🏠" },
+        { title: "Two-Wheeler & Used-Car Loans", icon: "🏍️" },
+        { title: "Domestic Money Transfer", icon: "💸" },
+        { title: "International Remittance & Forex", icon: "🌐" },
+        { title: "Insurance & Wealth Management", icon: "🛡️" },
+        { title: "Affordable Gold Jewellery", icon: "✨" }
+      ],
+      seoTitle: "About Us | Muthoot Gold Point",
+      seoDescription: "Learn about Muthoot Gold Point, a unit of Muthoot Exim, and our legacy of trust, scientific gold valuation, and transparency."
+    };
+
+    const aboutUsExisting = await strapi.documents(aboutUsUid).findFirst();
+    if (!aboutUsExisting) {
+      strapi.log.info('Seeding About Us Page...');
+      await strapi.documents(aboutUsUid).create({ data: aboutUsData });
+    }
+
     // 9. Auto-configure Public Role Permissions
     try {
       const publicRole = await strapi.db.connection('up_roles').where('type', 'public').first();
