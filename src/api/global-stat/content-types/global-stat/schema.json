@@ -1,0 +1,55 @@
+{
+  "kind": "singleType",
+  "collectionName": "global_stats",
+  "info": {
+    "singularName": "global-stat",
+    "pluralName": "global-stats",
+    "displayName": "Global Stats (Ribbon)",
+    "description": "Stats shown on the Hero Ribbon (Branches, Legacy, Employees, Customers)"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "branchesValue": {
+      "type": "string",
+      "default": "4,200",
+      "required": true
+    },
+    "branchesLabel": {
+      "type": "string",
+      "default": "Branches across India",
+      "required": true
+    },
+    "legacyValue": {
+      "type": "string",
+      "default": "133+",
+      "required": true
+    },
+    "legacyLabel": {
+      "type": "string",
+      "default": "Years of legacy",
+      "required": true
+    },
+    "employeesValue": {
+      "type": "string",
+      "default": "24,000",
+      "required": true
+    },
+    "employeesLabel": {
+      "type": "string",
+      "default": "Employees serving millions of customers",
+      "required": true
+    },
+    "customersValue": {
+      "type": "string",
+      "default": "1,00,000",
+      "required": true
+    },
+    "customersLabel": {
+      "type": "string",
+      "default": "Customers per day",
+      "required": true
+    }
+  }
+}
