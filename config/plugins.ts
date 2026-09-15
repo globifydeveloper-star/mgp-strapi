@@ -67,8 +67,8 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
         apiKey: env('RESEND_API_KEY'),
       },
       settings: {
-        defaultFrom: 'no-reply@globify.in',
-        defaultReplyTo: 'no-reply@globify.in',
+        defaultFrom: env('EMAIL_DEFAULT_FROM'),
+        defaultReplyTo: env('EMAIL_DEFAULT_FROM'),
       },
     },
   },
