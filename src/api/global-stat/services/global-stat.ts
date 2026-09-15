@@ -1,3 +1,3 @@
 import { factories } from '@strapi/strapi';
 
-export default factories.createCoreService('api::global-stat.global-stat');
+export default factories.createCoreService('api::global-stat.global-stat' as any);

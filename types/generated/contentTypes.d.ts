@@ -1061,6 +1061,58 @@ export interface ApiFooterSettingFooterSetting extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiGlobalStatGlobalStat extends Struct.SingleTypeSchema {
+  collectionName: 'global_stats';
+  info: {
+    description: 'Stats shown on the Hero Ribbon (Branches, Legacy, Employees, Customers)';
+    displayName: 'Global Stats (Ribbon)';
+    pluralName: 'global-stats';
+    singularName: 'global-stat';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    branchesLabel: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Branches across India'>;
+    branchesValue: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'4,200'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    customersLabel: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Customers per day'>;
+    customersValue: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'1,00,000'>;
+    employeesLabel: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Employees serving millions of customers'>;
+    employeesValue: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'24,000'>;
+    legacyLabel: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Years of legacy'>;
+    legacyValue: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'133+'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::global-stat.global-stat'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiGoldRatePageGoldRatePage extends Struct.SingleTypeSchema {
   collectionName: 'gold_rate_pages';
   info: {
@@ -2253,6 +2305,7 @@ declare module '@strapi/strapi' {
       'api::enquiry.enquiry': ApiEnquiryEnquiry;
       'api::faq.faq': ApiFaqFaq;
       'api::footer-setting.footer-setting': ApiFooterSettingFooterSetting;
+      'api::global-stat.global-stat': ApiGlobalStatGlobalStat;
       'api::gold-rate-page.gold-rate-page': ApiGoldRatePageGoldRatePage;
       'api::gold-valuation-submission.gold-valuation-submission': ApiGoldValuationSubmissionGoldValuationSubmission;
       'api::hero-slide.hero-slide': ApiHeroSlideHeroSlide;
