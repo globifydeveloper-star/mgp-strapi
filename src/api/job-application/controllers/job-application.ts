@@ -2,7 +2,6 @@ import type { Context } from 'koa';
 import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
 import PDFDocument from 'pdfkit';
-import { ZipArchive } from 'archiver';
 import { PassThrough } from 'stream';
 
 const { ValidationError } = errors;
@@ -559,6 +558,7 @@ export default factories.createCoreController(
         populate: ['resume'],
       })) as any[];
 
+      const { ZipArchive } = await import('archiver');
       const archive = new ZipArchive({ zlib: { level: 9 } });
       const stream = new PassThrough();
       archive.pipe(stream);
