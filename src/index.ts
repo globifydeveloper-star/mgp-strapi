@@ -309,10 +309,18 @@ export default {
         data: {
           heroHeading: 'Join the Muthoot Gold Point Team',
           heroSubheading: 'Build a rewarding career with India’s most trusted gold buying organization. We foster talent, integrity, and career growth.',
-          cultureHeading: 'Why Work With Us?',
+          cultureHeading: 'Why Join Muthoot?',
           cultureDescription: 'At Muthoot Gold Point, we believe our people are our strongest asset. We provide a collaborative, transparent, and growth-oriented work environment with competitive benefits and continuous learning opportunities.',
           seoTitle: 'Careers | Work With Muthoot Gold Point',
           seoDescription: 'Explore open job opportunities and build your career with Muthoot Gold Point.'
+        }
+      });
+    } else if (careerSettingExisting.cultureHeading === 'Why Work With Us?') {
+      strapi.log.info('Updating Career Page Settings with new Culture Heading...');
+      await strapi.documents(careerSettingUid).update({
+        documentId: careerSettingExisting.documentId,
+        data: {
+          cultureHeading: 'Why Join Muthoot?'
         }
       });
     }
@@ -482,6 +490,31 @@ export default {
     if (!aboutUsExisting) {
       strapi.log.info('Seeding About Us Page...');
       await strapi.documents(aboutUsUid).create({ data: aboutUsData });
+    }
+
+    // 8c. Seed Contact Us Page
+    const contactUsUid = 'api::contact-us-page.contact-us-page';
+    const contactUsExists = await strapi.documents(contactUsUid).findFirst();
+    if (!contactUsExists) {
+      strapi.log.info('Seeding Contact Us Page Data...');
+      await strapi.documents(contactUsUid).create({
+        data: {
+          heroHeading: "We’re Just A Message Away.",
+          heroLead: "Have questions or need assistance? We’re here to help you with all your gold loan & selling needs.",
+          formTitle: "Write to us",
+          officeName: "MUTHOOT GOLD POINT",
+          officeAddress: "Muthoot Exim Private Limited, 40/7384 Muthoot Towers, M.G. Road, Ernakulam, Kerala - 682035",
+          officePhone1: "0484 2351481",
+          officePhone2: "0484 2351494",
+          officeEmail: "info@muthootexim.com",
+          officeMapUrl: "https://maps.google.com/maps?q=Muthoot%20Towers,%20MG%20Road,%20Ernakulam,%20Kerala%20682035&t=&z=15&ie=UTF8&iwloc=&output=embed",
+          officeMapPopupTitle: "Muthoot Towers",
+          officeMapPopupText: "M.G. Road, Ernakulam, Kerala - 682035",
+          seoTitle: "Contact Us | Muthoot Gold Point",
+          seoDescription: "Get in touch with Muthoot Gold Point."
+        },
+        status: 'published'
+      });
     }
 
     // 9. Auto-configure Public Role Permissions

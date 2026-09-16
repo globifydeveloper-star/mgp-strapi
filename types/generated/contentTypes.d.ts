@@ -740,7 +740,9 @@ export interface ApiCareerPageSettingCareerPageSetting
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     cultureDescription: Schema.Attribute.Text;
-    cultureHeading: Schema.Attribute.String;
+    cultureHeading: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Why Join Muthoot?'>;
+    heroDescription: Schema.Attribute.Text;
     heroHeading: Schema.Attribute.String;
     heroImage: Schema.Attribute.Media<'images'>;
     heroSubheading: Schema.Attribute.String;
@@ -843,19 +845,16 @@ export interface ApiContactUsPageContactUsPage extends Struct.SingleTypeSchema {
     singularName: 'contact-us-page';
   };
   options: {
-    draftAndPublish: false;
+    draftAndPublish: true;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    formServices: Schema.Attribute.Component<'shared.check-item', true>;
     formTitle: Schema.Attribute.String;
     heroHeading: Schema.Attribute.String;
     heroImage: Schema.Attribute.Media<'images'>;
     heroLead: Schema.Attribute.Text;
-    hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -863,8 +862,8 @@ export interface ApiContactUsPageContactUsPage extends Struct.SingleTypeSchema {
     > &
       Schema.Attribute.Private;
     officeAddress: Schema.Attribute.Text;
-    officeEmail: Schema.Attribute.String;
-    officeMapPopupText: Schema.Attribute.Text;
+    officeEmail: Schema.Attribute.Email;
+    officeMapPopupText: Schema.Attribute.String;
     officeMapPopupTitle: Schema.Attribute.String;
     officeMapUrl: Schema.Attribute.Text;
     officeName: Schema.Attribute.String;
@@ -873,7 +872,6 @@ export interface ApiContactUsPageContactUsPage extends Struct.SingleTypeSchema {
     ogImage: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
     seoDescription: Schema.Attribute.Text;
-    seoKeywords: Schema.Attribute.String;
     seoTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1421,7 +1419,7 @@ export interface ApiMobileVanPageMobileVanPage extends Struct.SingleTypeSchema {
     heroHeadingBold: Schema.Attribute.String;
     heroHeadingLight1: Schema.Attribute.String;
     heroHeadingLight2: Schema.Attribute.String;
-    heroImage: Schema.Attribute.Media<'images'>;
+    heroImage: Schema.Attribute.Media<'images' | 'videos'>;
     howItWorksSteps: Schema.Attribute.Component<'shared.process-step', true>;
     howItWorksSubtitle: Schema.Attribute.String;
     howItWorksTitle: Schema.Attribute.String;

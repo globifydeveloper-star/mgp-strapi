@@ -63,10 +63,11 @@
     "heroImage": {
       "type": "media",
       "multiple": false,
+      "required": false,
       "allowedTypes": [
-        "images"
-      ],
-      "description": "Recommended: 4096 × 1408 px (background)"
+        "images",
+        "videos"
+      ]
     },
     "testingMethodsImage": {
       "type": "media",

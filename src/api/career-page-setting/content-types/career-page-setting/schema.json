@@ -26,7 +26,8 @@
       "description": "Recommended: 1920x1080 px (16:9 Desktop) / 800x800 px (Mobile)"
     },
     "cultureHeading": {
-      "type": "string"
+      "type": "string",
+      "default": "Why Join Muthoot?"
     },
     "cultureDescription": {
       "type": "text"
@@ -49,6 +50,9 @@
       "type": "component",
       "repeatable": true,
       "component": "shared.benefit-card"
+    },
+    "heroDescription": {
+      "type": "text"
     }
   }
 }
