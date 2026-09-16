@@ -176,6 +176,9 @@
     "hideNavbar": {
       "type": "boolean",
       "default": false
+    },
+    "seoKeywords": {
+      "type": "string"
     }
   }
 }

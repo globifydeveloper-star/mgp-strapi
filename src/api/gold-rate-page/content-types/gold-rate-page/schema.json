@@ -59,6 +59,9 @@
         "images"
       ],
       "description": "\"Why rates change\" section. Falls back to the built-in image if empty. Recommended: ~800 × 800 px"
+    },
+    "seoKeywords": {
+      "type": "string"
     }
   }
 }

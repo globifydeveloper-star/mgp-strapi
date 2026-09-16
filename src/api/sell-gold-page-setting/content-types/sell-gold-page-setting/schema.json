@@ -1,0 +1,35 @@
+{
+  "kind": "singleType",
+  "collectionName": "sell_gold_page_settings",
+  "info": {
+    "singularName": "sell-gold-page-setting",
+    "pluralName": "sell-gold-page-settings",
+    "displayName": "Sell Gold Page Setting",
+    "description": "Metadata for the Sell Gold for Cash page"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "seoKeywords": {
+      "type": "text"
+    },
+    "ogImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "seoKeywords": {
+      "type": "string"
+    }
+  }
+}

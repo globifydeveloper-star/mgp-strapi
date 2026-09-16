@@ -545,6 +545,7 @@ export interface ApiAboutUsPageAboutUsPage extends Struct.SingleTypeSchema {
     recyclingSubtitle: Schema.Attribute.String;
     recyclingTitle: Schema.Attribute.String;
     seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.String;
     seoTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -872,6 +873,7 @@ export interface ApiContactUsPageContactUsPage extends Struct.SingleTypeSchema {
     ogImage: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
     seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.String;
     seoTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1143,6 +1145,7 @@ export interface ApiGoldRatePageGoldRatePage extends Struct.SingleTypeSchema {
     ogImage: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
     seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.String;
     seoTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1259,6 +1262,7 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
     processSectionImage: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
     seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.String;
     seoTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1431,6 +1435,7 @@ export interface ApiMobileVanPageMobileVanPage extends Struct.SingleTypeSchema {
     locationsTitle: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.String;
     seoTitle: Schema.Attribute.String;
     testingMethods: Schema.Attribute.Component<'shared.benefit-card', true>;
     testingMethodsImage: Schema.Attribute.Media<'images'>;
@@ -1664,6 +1669,39 @@ export interface ApiPromoSlidePromoSlide extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiSellGoldPageSettingSellGoldPageSetting
+  extends Struct.SingleTypeSchema {
+  collectionName: 'sell_gold_page_settings';
+  info: {
+    description: 'Metadata for the Sell Gold for Cash page';
+    displayName: 'Sell Gold Page Setting';
+    pluralName: 'sell-gold-page-settings';
+    singularName: 'sell-gold-page-setting';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::sell-gold-page-setting.sell-gold-page-setting'
+    > &
+      Schema.Attribute.Private;
+    ogImage: Schema.Attribute.Media<'images'>;
+    publishedAt: Schema.Attribute.DateTime;
+    seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.String;
+    seoTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -2320,6 +2358,7 @@ declare module '@strapi/strapi' {
       'api::page.page': ApiPagePage;
       'api::process-step.process-step': ApiProcessStepProcessStep;
       'api::promo-slide.promo-slide': ApiPromoSlidePromoSlide;
+      'api::sell-gold-page-setting.sell-gold-page-setting': ApiSellGoldPageSettingSellGoldPageSetting;
       'api::shared-media.shared-media': ApiSharedMediaSharedMedia;
       'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'plugin::content-manager-organizer.content-manager-configuration': PluginContentManagerOrganizerContentManagerConfiguration;
