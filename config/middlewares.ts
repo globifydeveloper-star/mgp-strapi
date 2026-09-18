@@ -17,6 +17,7 @@ const config: Core.Config.Middlewares = [
             'https://mgp-web.vercel.app',
             'https://mgp-web-q2au.vercel.app',
             'https://*.vercel.app',
+            'https://mgpwebsiteui-uat.muthootgoldpoint.com',
           ],
           'img-src': [
             "'self'",
@@ -24,6 +25,8 @@ const config: Core.Config.Middlewares = [
             'blob:',
             'market-assets.strapi.io',
             'pub-bd272ef986bf4b208d871d215567b407.r2.dev',
+            'mgpwebsiteuat.s3.ap-south-1.amazonaws.com',
+            'mgpwebsiteuat.s3.amazonaws.com',
           ],
           'media-src': [
             "'self'",
@@ -31,6 +34,8 @@ const config: Core.Config.Middlewares = [
             'blob:',
             'market-assets.strapi.io',
             'pub-bd272ef986bf4b208d871d215567b407.r2.dev',
+            'mgpwebsiteuat.s3.ap-south-1.amazonaws.com',
+            'mgpwebsiteuat.s3.amazonaws.com',
           ],
           upgradeInsecureRequests: null,
         },
