@@ -104,10 +104,17 @@ export default factories.createCoreController(
       let body = ctx.request.body ?? {};
 
       // Handle wrapped body.data if present
-      if (typeof body === 'object' && body !== null && 'data' in body && body.data && typeof body.data === 'object') {
-        body = body.data;
-      }
-      if (typeof body === 'string') {
+      if (typeof body === 'object' && body !== null && 'data' in body && body.data) {
+        if (typeof body.data === 'string') {
+          try {
+            body = JSON.parse(body.data);
+          } catch (_) {
+            body = body.data;
+          }
+        } else if (typeof body.data === 'object') {
+          body = body.data;
+        }
+      } else if (typeof body === 'string') {
         try {
           body = JSON.parse(body);
         } catch (_) { }

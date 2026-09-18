@@ -39,6 +39,7 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
           region: env('AWS_REGION'),
           params: {
             Bucket: env('AWS_BUCKET'),
+            ACL: 'public-read',
           },
           forcePathStyle: true,
         },
