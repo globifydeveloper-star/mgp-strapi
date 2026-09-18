@@ -152,6 +152,7 @@ export default factories.createCoreController(
           }
         } catch (uploadErr) {
           strapi.log.error('[job-application] Failed to upload resume file:', uploadErr);
+          throw new ValidationError('Failed to upload resume file. Please try again.');
         }
       }
 
