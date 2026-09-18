@@ -1,5 +1,6 @@
 import type { Context } from 'koa';
 import { factories } from '@strapi/strapi';
+import { createHash, timingSafeEqual } from 'crypto';
 
 const OTP_TTL_MS = 5 * 60 * 1000;
 const RESEND_COOLDOWN_MS = 60 * 1000;
@@ -8,6 +9,14 @@ const PHONE_REGEX = /^\d{10}$/;
 
 const generateOtpCode = (): string =>
   Math.floor(100000 + Math.random() * 900000).toString();
+
+const hashOtp = (code: string): string => createHash('sha256').update(code).digest('hex');
+
+const safeCompare = (a: string, b: string): boolean => {
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+  return bufA.length === bufB.length && timingSafeEqual(bufA, bufB);
+};
 
 export default factories.createCoreController(
   'api::otp-request.otp-request',
@@ -41,7 +50,7 @@ export default factories.createCoreController(
       const expiresAt = new Date(now.getTime() + OTP_TTL_MS);
 
       await strapi.documents('api::otp-request.otp-request').create({
-        data: { phone, code, expiresAt: expiresAt.toISOString(), verified: false, attempts: 0 },
+        data: { phone, code: hashOtp(code), expiresAt: expiresAt.toISOString(), verified: false, attempts: 0 },
       });
 
       try {
@@ -135,7 +144,7 @@ export default factories.createCoreController(
         return;
       }
 
-      if (entry.code !== otp) {
+      if (!safeCompare(entry.code as string, hashOtp(otp))) {
         await strapi.documents('api::otp-request.otp-request').update({
           documentId: entry.documentId,
           data: { attempts: nextAttempts },

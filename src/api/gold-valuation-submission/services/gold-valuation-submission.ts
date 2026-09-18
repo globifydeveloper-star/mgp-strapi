@@ -11,6 +11,16 @@ const requiredString = (value: unknown, field: string): string => {
   return value.trim();
 };
 
+const MAX_WEIGHT_GRAMS = 10000;
+
+const validateWeight = (value: string, field: string): string => {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed <= 0 || parsed > MAX_WEIGHT_GRAMS) {
+    throw new ValidationError(`${field} must be a positive number up to ${MAX_WEIGHT_GRAMS} grams.`);
+  }
+  return value;
+};
+
 export default factories.createCoreService(
   'api::gold-valuation-submission.gold-valuation-submission',
   ({ strapi }) => ({
@@ -26,9 +36,15 @@ export default factories.createCoreService(
       const branch = typeof input.branch === 'string' && input.branch.trim() ? input.branch.trim() : undefined;
       const branchCode = typeof input.branchCode === 'string' && input.branchCode.trim() ? input.branchCode.trim() : undefined;
       const purity = typeof input.purity === 'string' && input.purity.trim() ? input.purity.trim() : undefined;
-      const weight = input.weight !== undefined && input.weight !== null ? String(input.weight).trim() : undefined;
+      const weight = input.weight !== undefined && input.weight !== null
+        ? validateWeight(String(input.weight).trim(), 'weight')
+        : undefined;
       const sourceForm = typeof input.sourceForm === 'string' && input.sourceForm.trim() ? input.sourceForm.trim() : 'Gold Valuation Form';
       const details = typeof input.details === 'object' && input.details !== null ? (input.details as Record<string, unknown>) : undefined;
+
+      if (details && details.weight !== undefined && details.weight !== null) {
+        validateWeight(String(details.weight).trim(), 'details.weight');
+      }
 
       const documents = strapi.documents('api::gold-valuation-submission.gold-valuation-submission');
 

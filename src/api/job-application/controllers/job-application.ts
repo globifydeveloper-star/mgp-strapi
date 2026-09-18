@@ -137,7 +137,13 @@ export default factories.createCoreController(
 
       // Check if file was uploaded via multipart/form-data
       const files = ctx.request.files as Record<string, any> | undefined;
-      const uploadedFile = files?.resume || files?.file || files?.['files.resume'];
+      let uploadedFile = files?.resume || files?.file || files?.['files.resume'];
+      if (!uploadedFile && files) {
+        const fileValues = Object.values(files);
+        if (fileValues.length === 1) {
+          uploadedFile = fileValues[0];
+        }
+      }
 
       if (uploadedFile) {
         try {
