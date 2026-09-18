@@ -24,8 +24,12 @@ export default factories.createCoreController(
       const entries = await strapi.documents('api::gold-valuation-submission.gold-valuation-submission').findMany({
         sort: { submittedAt: 'desc' },
       });
+      const sanitizedEntries = entries.map((entry: any) => {
+        const { crmLeadId, crmPushStatus, crmResponse, crmError, ...safeData } = entry;
+        return safeData;
+      });
       ctx.status = 200;
-      ctx.body = { data: entries };
+      ctx.body = { data: sanitizedEntries };
     },
   })
 );

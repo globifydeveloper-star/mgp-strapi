@@ -16,7 +16,6 @@ const config: Core.Config.Middlewares = [
             'http://127.0.0.1:3000',
             'https://mgp-web.vercel.app',
             'https://mgp-web-q2au.vercel.app',
-            'https://*.vercel.app',
             'https://mgpwebsiteui-uat.muthootgoldpoint.com',
           ],
           'img-src': [
@@ -45,7 +44,13 @@ const config: Core.Config.Middlewares = [
   {
     name: 'strapi::cors',
     config: {
-      origin: ['*'],
+      origin: [
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'https://mgp-web.vercel.app',
+        'https://mgp-web-q2au.vercel.app',
+        'https://mgpwebsiteui-uat.muthootgoldpoint.com',
+      ],
       headers: ['*'],
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
     },

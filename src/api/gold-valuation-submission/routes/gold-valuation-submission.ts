@@ -12,9 +12,6 @@ export default {
       method: 'GET',
       path: '/gold-valuation-submissions',
       handler: 'gold-valuation-submission.find',
-      config: {
-        auth: false,
-      },
     },
   ],
 };

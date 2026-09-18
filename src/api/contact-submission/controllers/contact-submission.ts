@@ -110,6 +110,19 @@ export default factories.createCoreController(
       const entries = await strapi.documents('api::contact-submission.contact-submission').findMany({
         sort: { submittedAt: 'desc' },
       });
+
+      const isAdmin = await verifyAdminSession(ctx, strapi);
+
+      if (!isAdmin) {
+        const sanitizedEntries = entries.map((entry: any) => {
+          const { crmLeadId, crmPushStatus, crmResponse, crmError, ...safeData } = entry;
+          return safeData;
+        });
+        ctx.status = 200;
+        ctx.body = { data: sanitizedEntries };
+        return;
+      }
+
       ctx.status = 200;
       ctx.body = { data: entries };
     },

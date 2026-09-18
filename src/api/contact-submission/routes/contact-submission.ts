@@ -36,9 +36,6 @@ export default {
       method: 'GET',
       path: '/contact-submissions',
       handler: 'contact-submission.find',
-      config: {
-        auth: false,
-      },
     },
   ],
 };
