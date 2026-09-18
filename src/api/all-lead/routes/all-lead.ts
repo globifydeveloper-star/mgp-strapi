@@ -24,5 +24,13 @@ export default {
         auth: false,
       },
     },
+    {
+      method: 'POST',
+      path: '/all-leads',
+      handler: 'all-lead.create',
+      config: {
+        auth: false,
+      },
+    },
   ],
 };
