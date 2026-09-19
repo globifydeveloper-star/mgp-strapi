@@ -1736,11 +1736,13 @@ export interface ApiSellGoldPageSettingSellGoldPageSetting
     ogImage: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
     seoDescription: Schema.Attribute.Text;
-    seoKeywords: Schema.Attribute.String;
+    seoKeywords: Schema.Attribute.Text;
     seoTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    weBuyGoldImage: Schema.Attribute.Media<'images'> &
+      Schema.Attribute.Required;
   };
 }
 
