@@ -183,6 +183,24 @@ export default {
       }
     }
 
+    // 4b. Seed Comparison Rows
+    const comparisonRowUid = 'api::comparison-row.comparison-row';
+    const comparisonRowsExisting = await strapi.documents(comparisonRowUid).findMany({ limit: 1 });
+    if (comparisonRowsExisting.length === 0) {
+      strapi.log.info('Seeding Comparison Rows...');
+      const rows = [
+        { order: 1, title: 'Valuation of your Gold', mgpText: 'Multilevel scientific testing for exact Gold value only', tradText: 'Touchstone gives approximate Gold value' },
+        { order: 2, title: 'Cleaning of your Gold', mgpText: 'Cleans the Gold with ultrasonic machine to get accurate weight', tradText: 'Do not clean and deduct melting cost directly' },
+        { order: 3, title: 'Weighing of your Gold', mgpText: 'Takes up to 3 decimals points (per gram) that are showing on the weighing scale', tradText: 'Round off to lowest number showing on the weighing scale' },
+        { order: 4, title: 'Gold rate', mgpText: 'Uses current market rate', tradText: 'Use lowest Gold rate of the day' },
+        { order: 5, title: 'Melting of your Gold', mgpText: 'Multilevel scientific testing for exact Gold value only', tradText: 'Use low quality crucibles which allows Gold particles to remain inside after melting' },
+        { order: 6, title: 'Mode of payment / invoicing', mgpText: 'Up to Rs 10,000 given as cash. Amounts higher than Rs 10,000 instantly paid to your bank account via NEFT/IMPS/RT. Invoice is always shared.', tradText: 'Cash payment with no invoice given' },
+      ];
+      for (const row of rows) {
+        await strapi.documents(comparisonRowUid).create({ data: row });
+      }
+    }
+
     // 5. Seed Promo Slides
     const promoSlideUid = 'api::promo-slide.promo-slide';
     const promoSlidesExisting = await strapi.documents(promoSlideUid).findMany({ limit: 1 });
