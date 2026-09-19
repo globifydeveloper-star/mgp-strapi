@@ -50,6 +50,7 @@ const config: Core.Config.Middlewares = [
         'https://mgp-web.vercel.app',
         'https://mgp-web-q2au.vercel.app',
         'https://mgpwebsiteui-uat.muthootgoldpoint.com',
+        'https://mgp.globify.in',
       ],
       headers: ['*'],
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
