@@ -517,6 +517,77 @@ export default {
       });
     }
 
+    // 8d. Seed Gold Rate Page
+    const goldRateUid = 'api::gold-rate-page.gold-rate-page';
+    const goldRateExists = await strapi.documents(goldRateUid).findFirst();
+    if (!goldRateExists) {
+      strapi.log.info('Seeding Gold Rate Page Data...');
+      await strapi.documents(goldRateUid).create({
+        data: {
+          seoTitle: "Today's Gold Rate | Gold Price Per Gram | Gold Point",
+          seoDescription: "Check today's gold rate and gold price per gram. Calculate the estimated value of your gold and explore transparent gold valuation with Gold Point.",
+          heroTitle: "Live Gold Rates & Valuation",
+          heroDescription: "Get the most accurate and real-time market value for your gold."
+        }
+      });
+    }
+
+    // 8e. Seed Mobile Van Page
+    const mobileVanUid = 'api::mobile-van-page.mobile-van-page';
+    const mobileVanExists = await strapi.documents(mobileVanUid).findFirst();
+    if (!mobileVanExists) {
+      strapi.log.info('Seeding Mobile Van Page Data...');
+      await strapi.documents(mobileVanUid).create({
+        data: {
+          heroHeadingLight1: "Mobile",
+          heroHeadingLight2: "Van",
+          heroHeadingBold: "India’s First Mobile Gold Buying Van",
+          heroDescription: "We bring our state-of-the-art gold valuation process directly to your doorstep. Safe, secure, and fully transparent.",
+          howItWorksSubtitle: "Simple Process",
+          howItWorksTitle: "How Our Mobile Van Works",
+          howItWorksSteps: [
+            { order: 1, title: 'Book an Appointment', desc: 'Call us or fill out our simple online form to schedule a visit at your convenience.' },
+            { order: 2, title: 'Van Arrives at Your Doorstep', desc: 'Our fully equipped Mobile Van arrives at your location with trained valuation experts.' },
+            { order: 3, title: 'On-the-Spot Valuation', desc: 'We test your gold using advanced XRF technology right in front of you.' },
+            { order: 4, title: 'Instant Payment', desc: 'Receive cash or instant bank transfer for your gold immediately.' }
+          ],
+          testingMethodsTitle: "State-of-the-Art Technology On Wheels",
+          testingMethods: [
+            { title: 'XRF Gold Testing', desc: '100% accurate, non-destructive purity testing', iconType: 'flask' },
+            { title: 'Ultrasonic Cleaning', desc: 'Removes dirt without damaging your gold', iconType: 'scale' },
+            { title: 'Precision Weighing', desc: 'Weighed to 3 decimal places for maximum accuracy', iconType: 'rupee' }
+          ],
+          locationsTitle: "Where We Operate",
+          locationsDescription: "Our Mobile Vans currently serve major metropolitan areas across India.",
+          appointmentTitle: "Book Your Mobile Van Visit",
+          appointmentDescription: "Experience the convenience of selling your gold from the comfort of your home.",
+          seoTitle: "Mobile Van - Sell Gold at Home | Muthoot Gold Point",
+          seoDescription: "Book our Mobile Van and sell your gold from the comfort of your home. We bring advanced XRF testing and instant payment directly to your doorstep."
+        }
+      });
+    }
+
+    
+    // 8f. Seed Sell Gold Page Setting
+    const sellGoldUid = 'api::sell-gold-page-setting.sell-gold-page-setting' as any;
+    const sellGoldExists = await strapi.documents(sellGoldUid).findFirst();
+    if (!sellGoldExists) {
+      strapi.log.info('Seeding Sell Gold Page Setting Data...');
+      try {
+        await strapi.documents(sellGoldUid).create({
+          data: {
+            seoTitle: 'Sell Gold for Cash | Muthoot Gold Point',
+            seoDescription: 'Sell your old gold and get cash instantly with 100% fair and precise gold buying. Free purity testing, 100% transparent process, and free ultrasonic cleaning.',
+            seoKeywords: 'Sell Gold, Cash for Gold, Gold Buyers, Sell Old Gold, Muthoot Gold Point, Instant Cash for Gold',
+            weBuyGoldImage: null as any
+          }
+        });
+      } catch (err) {
+        // weBuyGoldImage is a required media field, so this seed can't succeed; add the page in the admin panel instead.
+        strapi.log.warn(`Skipped Sell Gold Page Setting seed: ${(err as Error).message}`);
+      }
+    }
+
     // 9. Auto-configure Public Role Permissions
     try {
       const publicRole = await strapi.db.connection('up_roles').where('type', 'public').first();
