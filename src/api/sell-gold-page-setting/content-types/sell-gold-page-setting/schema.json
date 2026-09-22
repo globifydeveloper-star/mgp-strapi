@@ -28,8 +28,13 @@
         "images"
       ]
     },
-    "seoKeywords": {
-      "type": "string"
+    "weBuyGoldImage": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
     }
   }
 }

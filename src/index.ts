@@ -183,6 +183,24 @@ export default {
       }
     }
 
+    // 4b. Seed Comparison Rows
+    const comparisonRowUid = 'api::comparison-row.comparison-row';
+    const comparisonRowsExisting = await strapi.documents(comparisonRowUid).findMany({ limit: 1 });
+    if (comparisonRowsExisting.length === 0) {
+      strapi.log.info('Seeding Comparison Rows...');
+      const rows = [
+        { order: 1, title: 'Valuation of your Gold', mgpText: 'Multilevel scientific testing for exact Gold value only', tradText: 'Touchstone gives approximate Gold value' },
+        { order: 2, title: 'Cleaning of your Gold', mgpText: 'Cleans the Gold with ultrasonic machine to get accurate weight', tradText: 'Do not clean and deduct melting cost directly' },
+        { order: 3, title: 'Weighing of your Gold', mgpText: 'Takes up to 3 decimals points (per gram) that are showing on the weighing scale', tradText: 'Round off to lowest number showing on the weighing scale' },
+        { order: 4, title: 'Gold rate', mgpText: 'Uses current market rate', tradText: 'Use lowest Gold rate of the day' },
+        { order: 5, title: 'Melting of your Gold', mgpText: 'Multilevel scientific testing for exact Gold value only', tradText: 'Use low quality crucibles which allows Gold particles to remain inside after melting' },
+        { order: 6, title: 'Mode of payment / invoicing', mgpText: 'Up to Rs 10,000 given as cash. Amounts higher than Rs 10,000 instantly paid to your bank account via NEFT/IMPS/RT. Invoice is always shared.', tradText: 'Cash payment with no invoice given' },
+      ];
+      for (const row of rows) {
+        await strapi.documents(comparisonRowUid).create({ data: row });
+      }
+    }
+
     // 5. Seed Promo Slides
     const promoSlideUid = 'api::promo-slide.promo-slide';
     const promoSlidesExisting = await strapi.documents(promoSlideUid).findMany({ limit: 1 });
@@ -414,7 +432,7 @@ export default {
     const aboutUsData = {
       heroEyebrow: "A Muthoot Exim (P) Ltd. Enterprise",
       heroTitle: "Muthoot Gold Point — Precision You Can Trust",
-      heroDescription: "Muthoot Gold Point is a unit of Muthoot Exim (P) Ltd., the precious metal vertical of the Muthoot Pappachan Group, specialising in innovative products and offerings in the precious metal space. We are India's first national-level organised sector player in gold recycling — in sync with the Government of India's vision for the Indian gold industry — giving customers access to quality products at fair, transparent, and scientifically tested prices.",
+      heroDescription: "Muthoot Gold Point is a unit of Muthoot Exim (P) Ltd., the precious metal vertical of the Muthoot Pappachan Group that specialises in innovative products and offerings in the precious metal space. The vertical gives customers access to quality products that meet the highest standards at an affordable price. Apart from Muthoot Gold Point, Muthoot Exim’s flagship products include Swarnavarsham, Swethavarsham, and Corporate gifting.\nVisit the corporate website of Muthoot EXIM (P) Ltd to know more about the company: www.muthootexim.com\nMuthoot Gold Point is the first national-level organised sector player to get into the recycling of gold that is in sync with the Vision laid down by the Government of India for the Indian Gold Industry.\nWe enable customers to sell gold in a transparent and efficient manner. The unparalleled experience of selling old gold for instant cash is 100% fair and precise. Our customers enjoy a safe, transparent and scientifically tested way of selling gold.\nMobile Muthoot Gold Point – India’s First Mobile Gold Buying van buys gold at the customer’s doorstep. Continuing with our Group values around trust, we take the XRF and ultrasonic machines to the customer’s doorstep to ensure they are getting maximum value for their gold.",
       heroButtonText: "Sell Your Gold",
       heroButtonLink: "#what-we-do",
       heroChecklist: [
@@ -433,10 +451,10 @@ export default {
       historyTitle: "Our Historic Milestones",
       historyDescription: "From a local Kerala grain trader in 1887 to a multi-billion dollar diversified conglomerate.",
       historyMilestones: [
-        { year: "1887", title: "Humble Beginnings", desc: "Founded by Muthoot Ninan Mathai as a grain trading and chit fund business in Kozhencherry, Kerala." },
-        { year: "1950s", title: "Gold Loan Pioneer", desc: "Entered the gold loan business, making Kozhencherry the region's premier destination for trust-based lending." },
-        { year: "1979", title: "Muthoot Pappachan Group Formed", desc: "Led by Mathew M. Thomas, MPG was born with a strong focus on serving the common man." },
-        { year: "Today", title: "Modern Expansion", desc: "Diversified into Hospitality, Automotive, Real Estate, Healthcare, Precious Metals, and more." }
+        { year: "1887", title: "Humble Beginnings", desc: "Muthoot Ninan Mathai started humbly as a retail and wholesale trader of grains at Kozhencherry, and later launched a Chit Funds business for estate workers." },
+        { year: "1950s", title: "Gold Loan Pioneer", desc: "The family entered the gold loan business and became the largest player in Chits & Gold Loans." },
+        { year: "1979", title: "Muthoot Pappachan Group Formed", desc: "An amicable family partition led to the genesis of the Muthoot Pappachan Group under Late Mathew M Thomas." },
+        { year: "Today", title: "133 Years of Legacy", desc: "Empowering Indians across Financial Services, Hospitality, Automotive, Realty, IT Services, Healthcare, Precious Metals, Global Services and Alternate Energy." }
       ],
       parentEyebrow: "Parent Conglomerate",
       parentTitle: "About The Muthoot Pappachan Group",
@@ -473,13 +491,16 @@ export default {
       presentCardDesc: "Each of our 4,200+ branches operates as a comprehensive financial hub, housing a diverse range of products designed to empower local ambitions under a single roof.",
       presentServicesTitle: "Services Offered at Our Branches",
       presentServices: [
-        { title: "Gold Loans & Precious Metals", icon: "💰" },
+        { title: "Gold Loans", icon: "💰" },
         { title: "Small Business Loans", icon: "💼" },
         { title: "Affordable Housing Loans", icon: "🏠" },
-        { title: "Two-Wheeler & Used-Car Loans", icon: "🏍️" },
+        { title: "Two Wheeler Loans", icon: "🏍️" },
+        { title: "Used-car Loans", icon: "🚗" },
         { title: "Domestic Money Transfer", icon: "💸" },
-        { title: "International Remittance & Forex", icon: "🌐" },
-        { title: "Insurance & Wealth Management", icon: "🛡️" },
+        { title: "International Remittance", icon: "🌐" },
+        { title: "Foreign Exchange", icon: "💱" },
+        { title: "Insurance Products & Services", icon: "🛡️" },
+        { title: "Wealth Management Services", icon: "📈" },
         { title: "Affordable Gold Jewellery", icon: "✨" }
       ],
       seoTitle: "About Us | Muthoot Gold Point",
@@ -611,6 +632,7 @@ export default {
           'api::hero-slide.hero-slide.find',
           'api::process-step.process-step.find',
           'api::difference-box.difference-box.find',
+          'api::comparison-row.comparison-row.find',
           'api::promo-slide.promo-slide.find',
           'api::testimonial.testimonial.find',
           'api::career-page-setting.career-page-setting.find',
@@ -691,6 +713,7 @@ export default {
               'api::promo-slide.promo-slide',
               'api::process-step.process-step',
               'api::difference-box.difference-box',
+              'api::comparison-row.comparison-row',
               'api::testimonial.testimonial'
             ]
           },

@@ -545,6 +545,7 @@ export interface ApiAboutUsPageAboutUsPage extends Struct.SingleTypeSchema {
     recyclingSubtitle: Schema.Attribute.String;
     recyclingTitle: Schema.Attribute.String;
     seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.String;
     seoTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -739,7 +740,9 @@ export interface ApiCareerPageSettingCareerPageSetting
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     cultureDescription: Schema.Attribute.Text;
-    cultureHeading: Schema.Attribute.String;
+    cultureHeading: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Why Join Muthoot?'>;
+    heroDescription: Schema.Attribute.Text;
     heroHeading: Schema.Attribute.String;
     heroImage: Schema.Attribute.Media<'images'>;
     heroSubheading: Schema.Attribute.String;
@@ -786,6 +789,44 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
     name: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiComparisonRowComparisonRow
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'comparison_rows';
+  info: {
+    displayName: 'Comparison Row';
+    pluralName: 'comparison-rows';
+    singularName: 'comparison-row';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::comparison-row.comparison-row'
+    > &
+      Schema.Attribute.Private;
+    mgpText: Schema.Attribute.Text;
+    order: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    tradText: Schema.Attribute.Text;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -842,19 +883,16 @@ export interface ApiContactUsPageContactUsPage extends Struct.SingleTypeSchema {
     singularName: 'contact-us-page';
   };
   options: {
-    draftAndPublish: false;
+    draftAndPublish: true;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    formServices: Schema.Attribute.Component<'shared.check-item', true>;
     formTitle: Schema.Attribute.String;
     heroHeading: Schema.Attribute.String;
     heroImage: Schema.Attribute.Media<'images'>;
     heroLead: Schema.Attribute.Text;
-    hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -862,8 +900,8 @@ export interface ApiContactUsPageContactUsPage extends Struct.SingleTypeSchema {
     > &
       Schema.Attribute.Private;
     officeAddress: Schema.Attribute.Text;
-    officeEmail: Schema.Attribute.String;
-    officeMapPopupText: Schema.Attribute.Text;
+    officeEmail: Schema.Attribute.Email;
+    officeMapPopupText: Schema.Attribute.String;
     officeMapPopupTitle: Schema.Attribute.String;
     officeMapUrl: Schema.Attribute.Text;
     officeName: Schema.Attribute.String;
@@ -1143,6 +1181,7 @@ export interface ApiGoldRatePageGoldRatePage extends Struct.SingleTypeSchema {
     ogImage: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
     seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.String;
     seoTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1259,6 +1298,7 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
     processSectionImage: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
     seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.String;
     seoTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1417,7 +1457,7 @@ export interface ApiMobileVanPageMobileVanPage extends Struct.SingleTypeSchema {
     heroHeadingBold: Schema.Attribute.String;
     heroHeadingLight1: Schema.Attribute.String;
     heroHeadingLight2: Schema.Attribute.String;
-    heroImage: Schema.Attribute.Media<'images'>;
+    heroImage: Schema.Attribute.Media<'images' | 'videos'>;
     howItWorksSteps: Schema.Attribute.Component<'shared.process-step', true>;
     howItWorksSubtitle: Schema.Attribute.String;
     howItWorksTitle: Schema.Attribute.String;
@@ -1431,6 +1471,7 @@ export interface ApiMobileVanPageMobileVanPage extends Struct.SingleTypeSchema {
     locationsTitle: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.String;
     seoTitle: Schema.Attribute.String;
     testingMethods: Schema.Attribute.Component<'shared.benefit-card', true>;
     testingMethodsImage: Schema.Attribute.Media<'images'>;
@@ -1667,6 +1708,41 @@ export interface ApiPromoSlidePromoSlide extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+  };
+}
+
+export interface ApiSellGoldPageSettingSellGoldPageSetting
+  extends Struct.SingleTypeSchema {
+  collectionName: 'sell_gold_page_settings';
+  info: {
+    description: 'Metadata for the Sell Gold for Cash page';
+    displayName: 'Sell Gold Page Setting';
+    pluralName: 'sell-gold-page-settings';
+    singularName: 'sell-gold-page-setting';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::sell-gold-page-setting.sell-gold-page-setting'
+    > &
+      Schema.Attribute.Private;
+    ogImage: Schema.Attribute.Media<'images'>;
+    publishedAt: Schema.Attribute.DateTime;
+    seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.Text;
+    seoTitle: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    weBuyGoldImage: Schema.Attribute.Media<'images'> &
+      Schema.Attribute.Required;
   };
 }
 
@@ -2299,6 +2375,7 @@ declare module '@strapi/strapi' {
       'api::blog-post.blog-post': ApiBlogPostBlogPost;
       'api::career-page-setting.career-page-setting': ApiCareerPageSettingCareerPageSetting;
       'api::category.category': ApiCategoryCategory;
+      'api::comparison-row.comparison-row': ApiComparisonRowComparisonRow;
       'api::contact-submission.contact-submission': ApiContactSubmissionContactSubmission;
       'api::contact-us-page.contact-us-page': ApiContactUsPageContactUsPage;
       'api::difference-box.difference-box': ApiDifferenceBoxDifferenceBox;
@@ -2320,6 +2397,7 @@ declare module '@strapi/strapi' {
       'api::page.page': ApiPagePage;
       'api::process-step.process-step': ApiProcessStepProcessStep;
       'api::promo-slide.promo-slide': ApiPromoSlidePromoSlide;
+      'api::sell-gold-page-setting.sell-gold-page-setting': ApiSellGoldPageSettingSellGoldPageSetting;
       'api::shared-media.shared-media': ApiSharedMediaSharedMedia;
       'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'plugin::content-manager-organizer.content-manager-configuration': PluginContentManagerOrganizerContentManagerConfiguration;

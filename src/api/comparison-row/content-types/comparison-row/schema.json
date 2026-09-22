@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "comparison_rows",
+  "info": {
+    "singularName": "comparison-row",
+    "pluralName": "comparison-rows",
+    "displayName": "Comparison Row"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "order": {
+      "type": "integer",
+      "min": 0
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "mgpText": {
+      "type": "text"
+    },
+    "tradText": {
+      "type": "text"
+    }
+  }
+}
