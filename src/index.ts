@@ -605,6 +605,14 @@ export default {
       });
     }
 
+    // 8g. Seed Shared Media (single type; returns 404 until a row exists)
+    const sharedMediaUid = 'api::shared-media.shared-media';
+    const sharedMediaExists = await strapi.documents(sharedMediaUid).findFirst();
+    if (!sharedMediaExists) {
+      strapi.log.info('Seeding Shared Media...');
+      await strapi.documents(sharedMediaUid).create({ data: {} });
+    }
+
     // 9. Auto-configure Public Role Permissions
     try {
       const publicRole = await strapi.db.connection('up_roles').where('type', 'public').first();
