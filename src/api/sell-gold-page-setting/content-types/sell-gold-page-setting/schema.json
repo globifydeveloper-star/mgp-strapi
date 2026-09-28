@@ -35,6 +35,18 @@
       "allowedTypes": [
         "images"
       ]
+    },
+    "trustBadgePrefix": {
+      "type": "string",
+      "default": "Trusted by"
+    },
+    "trustBadgeHighlight": {
+      "type": "string",
+      "default": "Customers"
+    },
+    "trustBadgeSuffix": {
+      "type": "string",
+      "default": "Across India"
     }
   }
 }
