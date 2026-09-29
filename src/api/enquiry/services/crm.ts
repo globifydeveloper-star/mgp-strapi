@@ -59,7 +59,9 @@ async function resolveCrmToken(): Promise<string | null> {
     const data = (await res.json()) as any;
     const token = data?.respData?.accessToken || data?.token || data?.access_token || data?.respData?.token || data?.respData?.access_token;
     if (token) {
-      cachedCrmToken = { token, expiresAt: Date.now() + 23 * 60 * 60 * 1000 };
+      // Token's actual JWT `exp` gives it a 12-hour lifetime; cache well under that
+      // so a stale-but-cached token is never presented to the CRM API as valid.
+      cachedCrmToken = { token, expiresAt: Date.now() + 10 * 60 * 60 * 1000 };
       return token;
     }
     return null;
