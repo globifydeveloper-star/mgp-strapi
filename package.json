@@ -39,8 +39,7 @@
     "resend": "^6.20.0",
     "sharp": "^0.35.4",
     "strapi-plugin-content-manager-organizer": "^2.0.1",
-    "styled-components": "^6.0.0",
-    "xlsx": "^0.18.5"
+    "styled-components": "^6.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",

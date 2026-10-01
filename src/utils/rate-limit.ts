@@ -1,4 +1,5 @@
 import type { Context } from 'koa';
+import { getClientIp } from './get-client-ip';
 
 type Bucket = { count: number; resetAt: number };
 
@@ -33,16 +34,7 @@ const isRateLimited = (key: string, limit: number, windowMs: number): boolean =>
   return bucket.count > limit;
 };
 
-const getClientIp = (ctx: Context): string => {
-  const forwarded = ctx.request.headers['x-forwarded-for'];
-  if (typeof forwarded === 'string' && forwarded.length) {
-    return forwarded.split(',')[0].trim();
-  }
-  if (Array.isArray(forwarded) && forwarded.length) {
-    return forwarded[0];
-  }
-  return ctx.request.ip || 'unknown';
-};
+// getClientIp is imported from get-client-ip.ts
 
 /**
  * Enforces a per-IP rate limit for a public route. Returns true (and writes a
