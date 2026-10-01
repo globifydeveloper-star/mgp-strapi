@@ -20,6 +20,7 @@ const deniedExecutableTypes = [
   'application/x-sh',
   'text/x-shellscript',
   'application/x-mach-binary',
+  'image/svg+xml',
 ];
 
 const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin => ({
@@ -33,6 +34,7 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
   },
   upload: {
     config: {
+      sizeLimit: 5 * 1024 * 1024,
       provider: 'aws-s3',
       providerOptions: {
         s3Options: {
@@ -43,7 +45,8 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
           region: env('AWS_REGION'),
           params: {
             Bucket: env('AWS_BUCKET'),
-            ACL: undefined as any,
+            ACL: 'private',
+            signedUrlExpires: 15 * 60,
           },
         },
       },

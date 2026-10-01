@@ -1,75 +1,8 @@
 import type { Context } from 'koa';
 import { factories } from '@strapi/strapi';
 import PDFDocument from 'pdfkit';
-
-const verifyAdminSession = async (ctx: Context, strapi: any): Promise<boolean> => {
-  if (ctx.state && (ctx.state.user || ctx.state.adminUser)) {
-    return true;
-  }
-
-  const authHeader = (ctx.headers.authorization || ctx.headers.Authorization) as string | undefined;
-  let token: string | undefined = undefined;
-
-  if (authHeader && typeof authHeader === 'string' && authHeader.startsWith('Bearer ')) {
-    token = authHeader.substring(7).trim();
-  }
-  if (!token && typeof ctx.query.token === 'string') {
-    token = ctx.query.token.trim();
-  }
-  if (!token && typeof ctx.query.jwt === 'string') {
-    token = ctx.query.jwt.trim();
-  }
-
-  if (!token && ctx.cookies) {
-    token = ctx.cookies.get('jwtToken') || ctx.cookies.get('admin_jwtToken');
-  }
-
-  const envApiToken = process.env.STRAPI_API_TOKEN;
-  if (envApiToken && envApiToken.trim() && token && token === envApiToken.trim()) {
-    return true;
-  }
-
-  if (!token) return false;
-
-  try {
-    const adminTokenService = strapi.service('admin::token') || strapi.plugin('admin')?.service('token');
-    if (adminTokenService && typeof adminTokenService.decodeJWTToken === 'function') {
-      const decoded = await adminTokenService.decodeJWTToken(token);
-      if (decoded && (decoded.id || decoded.userId)) {
-        return true;
-      }
-    }
-  } catch (_) { }
-
-  try {
-    const jwt = require('jsonwebtoken');
-    const secret = process.env.ADMIN_JWT_SECRET || strapi.config.get('admin.auth.secret');
-    if (secret) {
-      const decoded = jwt.verify(token, secret);
-      strapi.log.info('[verifyAdminSession] Decoded token payload:', decoded);
-      if (decoded) {
-        return true;
-      }
-    } else {
-      strapi.log.warn('[verifyAdminSession] ADMIN_JWT_SECRET is missing or undefined.');
-    }
-  } catch (err) {
-    strapi.log.error('[verifyAdminSession] JWT Verification failed:', err);
-  }
-
-  try {
-    const apiTokenService = strapi.service('admin::api-token') || strapi.plugin('admin')?.service('api-token');
-    if (apiTokenService && typeof apiTokenService.hash === 'function') {
-      const hashedToken = apiTokenService.hash(token);
-      const tokenRow = await strapi.documents('strapi::api-token').findFirst({
-        filters: { accessKey: { $eq: hashedToken } },
-      });
-      if (tokenRow) return true;
-    }
-  } catch (_) { }
-
-  return false;
-};
+import { verifyAdminSession } from '../../../utils/verify-admin-session';
+import { enforceRateLimit } from '../../../utils/rate-limit';
 
 const createPdfBuffer = (builder: (doc: PDFKit.PDFDocument) => void): Promise<Buffer> => {
   return new Promise((resolve, reject) => {
@@ -91,6 +24,34 @@ export default factories.createCoreController(
   'api::contact-submission.contact-submission',
   ({ strapi }) => ({
     async create(ctx: Context) {
+
+      // Inject sanitization
+      try {
+        const { sanitizePayload, validateStringLengths } = require('../../../utils/sanitize-input');
+        if (ctx.request.body) {
+          if (!validateStringLengths(ctx.request.body)) {
+            ctx.status = 400;
+            ctx.body = { success: false, message: 'Payload contains strings that are too long' };
+            return;
+          }
+          ctx.request.body = sanitizePayload(ctx.request.body);
+        }
+      } catch (err) {
+        // Ignore if file not found, but it should exist
+      }
+
+      if (process.env.REQUIRE_INTERNAL_SECRET === 'true') {
+        const secret = ctx.request.headers['x-internal-secret'];
+        const expected = process.env.INTERNAL_API_SECRET;
+        if (!expected || !secret || typeof secret !== 'string' || secret !== expected) {
+          ctx.status = 403;
+          ctx.body = { success: false, message: 'Forbidden' };
+          return;
+        }
+      }
+
+      if (enforceRateLimit(ctx, 'contact-submission:create', 5, 10 * 60 * 1000)) return;
+
       let body = ctx.request.body;
       if (body && typeof body === 'object' && 'data' in body && body.data && typeof body.data === 'object') {
         body = body.data;
@@ -100,28 +61,22 @@ export default factories.createCoreController(
         submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
       };
 
-      const result = await service.submitAndSync(body);
+      await service.submitAndSync(body);
 
       ctx.status = 201;
-      ctx.body = { data: result };
+      ctx.body = { success: true };
     },
 
     async find(ctx: Context) {
+      if (!(await verifyAdminSession(ctx, strapi))) {
+        ctx.status = 403;
+        ctx.body = { error: 'Forbidden: Admin authentication required.' };
+        return;
+      }
+
       const entries = await strapi.documents('api::contact-submission.contact-submission').findMany({
         sort: { submittedAt: 'desc' },
       });
-
-      const isAdmin = await verifyAdminSession(ctx, strapi);
-
-      if (!isAdmin) {
-        const sanitizedEntries = entries.map((entry: any) => {
-          const { crmLeadId, crmPushStatus, crmResponse, crmError, ...safeData } = entry;
-          return safeData;
-        });
-        ctx.status = 200;
-        ctx.body = { data: sanitizedEntries };
-        return;
-      }
 
       ctx.status = 200;
       ctx.body = { data: entries };

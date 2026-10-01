@@ -1,6 +1,5 @@
-export default {
-  routes: [
-    { method: 'POST', path: '/otp/send', handler: 'otp-request.sendOtp', config: { auth: false } },
-    { method: 'POST', path: '/otp/verify', handler: 'otp-request.verifyOtp', config: { auth: false } },
-  ],
-};
+import { factories } from '@strapi/strapi';
+
+export default factories.createCoreRouter('api::otp-request.otp-request', {
+  only: [],
+});

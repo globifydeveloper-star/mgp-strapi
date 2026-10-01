@@ -3,6 +3,7 @@ import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
 import PDFDocument from 'pdfkit';
 import { PassThrough } from 'stream';
+import { enforceRateLimit } from '../../../utils/rate-limit';
 
 const { ValidationError } = errors;
 
@@ -101,6 +102,34 @@ export default factories.createCoreController(
   'api::job-application.job-application',
   ({ strapi }) => ({
     async create(ctx: Context) {
+
+      // Inject sanitization
+      try {
+        const { sanitizePayload, validateStringLengths } = require('../../../utils/sanitize-input');
+        if (ctx.request.body) {
+          if (!validateStringLengths(ctx.request.body)) {
+            ctx.status = 400;
+            ctx.body = { success: false, message: 'Payload contains strings that are too long' };
+            return;
+          }
+          ctx.request.body = sanitizePayload(ctx.request.body);
+        }
+      } catch (err) {
+        // Ignore if file not found, but it should exist
+      }
+
+      if (process.env.REQUIRE_INTERNAL_SECRET === 'true') {
+        const secret = ctx.request.headers['x-internal-secret'];
+        const expected = process.env.INTERNAL_API_SECRET;
+        if (!expected || !secret || typeof secret !== 'string' || secret !== expected) {
+          ctx.status = 403;
+          ctx.body = { success: false, message: 'Forbidden' };
+          return;
+        }
+      }
+
+      if (enforceRateLimit(ctx, 'job-application:create', 5, 10 * 60 * 1000)) return;
+
       let body = ctx.request.body ?? {};
 
       // Handle wrapped body.data if present
@@ -189,7 +218,7 @@ export default factories.createCoreController(
         }
       }
 
-      const application = await strapi.documents('api::job-application.job-application').create({
+      await strapi.documents('api::job-application.job-application').create({
         data: {
           fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
@@ -205,14 +234,7 @@ export default factories.createCoreController(
       });
 
       ctx.status = 201;
-      ctx.body = {
-        data: {
-          documentId: application.documentId,
-          fullName: application.fullName,
-          email: application.email,
-          submittedAt: application.submittedAt,
-        },
-      };
+      ctx.body = { success: true };
     },
 
     async downloadResume(ctx: Context) {

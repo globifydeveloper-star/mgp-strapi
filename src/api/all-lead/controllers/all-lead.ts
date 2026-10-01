@@ -1,6 +1,8 @@
 import type { Context } from 'koa';
 import { factories } from '@strapi/strapi';
 import PDFDocument from 'pdfkit';
+import { verifyAdminSession } from '../../../utils/verify-admin-session';
+import { enforceRateLimit } from '../../../utils/rate-limit';
 
 const FORM_SOURCE_LABELS: Record<string, string> = {
   'Contact Submission': 'Contact Us',
@@ -8,37 +10,6 @@ const FORM_SOURCE_LABELS: Record<string, string> = {
   'Mobile Van': 'Mobile Van',
   'Blog Enquiry': 'Blog Enquiry',
   'Enquiry': 'Enquiry',
-};
-
-const verifyAdminSession = async (ctx: Context, strapi: any): Promise<boolean> => {
-  if (ctx.state && (ctx.state.user || ctx.state.adminUser)) return true;
-
-  const authHeader = (ctx.headers.authorization || ctx.headers.Authorization) as string | undefined;
-  let token: string | undefined;
-
-  if (authHeader && typeof authHeader === 'string' && authHeader.startsWith('Bearer ')) {
-    token = authHeader.substring(7).trim();
-  }
-  if (!token && typeof ctx.query.token === 'string') token = ctx.query.token.trim();
-  if (!token && typeof ctx.query.jwt === 'string') token = ctx.query.jwt.trim();
-  if (!token && ctx.cookies) {
-    token = ctx.cookies.get('jwtToken') || ctx.cookies.get('admin_jwtToken');
-  }
-
-  const envApiToken = process.env.STRAPI_API_TOKEN;
-  if (envApiToken && envApiToken.trim() && token && token === envApiToken.trim()) return true;
-  if (!token) return false;
-
-  try {
-    const jwt = require('jsonwebtoken');
-    const secret = process.env.ADMIN_JWT_SECRET || strapi.config.get('admin.auth.secret');
-    if (secret) {
-      const decoded = jwt.verify(token, secret);
-      if (decoded) return true;
-    }
-  } catch (_) { }
-
-  return false;
 };
 
 const createPdfBuffer = (builder: (doc: PDFKit.PDFDocument) => void): Promise<Buffer> =>
@@ -60,7 +31,45 @@ export default factories.createCoreController(
   'api::all-lead.all-lead',
   ({ strapi }) => ({
 
+    async create(ctx: Context) {
+
+      // Inject sanitization
+      try {
+        const { sanitizePayload, validateStringLengths } = require('../../../utils/sanitize-input');
+        if (ctx.request.body) {
+          if (!validateStringLengths(ctx.request.body)) {
+            ctx.status = 400;
+            ctx.body = { success: false, message: 'Payload contains strings that are too long' };
+            return;
+          }
+          ctx.request.body = sanitizePayload(ctx.request.body);
+        }
+      } catch (err) {
+        // Ignore if file not found, but it should exist
+      }
+
+      if (process.env.REQUIRE_INTERNAL_SECRET === 'true') {
+        const secret = ctx.request.headers['x-internal-secret'];
+        const expected = process.env.INTERNAL_API_SECRET;
+        if (!expected || !secret || typeof secret !== 'string' || secret !== expected) {
+          ctx.status = 403;
+          ctx.body = { success: false, message: 'Forbidden' };
+          return;
+        }
+      }
+
+      if (enforceRateLimit(ctx, 'all-lead:create', 5, 10 * 60 * 1000)) return;
+      await super.create(ctx);
+      ctx.body = { success: true };
+    },
+
     async find(ctx: Context) {
+      if (!(await verifyAdminSession(ctx, strapi))) {
+        ctx.status = 403;
+        ctx.body = { error: 'Forbidden: Admin authentication required.' };
+        return;
+      }
+
       const { source, fromDate, toDate, from, to } = ctx.query as { source?: string; fromDate?: string; toDate?: string; from?: string; to?: string };
       const start = fromDate || from;
       const end = toDate || to;
