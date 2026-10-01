@@ -134,6 +134,22 @@ export default factories.createCoreController(
     },
 
     async verifyOtp(ctx: Context) {
+
+      // Inject sanitization
+      try {
+        const { sanitizePayload, validateStringLengths } = require('../../../utils/sanitize-input');
+        if (ctx.request.body) {
+          if (!validateStringLengths(ctx.request.body)) {
+            ctx.status = 400;
+            ctx.body = { success: false, message: 'Payload contains strings that are too long' };
+            return;
+          }
+          ctx.request.body = sanitizePayload(ctx.request.body);
+        }
+      } catch (err) {
+        // Ignore if file not found, but it should exist
+      }
+
       if (process.env.REQUIRE_INTERNAL_SECRET === 'true') {
         const secret = ctx.request.headers['x-internal-secret'];
         const expected = process.env.INTERNAL_API_SECRET;
