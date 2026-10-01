@@ -41,7 +41,21 @@ function parseBranches(content: string) {
 }
 
 export default {
-  register() {},
+  register() {
+    if (process.env.NODE_ENV === 'production') {
+      const requiredSecrets = [
+        'APP_KEYS', 'API_TOKEN_SALT', 'ADMIN_JWT_SECRET', 'TRANSFER_TOKEN_SALT',
+        'ENCRYPTION_KEY', 'DATABASE_PASSWORD', 'AWS_ACCESS_KEY_ID',
+        'AWS_SECRET_ACCESS_KEY', 'AWS_REGION', 'AWS_BUCKET', 'RESEND_API_KEY',
+        'PINNACLE_API_URL', 'PINNACLE_ACCESS_KEY', 'CRM_AUTH_URL',
+        'CRM_USERNAME', 'CRM_PASSWORD', 'CRM_BASE_URL', 'OTP_SALT'
+      ];
+      const missing = requiredSecrets.filter(s => !process.env[s]);
+      if (missing.length > 0) {
+        throw new Error(`Missing required production secrets: ${missing.join(', ')}`);
+      }
+    }
+  },
 
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
     // 1. Seed Homepage Single Type
