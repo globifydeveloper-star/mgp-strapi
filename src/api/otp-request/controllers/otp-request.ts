@@ -120,7 +120,7 @@ export default factories.createCoreController(
         }
       } catch (err) {
         strapi.log.error(`[otp-request] Failed to send OTP for phone ending in ${maskPhone(phone)}`);
-        if (process.env.NODE_ENV !== 'production') {
+        if (process.env.NODE_ENV === 'development') {
           strapi.log.info(`[otp-request] DEV MODE: OTP sent for ${maskPhone(phone)}`);
         } else {
           ctx.status = 502;

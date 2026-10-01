@@ -664,11 +664,8 @@ export default {
           'api::job-position.job-position.find',
           'api::job-position.job-position.findOne',
           'api::job-application.job-application.create',
-          'api::form-submission.form-submission.create',
-          'api::enquiry.enquiry.create',
-          'api::mobile-van-submission.mobile-van-submission.create',
           'api::gold-valuation-submission.gold-valuation-submission.create',
-          'api::contact-submission.contact-submission.create'
+          'api::all-lead.all-lead.create'
         ];
 
         for (const action of actions) {
@@ -703,21 +700,14 @@ export default {
           }
         }
         
-        // Explicitly remove unsafe OTP core routes from public role
-        const unsafeOtpAction = 'api::otp-request.otp-request.create';
-        const unsafePerm = await strapi.db.connection('up_permissions').where('action', unsafeOtpAction).first();
-        if (unsafePerm) {
-          await strapi.db.connection('up_permissions_role_lnk')
-            .where({ permission_id: unsafePerm.id, role_id: roleId })
-            .delete();
-        }
-
-        strapi.log.info('Auto-configured Public role permissions successfully.');
-
-        // 9b. Revoke any Public-role read access to submission data (PII).
-        // These must only ever be reachable via create (public submit) or
-        // find (admin-only, enforced in the controllers themselves).
+        // Explicitly remove unsafe OTP core routes and auth.register from public role
         const revokedActions = [
+          'api::otp-request.otp-request.create',
+          'api::otp-request.otp-request.find',
+          'api::otp-request.otp-request.findOne',
+          'api::otp-request.otp-request.update',
+          'api::otp-request.otp-request.delete',
+          'plugin::users-permissions.auth.register',
           'api::contact-submission.contact-submission.find',
           'api::contact-submission.contact-submission.findOne',
           'api::gold-valuation-submission.gold-valuation-submission.find',
@@ -730,6 +720,12 @@ export default {
           'api::blog-enquiry.blog-enquiry.findOne',
           'api::all-lead.all-lead.find',
           'api::all-lead.all-lead.findOne',
+          // Revoke public create for server-side only submissions:
+          'api::contact-submission.contact-submission.create',
+          'api::mobile-van-submission.mobile-van-submission.create',
+          'api::enquiry.enquiry.create',
+          'api::blog-enquiry.blog-enquiry.create',
+          'api::form-submission.form-submission.create'
         ];
 
         for (const action of revokedActions) {
@@ -740,7 +736,17 @@ export default {
               .del();
           }
         }
-        strapi.log.info('Revoked Public role access to submission data (PII) endpoints.');
+        strapi.log.info('Revoked Public role access to unsafe endpoints (OTP, submission PII, registration).');
+      
+      // H3: Disable public registration in users-permissions
+      const upStore = strapi.store({ type: 'plugin', name: 'users-permissions', key: 'advanced' });
+      const upConfig: any = await upStore.get() || {};
+      if (upConfig.allow_register !== false) {
+        upConfig.allow_register = false;
+        await upStore.set({ value: upConfig });
+        strapi.log.info('Disabled public registration in users-permissions.');
+      }
+
       }
     } catch (err) {
       strapi.log.error('Failed to configure Public role permissions:', err);
