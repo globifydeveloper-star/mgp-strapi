@@ -43,7 +43,8 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
           region: env('AWS_REGION'),
           params: {
             Bucket: env('AWS_BUCKET'),
-            ACL: undefined as any,
+            ACL: 'private',
+            signedUrlExpires: 15 * 60,
           },
         },
       },
