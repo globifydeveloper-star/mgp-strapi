@@ -33,7 +33,8 @@ export default factories.createCoreController(
 
     async create(ctx: Context) {
       if (enforceRateLimit(ctx, 'all-lead:create', 5, 10 * 60 * 1000)) return;
-      return await super.create(ctx);
+      await super.create(ctx);
+      ctx.body = { success: true };
     },
 
     async find(ctx: Context) {

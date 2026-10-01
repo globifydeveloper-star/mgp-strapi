@@ -192,7 +192,7 @@ export default factories.createCoreController(
         }
       }
 
-      const application = await strapi.documents('api::job-application.job-application').create({
+      await strapi.documents('api::job-application.job-application').create({
         data: {
           fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
@@ -208,14 +208,7 @@ export default factories.createCoreController(
       });
 
       ctx.status = 201;
-      ctx.body = {
-        data: {
-          documentId: application.documentId,
-          fullName: application.fullName,
-          email: application.email,
-          submittedAt: application.submittedAt,
-        },
-      };
+      ctx.body = { success: true };
     },
 
     async downloadResume(ctx: Context) {

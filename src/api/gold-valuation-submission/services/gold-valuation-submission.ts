@@ -11,7 +11,10 @@ const requiredString = (value: unknown, field: string): string => {
   return value.trim();
 };
 
-const MAX_WEIGHT_GRAMS = 10000;
+// Retail walk-in/mobile-van gold-sell submissions are individual jewellery items,
+// not bulk bullion — cap well below what a legitimate submission could ever be
+// so an in-range tampered value can't still inflate a lead's apparent worth.
+const MAX_WEIGHT_GRAMS = 1000;
 
 const validateWeight = (value: string, field: string): string => {
   const parsed = Number(value);

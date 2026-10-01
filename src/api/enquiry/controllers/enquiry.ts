@@ -28,9 +28,9 @@ export default factories.createCoreController('api::enquiry.enquiry', ({ strapi 
     const enquiryService = strapi.service('api::enquiry.enquiry') as unknown as {
       createVerifiedEnquiry(payload: unknown): Promise<Record<string, unknown>>;
     };
-    const enquiry = await enquiryService.createVerifiedEnquiry(body);
+    await enquiryService.createVerifiedEnquiry(body);
 
     ctx.status = 201;
-    ctx.body = { data: enquiry };
+    ctx.body = { success: true };
   },
 }));

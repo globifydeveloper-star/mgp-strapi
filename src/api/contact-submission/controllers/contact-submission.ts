@@ -35,10 +35,10 @@ export default factories.createCoreController(
         submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
       };
 
-      const result = await service.submitAndSync(body);
+      await service.submitAndSync(body);
 
       ctx.status = 201;
-      ctx.body = { data: result };
+      ctx.body = { success: true };
     },
 
     async find(ctx: Context) {
