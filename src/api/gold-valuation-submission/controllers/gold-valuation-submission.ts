@@ -1,10 +1,14 @@
 import type { Context } from 'koa';
 import { factories } from '@strapi/strapi';
+import { verifyAdminSession } from '../../../utils/verify-admin-session';
+import { enforceRateLimit } from '../../../utils/rate-limit';
 
 export default factories.createCoreController(
   'api::gold-valuation-submission.gold-valuation-submission',
   ({ strapi }) => ({
     async create(ctx: Context) {
+      if (enforceRateLimit(ctx, 'gold-valuation-submission:create', 5, 10 * 60 * 1000)) return;
+
       let body = ctx.request.body;
       if (body && typeof body === 'object' && 'data' in body && body.data && typeof body.data === 'object') {
         body = body.data;
@@ -21,15 +25,17 @@ export default factories.createCoreController(
     },
 
     async find(ctx: Context) {
+      if (!(await verifyAdminSession(ctx, strapi))) {
+        ctx.status = 403;
+        ctx.body = { error: 'Forbidden: Admin authentication required.' };
+        return;
+      }
+
       const entries = await strapi.documents('api::gold-valuation-submission.gold-valuation-submission').findMany({
         sort: { submittedAt: 'desc' },
       });
-      const sanitizedEntries = entries.map((entry: any) => {
-        const { crmLeadId, crmPushStatus, crmResponse, crmError, ...safeData } = entry;
-        return safeData;
-      });
       ctx.status = 200;
-      ctx.body = { data: sanitizedEntries };
+      ctx.body = { data: entries };
     },
   })
 );

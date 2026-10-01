@@ -684,6 +684,34 @@ export default {
           }
         }
         strapi.log.info('Auto-configured Public role permissions successfully.');
+
+        // 9b. Revoke any Public-role read access to submission data (PII).
+        // These must only ever be reachable via create (public submit) or
+        // find (admin-only, enforced in the controllers themselves).
+        const revokedActions = [
+          'api::contact-submission.contact-submission.find',
+          'api::contact-submission.contact-submission.findOne',
+          'api::gold-valuation-submission.gold-valuation-submission.find',
+          'api::gold-valuation-submission.gold-valuation-submission.findOne',
+          'api::job-application.job-application.find',
+          'api::job-application.job-application.findOne',
+          'api::mobile-van-submission.mobile-van-submission.find',
+          'api::mobile-van-submission.mobile-van-submission.findOne',
+          'api::blog-enquiry.blog-enquiry.find',
+          'api::blog-enquiry.blog-enquiry.findOne',
+          'api::all-lead.all-lead.find',
+          'api::all-lead.all-lead.findOne',
+        ];
+
+        for (const action of revokedActions) {
+          const perm = await strapi.db.connection('up_permissions').where('action', action).first();
+          if (perm) {
+            await strapi.db.connection('up_permissions_role_lnk')
+              .where({ permission_id: perm.id, role_id: roleId })
+              .del();
+          }
+        }
+        strapi.log.info('Revoked Public role access to submission data (PII) endpoints.');
       }
     } catch (err) {
       strapi.log.error('Failed to configure Public role permissions:', err);

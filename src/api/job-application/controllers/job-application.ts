@@ -3,6 +3,7 @@ import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
 import PDFDocument from 'pdfkit';
 import { PassThrough } from 'stream';
+import { enforceRateLimit } from '../../../utils/rate-limit';
 
 const { ValidationError } = errors;
 
@@ -101,6 +102,8 @@ export default factories.createCoreController(
   'api::job-application.job-application',
   ({ strapi }) => ({
     async create(ctx: Context) {
+      if (enforceRateLimit(ctx, 'job-application:create', 5, 10 * 60 * 1000)) return;
+
       let body = ctx.request.body ?? {};
 
       // Handle wrapped body.data if present

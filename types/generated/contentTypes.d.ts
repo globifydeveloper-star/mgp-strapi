@@ -1300,6 +1300,12 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
     seoDescription: Schema.Attribute.Text;
     seoKeywords: Schema.Attribute.String;
     seoTitle: Schema.Attribute.String;
+    trustBadgeHighlight: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Customers'>;
+    trustBadgePrefix: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Trusted by'>;
+    trustBadgeSuffix: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Across India'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1738,6 +1744,12 @@ export interface ApiSellGoldPageSettingSellGoldPageSetting
     seoDescription: Schema.Attribute.Text;
     seoKeywords: Schema.Attribute.Text;
     seoTitle: Schema.Attribute.String;
+    trustBadgeHighlight: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Customers'>;
+    trustBadgePrefix: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Trusted by'>;
+    trustBadgeSuffix: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Across India'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

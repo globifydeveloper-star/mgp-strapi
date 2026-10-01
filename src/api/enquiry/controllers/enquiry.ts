@@ -1,6 +1,7 @@
 import type { Context } from 'koa';
 import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
+import { enforceRateLimit } from '../../../utils/rate-limit';
 
 const { ValidationError } = errors;
 
@@ -14,6 +15,8 @@ export default factories.createCoreController('api::enquiry.enquiry', ({ strapi 
   },
 
   async create(ctx: Context) {
+    if (enforceRateLimit(ctx, 'enquiry:create', 5, 10 * 60 * 1000)) return;
+
     let body = ctx.request.body;
     if (!body || typeof body !== 'object' || Array.isArray(body)) {
       throw new ValidationError('A JSON request body is required.');
