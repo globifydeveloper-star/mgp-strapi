@@ -58,6 +58,12 @@ export default {
   },
 
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
+    // 0. Configure Koa trusted proxy count
+    if (strapi.server && strapi.server.app) {
+      const proxyCount = parseInt(process.env.TRUSTED_PROXY_COUNT || '1', 10);
+      strapi.server.app.maxIpsCount = proxyCount;
+    }
+
     // 1. Seed Homepage Single Type
     const homepageUid = 'api::homepage.homepage';
     const defaultHomeVideos = [
