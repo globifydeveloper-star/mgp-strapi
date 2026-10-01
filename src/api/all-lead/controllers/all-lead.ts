@@ -32,6 +32,16 @@ export default factories.createCoreController(
   ({ strapi }) => ({
 
     async create(ctx: Context) {
+      if (process.env.REQUIRE_INTERNAL_SECRET === 'true') {
+        const secret = ctx.request.headers['x-internal-secret'];
+        const expected = process.env.INTERNAL_API_SECRET;
+        if (!expected || !secret || typeof secret !== 'string' || secret !== expected) {
+          ctx.status = 403;
+          ctx.body = { success: false, message: 'Forbidden' };
+          return;
+        }
+      }
+
       if (enforceRateLimit(ctx, 'all-lead:create', 5, 10 * 60 * 1000)) return;
       await super.create(ctx);
       ctx.body = { success: true };

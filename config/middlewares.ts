@@ -54,7 +54,7 @@ const config: Core.Config.Middlewares = [
         'https://mgpwebsiteui-uat.muthootgoldpoint.com',
         'https://mgp.globify.in',
       ],
-      headers: ['*'],
+      headers: ['*', 'x-internal-secret'],
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
     },
   },
