@@ -1,16 +1,20 @@
 import type { Context } from 'koa';
 import { factories } from '@strapi/strapi';
-import { createHash, timingSafeEqual } from 'crypto';
+import { createHmac, timingSafeEqual, randomInt } from 'crypto';
 
 const OTP_TTL_MS = 5 * 60 * 1000;
 const RESEND_COOLDOWN_MS = 60 * 1000;
 const MAX_ATTEMPTS = 5;
+const MAX_SENDS_PER_24H = 10;
 const PHONE_REGEX = /^\d{10}$/;
 
-const generateOtpCode = (): string =>
-  Math.floor(100000 + Math.random() * 900000).toString();
+const generateOtpCode = (): string => randomInt(100000, 1000000).toString();
 
-const hashOtp = (code: string): string => createHash('sha256').update(code).digest('hex');
+const hashOtp = (phone: string, code: string): string => {
+  const salt = process.env.OTP_SALT;
+  if (!salt) throw new Error('OTP_SALT is not configured.');
+  return createHmac('sha256', salt).update(`${phone}:${code}`).digest('hex');
+};
 
 const safeCompare = (a: string, b: string): boolean => {
   const bufA = Buffer.from(a);
@@ -18,39 +22,72 @@ const safeCompare = (a: string, b: string): boolean => {
   return bufA.length === bufB.length && timingSafeEqual(bufA, bufB);
 };
 
+const maskPhone = (phone: string): string => {
+  if (phone.length < 4) return '****';
+  return '*'.repeat(phone.length - 4) + phone.slice(-4);
+};
+
 export default factories.createCoreController(
   'api::otp-request.otp-request',
   ({ strapi }) => ({
     async sendOtp(ctx: Context) {
+      if (process.env.REQUIRE_INTERNAL_SECRET === 'true') {
+        const secret = ctx.request.headers['x-internal-secret'];
+        const expected = process.env.INTERNAL_API_SECRET;
+        if (!expected || !secret || typeof secret !== 'string' || !safeCompare(secret, expected)) {
+          ctx.status = 403;
+          ctx.body = { success: false, message: 'Forbidden' };
+          return;
+        }
+      }
+
       const { phone } = (ctx.request.body ?? {}) as { phone?: string };
 
       if (typeof phone !== 'string' || !PHONE_REGEX.test(phone)) {
         ctx.status = 400;
-        ctx.body = { success: false, message: 'Phone number must be exactly 10 digits.' };
+        ctx.body = { success: false, message: 'Invalid or expired code' }; // Generic
         return;
       }
 
       const now = new Date();
+      const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
-      const recent = await strapi.documents('api::otp-request.otp-request').findFirst({
+      // Check limits
+      const recentRequests = await strapi.documents('api::otp-request.otp-request').findMany({
         filters: {
           phone: { $eq: phone },
-          createdAt: { $gte: new Date(now.getTime() - RESEND_COOLDOWN_MS).toISOString() },
-          expiresAt: { $gte: now.toISOString() },
+          createdAt: { $gte: oneDayAgo.toISOString() },
         },
+        sort: { createdAt: 'desc' },
       });
 
-      if (recent) {
+      if (recentRequests.length >= MAX_SENDS_PER_24H) {
         ctx.status = 429;
-        ctx.body = { success: false, message: 'Please wait before requesting another OTP' };
+        ctx.body = { success: false, message: 'Too many requests. Please try again later.', retryAfterSeconds: 86400 };
         return;
+      }
+
+      const mostRecent = recentRequests[0];
+      if (mostRecent && (now.getTime() - new Date(mostRecent.createdAt as string).getTime()) < RESEND_COOLDOWN_MS) {
+        ctx.status = 429;
+        ctx.body = { success: false, message: 'Please wait before requesting another OTP', retryAfterSeconds: 60 };
+        return;
+      }
+
+      // Invalidate old active OTPs for this phone
+      const activeOtps = recentRequests.filter(r => !r.verified && new Date(r.expiresAt as string) > now);
+      for (const otp of activeOtps) {
+        await strapi.documents('api::otp-request.otp-request').update({
+          documentId: otp.documentId,
+          data: { attempts: MAX_ATTEMPTS + 1 },
+        });
       }
 
       const code = generateOtpCode();
       const expiresAt = new Date(now.getTime() + OTP_TTL_MS);
 
       await strapi.documents('api::otp-request.otp-request').create({
-        data: { phone, code: hashOtp(code), expiresAt: expiresAt.toISOString(), verified: false, attempts: 0 },
+        data: { phone, code: hashOtp(phone, code), expiresAt: expiresAt.toISOString(), verified: false, attempts: 0 },
       });
 
       try {
@@ -82,9 +119,9 @@ export default factories.createCoreController(
           throw new Error(`Pinnacle gateway responded with status ${response.status}`);
         }
       } catch (err) {
-        strapi.log.error('[otp-request] Failed to send OTP via Pinnacle:', err);
+        strapi.log.error(`[otp-request] Failed to send OTP for phone ending in ${maskPhone(phone)}`);
         if (process.env.NODE_ENV !== 'production') {
-          strapi.log.info(`[otp-request] DEV MODE: OTP for ${phone} is ${code}`);
+          strapi.log.info(`[otp-request] DEV MODE: OTP sent for ${maskPhone(phone)}`);
         } else {
           ctx.status = 502;
           ctx.body = { success: false, message: 'Failed to send OTP. Please try again.' };
@@ -93,10 +130,20 @@ export default factories.createCoreController(
       }
 
       ctx.status = 200;
-      ctx.body = { success: true, message: 'OTP sent' };
+      ctx.body = { success: true, message: 'If the number is valid, a code has been sent' };
     },
 
     async verifyOtp(ctx: Context) {
+      if (process.env.REQUIRE_INTERNAL_SECRET === 'true') {
+        const secret = ctx.request.headers['x-internal-secret'];
+        const expected = process.env.INTERNAL_API_SECRET;
+        if (!expected || !secret || typeof secret !== 'string' || !safeCompare(secret, expected)) {
+          ctx.status = 403;
+          ctx.body = { success: false, message: 'Forbidden' };
+          return;
+        }
+      }
+
       const { phone, otp, name, email, state, city, branchCode, address, purity, weight, message, consent, sourceForm, enquiryType } = (ctx.request.body ?? {}) as {
         phone?: string;
         otp?: string;
@@ -116,7 +163,7 @@ export default factories.createCoreController(
 
       if (typeof phone !== 'string' || !PHONE_REGEX.test(phone) || typeof otp !== 'string') {
         ctx.status = 400;
-        ctx.body = { success: false, message: 'Phone and otp are required.' };
+        ctx.body = { success: false, message: 'Invalid or expired code' };
         return;
       }
 
@@ -127,30 +174,30 @@ export default factories.createCoreController(
 
       if (!entry) {
         ctx.status = 400;
-        ctx.body = { success: false, message: 'No pending OTP request found for this phone number.' };
+        ctx.body = { success: false, message: 'Invalid or expired code' };
         return;
       }
 
       if (new Date(entry.expiresAt as string) < new Date()) {
         ctx.status = 400;
-        ctx.body = { success: false, message: 'OTP has expired. Please request a new one.' };
+        ctx.body = { success: false, message: 'Invalid or expired code' };
         return;
       }
 
       const nextAttempts = (entry.attempts ?? 0) + 1;
       if (nextAttempts > MAX_ATTEMPTS) {
-        ctx.status = 429;
-        ctx.body = { success: false, message: 'Too many attempts. Please request a new OTP.' };
+        ctx.status = 400;
+        ctx.body = { success: false, message: 'Invalid or expired code' };
         return;
       }
 
-      if (!safeCompare(entry.code as string, hashOtp(otp))) {
+      if (!safeCompare(entry.code as string, hashOtp(phone, otp))) {
         await strapi.documents('api::otp-request.otp-request').update({
           documentId: entry.documentId,
           data: { attempts: nextAttempts },
         });
         ctx.status = 400;
-        ctx.body = { success: false, message: 'Incorrect OTP.' };
+        ctx.body = { success: false, message: 'Invalid or expired code' };
         return;
       }
 
@@ -167,7 +214,7 @@ export default factories.createCoreController(
         },
       });
 
-      // Dual-Write Mirror to Target Collection (Mobile Van Submission, Contact Submission, or Form Submission)
+      // Dual-Write Mirror to Target Collection
       if (name && typeof name === 'string' && name.trim()) {
         try {
           const srcStr = `${sourceForm || ''} ${enquiryType || ''}`.toLowerCase();
@@ -251,7 +298,7 @@ export default factories.createCoreController(
             }
           }
         } catch (mirrorErr) {
-          strapi.log.error('[otp-request] Failed to mirror submission to target collection:', mirrorErr);
+          strapi.log.error('[otp-request] Failed to mirror submission to target collection');
         }
       }
 

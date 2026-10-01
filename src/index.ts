@@ -662,8 +662,7 @@ export default {
           'api::enquiry.enquiry.create',
           'api::mobile-van-submission.mobile-van-submission.create',
           'api::gold-valuation-submission.gold-valuation-submission.create',
-          'api::contact-submission.contact-submission.create',
-          'api::otp-request.otp-request.create'
+          'api::contact-submission.contact-submission.create'
         ];
 
         for (const action of actions) {
@@ -697,6 +696,16 @@ export default {
             });
           }
         }
+        
+        // Explicitly remove unsafe OTP core routes from public role
+        const unsafeOtpAction = 'api::otp-request.otp-request.create';
+        const unsafePerm = await strapi.db.connection('up_permissions').where('action', unsafeOtpAction).first();
+        if (unsafePerm) {
+          await strapi.db.connection('up_permissions_role_lnk')
+            .where({ permission_id: unsafePerm.id, role_id: roleId })
+            .delete();
+        }
+
         strapi.log.info('Auto-configured Public role permissions successfully.');
 
         // 9b. Revoke any Public-role read access to submission data (PII).
