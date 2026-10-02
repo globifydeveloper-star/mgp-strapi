@@ -708,6 +708,12 @@ export default {
           'api::otp-request.otp-request.update',
           'api::otp-request.otp-request.delete',
           'plugin::users-permissions.auth.register',
+          'plugin::users-permissions.auth.forgotPassword',
+          'plugin::users-permissions.auth.resetPassword',
+          'plugin::users-permissions.auth.emailConfirmation',
+          'plugin::users-permissions.auth.sendEmailConfirmation',
+          'plugin::users-permissions.auth.connect',
+          'plugin::users-permissions.auth.callback',
           'api::contact-submission.contact-submission.find',
           'api::contact-submission.contact-submission.findOne',
           'api::gold-valuation-submission.gold-valuation-submission.find',
@@ -725,7 +731,12 @@ export default {
           'api::mobile-van-submission.mobile-van-submission.create',
           'api::enquiry.enquiry.create',
           'api::blog-enquiry.blog-enquiry.create',
-          'api::form-submission.form-submission.create'
+          'api::form-submission.form-submission.create',
+          ...(process.env.ENFORCE_SERVER_SUBMISSIONS === 'true' ? [
+            'api::job-application.job-application.create',
+            'api::gold-valuation-submission.gold-valuation-submission.create',
+            'api::all-lead.all-lead.create'
+          ] : [])
         ];
 
         for (const action of revokedActions) {

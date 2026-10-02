@@ -1,5 +1,10 @@
 import type { Core } from '@strapi/strapi';
 
+if (process.env.NODE_ENV === 'production' && !process.env.CORS_ORIGINS) {
+  throw new Error('CORS_ORIGINS environment variable is missing in production');
+}
+const origins = process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : ['http://localhost:3000'];
+
 const config: Core.Config.Middlewares = [
   'strapi::logger',
   'strapi::errors',
@@ -12,13 +17,7 @@ const config: Core.Config.Middlewares = [
           'connect-src': ["'self'", 'https:'],
           'frame-src': [
             "'self'",
-            ...(process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : [
-              'http://localhost:3000',
-              'http://127.0.0.1:3000',
-              'https://mgp-web.vercel.app',
-              'https://mgp-web-q2au.vercel.app',
-              'https://mgpwebsiteui-uat.muthootgoldpoint.com',
-            ]),
+            ...origins,
           ],
           'img-src': [
             "'self'",
@@ -48,19 +47,11 @@ const config: Core.Config.Middlewares = [
   {
     name: 'strapi::cors',
     config: {
-      origin: process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : [
-        'http://localhost:3000',
-        'http://127.0.0.1:3000',
-        'https://mgp-web.vercel.app',
-        'https://mgp-web-q2au.vercel.app',
-        'https://mgpwebsiteui-uat.muthootgoldpoint.com',
-        'https://mgp.globify.in',
-      ],
+      origin: origins,
       headers: ['*', 'x-internal-secret'],
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
     },
   },
-  'strapi::poweredBy',
   'strapi::query',
   'strapi::body',
   'strapi::session',
