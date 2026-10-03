@@ -29,7 +29,6 @@ export default {
       path: '/all-leads',
       handler: 'all-lead.create',
       config: {
-        auth: false,
       },
     },
   ],

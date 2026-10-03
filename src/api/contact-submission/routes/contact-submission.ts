@@ -5,7 +5,6 @@ export default {
       path: '/contact-submissions',
       handler: 'contact-submission.create',
       config: {
-        auth: false,
       },
     },
     {

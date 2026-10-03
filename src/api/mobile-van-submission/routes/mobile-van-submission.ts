@@ -5,7 +5,6 @@ export default {
       path: '/mobile-van-submissions',
       handler: 'mobile-van-submission.create',
       config: {
-        auth: false,
       },
     },
     {

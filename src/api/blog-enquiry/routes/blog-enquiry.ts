@@ -5,7 +5,6 @@ export default {
       path: '/blog-enquiries',
       handler: 'blog-enquiry.create',
       config: {
-        auth: false,
       },
     },
     {

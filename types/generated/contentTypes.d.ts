@@ -576,7 +576,7 @@ export interface ApiAllLeadAllLead extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'Pending'>;
     crmResponse: Schema.Attribute.JSON;
-    email: Schema.Attribute.Email;
+    email: Schema.Attribute.Email & Schema.Attribute.Private;
     extraData: Schema.Attribute.JSON;
     formSource: Schema.Attribute.Enumeration<
       [
@@ -595,7 +595,9 @@ export interface ApiAllLeadAllLead extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
-    phone: Schema.Attribute.String & Schema.Attribute.Required;
+    phone: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
     sourceFormDetail: Schema.Attribute.String;
     submittedAt: Schema.Attribute.DateTime;
@@ -627,7 +629,7 @@ export interface ApiBlogEnquiryBlogEnquiry extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'Pending'>;
     crmResponse: Schema.Attribute.JSON;
-    email: Schema.Attribute.Email;
+    email: Schema.Attribute.Email & Schema.Attribute.Private;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -856,7 +858,7 @@ export interface ApiContactSubmissionContactSubmission
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'Pending'>;
     crmResponse: Schema.Attribute.JSON;
-    email: Schema.Attribute.Email;
+    email: Schema.Attribute.Email & Schema.Attribute.Private;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -865,7 +867,9 @@ export interface ApiContactSubmissionContactSubmission
       Schema.Attribute.Private;
     message: Schema.Attribute.Text;
     name: Schema.Attribute.String & Schema.Attribute.Required;
-    phone: Schema.Attribute.String & Schema.Attribute.Required;
+    phone: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
     submittedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
@@ -981,7 +985,7 @@ export interface ApiEnquiryEnquiry extends Struct.CollectionTypeSchema {
     crmStatus: Schema.Attribute.Enumeration<['PENDING', 'SYNCED', 'FAILED']> &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'PENDING'>;
-    email: Schema.Attribute.Email;
+    email: Schema.Attribute.Email & Schema.Attribute.Private;
     lastSyncAt: Schema.Attribute.DateTime;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -1214,7 +1218,7 @@ export interface ApiGoldValuationSubmissionGoldValuationSubmission
       Schema.Attribute.DefaultTo<'Pending'>;
     crmResponse: Schema.Attribute.JSON;
     details: Schema.Attribute.JSON;
-    email: Schema.Attribute.Email;
+    email: Schema.Attribute.Email & Schema.Attribute.Private;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1222,7 +1226,9 @@ export interface ApiGoldValuationSubmissionGoldValuationSubmission
     > &
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
-    phone: Schema.Attribute.String & Schema.Attribute.Required;
+    phone: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
     purity: Schema.Attribute.String;
     sourceForm: Schema.Attribute.String;
@@ -1339,7 +1345,9 @@ export interface ApiJobApplicationJobApplication
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     currentCity: Schema.Attribute.String;
-    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    email: Schema.Attribute.Email &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
     experienceYears: Schema.Attribute.String;
     fullName: Schema.Attribute.String & Schema.Attribute.Required;
     jobPosition: Schema.Attribute.Relation<
@@ -1352,10 +1360,13 @@ export interface ApiJobApplicationJobApplication
       'api::job-application.job-application'
     > &
       Schema.Attribute.Private;
-    phone: Schema.Attribute.String & Schema.Attribute.Required;
+    phone: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
     resume: Schema.Attribute.Media<'files' | 'images'> &
-      Schema.Attribute.Required;
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
     submittedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1513,7 +1524,7 @@ export interface ApiMobileVanSubmissionMobileVanSubmission
       Schema.Attribute.DefaultTo<'Pending'>;
     crmResponse: Schema.Attribute.JSON;
     details: Schema.Attribute.JSON;
-    email: Schema.Attribute.Email;
+    email: Schema.Attribute.Email & Schema.Attribute.Private;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1521,7 +1532,9 @@ export interface ApiMobileVanSubmissionMobileVanSubmission
     > &
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
-    phone: Schema.Attribute.String & Schema.Attribute.Required;
+    phone: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
     preferredDate: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     state: Schema.Attribute.String;

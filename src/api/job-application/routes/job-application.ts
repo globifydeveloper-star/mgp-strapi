@@ -5,7 +5,6 @@ export default {
       path: '/job-applications',
       handler: 'job-application.create',
       config: {
-        auth: false,
       },
     },
     {
