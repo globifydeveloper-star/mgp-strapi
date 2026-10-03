@@ -1,35 +1,22 @@
 export default {
   routes: [
     {
-      method: 'POST',
-      path: '/contact-submissions',
-      handler: 'contact-submission.create',
-      config: {
-      },
-    },
-    {
       method: 'GET',
       path: '/contact-submissions/export/pdf',
       handler: 'contact-submission.exportBulkPdf',
-      config: {
-        auth: false,
-      },
+      
     },
     {
       method: 'GET',
       path: '/contact-submissions/export/csv',
       handler: 'contact-submission.exportBulkCsv',
-      config: {
-        auth: false,
-      },
+      
     },
     {
       method: 'GET',
       path: '/contact-submissions/:id/pdf',
       handler: 'contact-submission.generateSinglePdf',
-      config: {
-        auth: false,
-      },
+      
     },
     {
       method: 'GET',
@@ -38,3 +25,5 @@ export default {
     },
   ],
 };
+
+

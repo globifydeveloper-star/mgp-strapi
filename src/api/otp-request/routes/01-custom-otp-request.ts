@@ -4,3 +4,5 @@ export default {
     { method: 'POST', path: '/otp/verify', handler: 'otp-request.verifyOtp', config: { auth: false } },
   ],
 };
+
+

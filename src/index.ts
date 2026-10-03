@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { Core } from '@strapi/strapi';
 import fs from 'fs';
 import path from 'path';
@@ -675,7 +676,7 @@ export default {
         for (const action of actions) {
           let perm = await strapi.db.connection('up_permissions').where('action', action).first();
           if (!perm) {
-            const document_id = Math.random().toString(36).substring(2, 16);
+            const document_id = crypto.randomBytes(8).toString('hex');
             const [insertedId] = await strapi.db.connection('up_permissions').insert({
               action,
               document_id,
@@ -860,3 +861,5 @@ export default {
     }
   },
 };
+
+

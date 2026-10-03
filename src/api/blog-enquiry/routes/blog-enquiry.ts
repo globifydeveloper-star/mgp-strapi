@@ -11,9 +11,9 @@ export default {
       method: 'GET',
       path: '/blog-enquiries',
       handler: 'blog-enquiry.find',
-      config: {
-        auth: false,
-      },
+      
     },
   ],
 };
+
+

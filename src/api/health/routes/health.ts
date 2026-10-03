@@ -4,9 +4,8 @@ export default {
       method: 'GET',
       path: '/health',
       handler: 'health.check',
-      config: {
-        auth: false,
-      },
+      
     },
   ],
 };
+

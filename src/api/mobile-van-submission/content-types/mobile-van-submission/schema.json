@@ -1,65 +1,66 @@
 {
-    "kind":  "collectionType",
-    "collectionName":  "mobile_van_submissions",
-    "info":  {
-                 "singularName":  "mobile-van-submission",
-                 "pluralName":  "mobile-van-submissions",
-                 "displayName":  "Mobile Van Submission",
-                 "description":  "Submissions received for Mobile Van service requests"
-             },
-    "options":  {
-                    "draftAndPublish":  false
-                },
-    "attributes":  {
-                       "name":  {
-                                    "type":  "string",
-                                    "required":  true
-                                },
-                       "phone":  {
-                                     "type":  "string",
-                                     "required":  true,
-                                     "private":  true
-                                 },
-                       "email":  {
-                                     "type":  "email",
-                                     "private":  true
-                                 },
-                       "city":  {
-                                    "type":  "string"
-                                },
-                       "state":  {
-                                     "type":  "string"
-                                 },
-                       "address":  {
-                                       "type":  "text"
-                                   },
-                       "preferredDate":  {
-                                             "type":  "string"
-                                         },
-                       "details":  {
-                                       "type":  "json"
-                                   },
-                       "submittedAt":  {
-                                           "type":  "datetime"
-                                       },
-                       "crmPushStatus":  {
-                                             "type":  "enumeration",
-                                             "enum":  [
-                                                          "Sent",
-                                                          "Pending",
-                                                          "Failed"
-                                                      ],
-                                             "default":  "Pending",
-                                             "required":  true
-                                         },
-                       "crmLeadId":  {
-                                         "type":  "string"
-                                     },
-                       "crmResponse":  {
-                                           "type":  "json"
-                                       },
-                       "crmError":  {
-                                        "type":  "text"
-                                    }
-                   }
+  "kind": "collectionType",
+  "collectionName": "mobile_van_submissions",
+  "info": {
+    "singularName": "mobile-van-submission",
+    "pluralName": "mobile-van-submissions",
+    "displayName": "Mobile Van Submission",
+    "description": "Submissions received for Mobile Van service requests"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true,
+      "private": true
+    },
+    "email": {
+      "type": "email",
+      "private": true
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "address": {
+      "type": "text",
+      "private": true
+    },
+    "preferredDate": {
+      "type": "string"
+    },
+    "details": {
+      "type": "json"
+    },
+    "submittedAt": {
+      "type": "datetime"
+    },
+    "crmPushStatus": {
+      "type": "enumeration",
+      "enum": [
+        "Sent",
+        "Pending",
+        "Failed"
+      ],
+      "default": "Pending",
+      "required": true
+    },
+    "crmLeadId": {
+      "type": "string"
+    },
+    "crmResponse": {
+      "type": "json"
+    },
+    "crmError": {
+      "type": "text"
+    }
+  }
 }

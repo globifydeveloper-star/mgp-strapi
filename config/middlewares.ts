@@ -3,7 +3,7 @@ import type { Core } from '@strapi/strapi';
 if (process.env.NODE_ENV === 'production' && !process.env.CORS_ORIGINS) {
   throw new Error('CORS_ORIGINS environment variable is missing in production');
 }
-const origins = process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : ['http://localhost:3000'];
+const origins = process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',').map(s => s.trim()) : [];
 
 const config: Core.Config.Middlewares = [
   'strapi::logger',

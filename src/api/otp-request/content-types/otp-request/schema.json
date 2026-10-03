@@ -10,15 +10,46 @@
     "draftAndPublish": false
   },
   "attributes": {
-    "phone": { "type": "string", "required": true },
-    "code": { "type": "string", "required": true, "private": true },
-    "expiresAt": { "type": "datetime", "required": true, "private": true },
-    "verified": { "type": "boolean", "default": false, "private": true },
-    "attempts": { "type": "integer", "default": 0, "private": true },
-    "name": { "type": "string" },
-    "state": { "type": "string" },
-    "city": { "type": "string" },
-    "message": { "type": "text" },
-    "consent": { "type": "boolean", "default": false }
+    "phone": {
+      "type": "string",
+      "required": true,
+      "private": true
+    },
+    "code": {
+      "type": "string",
+      "required": true,
+      "private": true
+    },
+    "expiresAt": {
+      "type": "datetime",
+      "required": true,
+      "private": true
+    },
+    "verified": {
+      "type": "boolean",
+      "default": false,
+      "private": true
+    },
+    "attempts": {
+      "type": "integer",
+      "default": 0,
+      "private": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "message": {
+      "type": "text"
+    },
+    "consent": {
+      "type": "boolean",
+      "default": false
+    }
   }
 }

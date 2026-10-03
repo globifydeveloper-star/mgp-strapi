@@ -636,7 +636,9 @@ export interface ApiBlogEnquiryBlogEnquiry extends Struct.CollectionTypeSchema {
       'api::blog-enquiry.blog-enquiry'
     > &
       Schema.Attribute.Private;
-    mobile: Schema.Attribute.String & Schema.Attribute.Required;
+    mobile: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     source: Schema.Attribute.String & Schema.Attribute.DefaultTo<'BLOG'>;
@@ -993,7 +995,9 @@ export interface ApiEnquiryEnquiry extends Struct.CollectionTypeSchema {
       'api::enquiry.enquiry'
     > &
       Schema.Attribute.Private;
-    mobile: Schema.Attribute.String & Schema.Attribute.Required;
+    mobile: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     otpVerified: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
@@ -1512,7 +1516,7 @@ export interface ApiMobileVanSubmissionMobileVanSubmission
     draftAndPublish: false;
   };
   attributes: {
-    address: Schema.Attribute.Text;
+    address: Schema.Attribute.Text & Schema.Attribute.Private;
     city: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1613,7 +1617,9 @@ export interface ApiOtpRequestOtpRequest extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     message: Schema.Attribute.Text;
     name: Schema.Attribute.String;
-    phone: Schema.Attribute.String & Schema.Attribute.Required;
+    phone: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
     state: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;

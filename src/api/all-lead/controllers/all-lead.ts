@@ -32,6 +32,11 @@ export default factories.createCoreController(
   ({ strapi }) => ({
 
     async create(ctx: Context) {
+      if (!(await verifyAdminSession(ctx, strapi))) {
+        ctx.status = 403;
+        ctx.body = { error: 'Forbidden: Admin authentication required.' };
+        return;
+      }
 
       // Inject sanitization
       try {
