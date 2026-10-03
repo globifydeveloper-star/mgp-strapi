@@ -2,6 +2,8 @@
 FROM node:20-alpine3.21 as build
 RUN apk update && apk add --no-cache build-base gcc autoconf automake zlib-dev libpng-dev vips-dev > /dev/null 2>&1
 ENV NODE_ENV=production
+ARG CORS_ORIGINS
+ENV CORS_ORIGINS=$CORS_ORIGINS
 
 WORKDIR /opt/
 COPY package.json package-lock.json ./

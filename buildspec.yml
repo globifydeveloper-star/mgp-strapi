@@ -15,7 +15,8 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Strapi Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
+      # Ensure CORS_ORIGINS is set in your CodeBuild project environment variables
+      - docker build --build-arg CORS_ORIGINS=$CORS_ORIGINS -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
