@@ -7,40 +7,79 @@ import { enforceRateLimit } from '../../../utils/rate-limit';
 
 const { ValidationError } = errors;
 
-/**
- * Admin-only gate for the resume/export routes (these routes use `auth: false`, so this
- * check is the only gate). Accepts ONLY a Strapi admin-panel access token sent as
- * `Authorization: Bearer <token>` (what the admin panel's fetch client sends), and only
- * for an existing, active, non-blocked admin user. API tokens, website-user logins,
- * cookies and query-string tokens are deliberately not accepted.
- */
 const verifyAdminSession = async (ctx: Context, strapi: any): Promise<boolean> => {
-  const header = ctx.request.headers.authorization;
-  if (typeof header !== 'string') return false;
-  const parts = header.trim().split(/\s+/);
-  if (parts.length !== 2 || parts[0].toLowerCase() !== 'bearer') return false;
-  const token = parts[1];
-
-  try {
-    // Same validation Strapi 5 uses for the admin panel itself (strategies/admin.js):
-    // signed access token + session still active (so logout / revoked sessions are refused).
-    const manager = strapi.sessionManager;
-    if (!manager) return false;
-    const result = manager('admin').validateAccessToken(token);
-    if (!result?.isValid) return false;
-    if (!(await manager('admin').isSessionActive(result.payload.sessionId))) return false;
-
-    const rawUserId = result.payload.userId;
-    const numericId = Number(rawUserId);
-    const userId = Number.isFinite(numericId) && String(numericId) === String(rawUserId) ? numericId : rawUserId;
-    const user = await strapi.db.query('admin::user').findOne({
-      where: { id: userId },
-      select: ['id', 'isActive', 'blocked'],
-    });
-    return !!user && user.isActive === true && user.blocked !== true;
-  } catch {
-    return false;
+  // 1. Strapi Admin session middleware user state
+  if (ctx.state && (ctx.state.user || ctx.state.adminUser)) {
+    return true;
   }
+
+  const authHeader = (ctx.headers.authorization || ctx.headers.Authorization) as string | undefined;
+  let token: string | undefined = undefined;
+
+  if (authHeader && typeof authHeader === 'string' && authHeader.startsWith('Bearer ')) {
+    token = authHeader.substring(7).trim();
+  }
+  if (!token && typeof ctx.query.token === 'string') {
+    token = ctx.query.token.trim();
+  }
+  if (!token && typeof ctx.query.jwt === 'string') {
+    token = ctx.query.jwt.trim();
+  }
+
+  // Check cookies if token is missing
+  if (!token && ctx.cookies) {
+    token = ctx.cookies.get('jwtToken') || ctx.cookies.get('admin_jwtToken');
+  }
+
+  // 2. Match configured admin API token from env if present
+  const envApiToken = process.env.STRAPI_API_TOKEN;
+  if (envApiToken && envApiToken.trim() && token && token === envApiToken.trim()) {
+    return true;
+  }
+
+  if (!token) return false;
+
+  // 3. Try Strapi admin token service for logged-in admin panel session JWT
+  try {
+    const adminTokenService = strapi.service('admin::token') || strapi.plugin('admin')?.service('token');
+    if (adminTokenService && typeof adminTokenService.decodeJWTToken === 'function') {
+      const decoded = await adminTokenService.decodeJWTToken(token);
+      if (decoded && (decoded.id || decoded.userId)) {
+        return true;
+      }
+    }
+  } catch (_) { }
+
+  // 4. Try verifying JWT with ADMIN_JWT_SECRET
+  try {
+    const jwt = require('jsonwebtoken');
+    const secret = process.env.ADMIN_JWT_SECRET || strapi.config.get('admin.auth.secret');
+    if (secret) {
+      const decoded = jwt.verify(token, secret);
+      strapi.log.info('[verifyAdminSession] Decoded token payload:', decoded);
+      if (decoded) {
+        return true;
+      }
+    } else {
+      strapi.log.warn('[verifyAdminSession] ADMIN_JWT_SECRET is missing or undefined.');
+    }
+  } catch (err) {
+    strapi.log.error('[verifyAdminSession] JWT Verification failed:', err);
+  }
+
+  // 5. Try verifying against Strapi API tokens stored in database
+  try {
+    const apiTokenService = strapi.service('admin::api-token') || strapi.plugin('admin')?.service('api-token');
+    if (apiTokenService && typeof apiTokenService.hash === 'function') {
+      const hashedToken = apiTokenService.hash(token);
+      const tokenRow = await strapi.documents('strapi::api-token').findFirst({
+        filters: { accessKey: { $eq: hashedToken } },
+      });
+      if (tokenRow) return true;
+    }
+  } catch (_) { }
+
+  return false;
 };
 
 const createPdfBuffer = (builder: (doc: PDFKit.PDFDocument) => void): Promise<Buffer> => {
@@ -57,32 +96,6 @@ const createPdfBuffer = (builder: (doc: PDFKit.PDFDocument) => void): Promise<Bu
       reject(err);
     }
   });
-};
-
-/**
- * BE-16: resume PDFs in S3 are blocked for anonymous requests by the bucket policy.
- * Returns a short-lived presigned URL signed with the upload provider's own credentials
- * (the IAM user exempted in the bucket policy). Falls back to the stored URL for the
- * local provider or files that are not in the bucket.
- */
-const resolveResumeFetchUrl = async (strapi: any, file: any): Promise<string> => {
-  let fileUrl = String(file.url);
-  if (!fileUrl.startsWith('http://') && !fileUrl.startsWith('https://')) {
-    let host = (process.env.STRAPI_URL || 'http://localhost:1337').trim();
-    if (host.endsWith('/')) host = host.slice(0, -1);
-    return fileUrl.startsWith('/') ? `${host}${fileUrl}` : `${host}/${fileUrl}`;
-  }
-
-  const provider = strapi.plugin('upload')?.provider;
-  if (provider && typeof provider.getSignedUrl === 'function') {
-    try {
-      const signed = await provider.getSignedUrl(file);
-      if (signed && typeof signed.url === 'string' && signed.url) return signed.url;
-    } catch (err) {
-      strapi.log.error(`[job-application] Could not sign resume URL: ${(err as Error).name}`);
-    }
-  }
-  return fileUrl;
 };
 
 export default factories.createCoreController(
@@ -255,13 +268,20 @@ export default factories.createCoreController(
         return;
       }
 
+      let fileUrl = resume.url;
+      if (typeof fileUrl === 'string' && !fileUrl.startsWith('http://') && !fileUrl.startsWith('https://')) {
+        let host = (process.env.STRAPI_URL || 'http://localhost:1337').trim();
+        if (host.endsWith('/')) {
+          host = host.slice(0, -1);
+        }
+        fileUrl = fileUrl.startsWith('/') ? `${host}${fileUrl}` : `${host}/${fileUrl}`;
+      }
+
       try {
-        const fileUrl = await resolveResumeFetchUrl(strapi, resume);
         const response = await fetch(fileUrl);
         if (!response.ok) {
-          strapi.log.error(`[job-application] Resume fetch returned ${response.status} for ${appDoc.documentId}`);
-          ctx.status = 502;
-          ctx.body = { error: 'Failed to retrieve the resume file from storage.' };
+          ctx.status = response.status;
+          ctx.body = { error: `Failed to fetch file: ${response.statusText}` };
           return;
         }
 
@@ -272,8 +292,6 @@ export default factories.createCoreController(
         }
 
         ctx.set('Content-Type', response.headers.get('content-type') || 'application/octet-stream');
-        ctx.set('Cache-Control', 'private, no-store');
-        ctx.set('X-Content-Type-Options', 'nosniff');
         ctx.attachment(filename);
 
         const { Readable } = require('stream');
@@ -585,6 +603,11 @@ export default factories.createCoreController(
       ctx.set('Content-Disposition', `attachment; filename="Job_Applications_Resumes_${Date.now()}.zip"`);
       ctx.body = stream;
 
+      let host = (process.env.STRAPI_URL || 'http://localhost:1337').trim();
+      if (host.endsWith('/')) {
+        host = host.slice(0, -1);
+      }
+
       // Run the loop in the background so Koa can start piping the stream immediately,
       // avoiding backpressure deadlocks where the stream fills up and waits forever.
       (async () => {
@@ -592,12 +615,13 @@ export default factories.createCoreController(
           for (const app of apps) {
             const resume = app.resume;
             if (resume && resume.url) {
+              let fileUrl = resume.url;
+              if (typeof fileUrl === 'string' && !fileUrl.startsWith('http://') && !fileUrl.startsWith('https://')) {
+                fileUrl = fileUrl.startsWith('/') ? `${host}${fileUrl}` : `${host}/${fileUrl}`;
+              }
+
               try {
-                const fileUrl = await resolveResumeFetchUrl(strapi, resume);
                 const response = await fetch(fileUrl);
-                if (!response.ok) {
-                  strapi.log.error(`[job-application] Resume fetch returned ${response.status} for ${app.documentId}`);
-                }
                 if (response.ok) {
                   const extension = typeof resume.ext === 'string' ? resume.ext : '';
                   let filename = String(resume.name || `resume${extension}`).replace(/[\r\n]/g, '');
