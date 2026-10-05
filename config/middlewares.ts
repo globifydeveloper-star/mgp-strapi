@@ -24,7 +24,6 @@ const config: Core.Config.Middlewares = [
             'data:',
             'blob:',
             'market-assets.strapi.io',
-            'pub-bd272ef986bf4b208d871d215567b407.r2.dev',
             'mgpwebsiteuat.s3.ap-south-1.amazonaws.com',
           ],
           'media-src': [
@@ -32,7 +31,6 @@ const config: Core.Config.Middlewares = [
             'data:',
             'blob:',
             'market-assets.strapi.io',
-            'pub-bd272ef986bf4b208d871d215567b407.r2.dev',
             'mgpwebsiteuat.s3.ap-south-1.amazonaws.com',
           ],
           upgradeInsecureRequests: null,
