@@ -50,6 +50,10 @@
     "consent": {
       "type": "boolean",
       "default": false
+    },
+    "ipHash": {
+      "type": "string",
+      "private": true
     }
   }
 }

@@ -16,6 +16,12 @@ const hashOtp = (phone: string, code: string): string => {
   return createHmac('sha256', salt).update(`${phone}:${code}`).digest('hex');
 };
 
+const hashIp = (ip: string): string => {
+  const salt = process.env.OTP_SALT || process.env.INTERNAL_API_SECRET;
+  if (!salt) throw new Error('OTP_SALT or INTERNAL_API_SECRET is not configured.');
+  return createHmac('sha256', salt).update(ip).digest('hex');
+};
+
 const safeCompare = (a: string, b: string): boolean => {
   const bufA = Buffer.from(a);
   const bufB = Buffer.from(b);
@@ -31,14 +37,49 @@ export default factories.createCoreController(
   'api::otp-request.otp-request',
   ({ strapi }) => ({
     async sendOtp(ctx: Context) {
-      if (process.env.REQUIRE_INTERNAL_SECRET === 'true') {
-        const secret = ctx.request.headers['x-internal-secret'];
-        const expected = process.env.INTERNAL_API_SECRET;
-        if (!expected || !secret || typeof secret !== 'string' || !safeCompare(secret, expected)) {
-          ctx.status = 403;
-          ctx.body = { success: false, message: 'Forbidden' };
-          return;
-        }
+      const secret = ctx.request.headers['x-internal-secret'];
+      const expected = process.env.INTERNAL_API_SECRET;
+      if (!expected || !secret || typeof secret !== 'string' || !safeCompare(secret, expected)) {
+        ctx.status = 403;
+        ctx.body = { success: false, message: 'Forbidden' };
+        return;
+      }
+
+      const rawClientIp = ctx.request.headers['x-client-ip'];
+      const clientIp = (typeof rawClientIp === 'string' && rawClientIp.trim().length > 0)
+        ? rawClientIp.split(',')[0].trim()
+        : ctx.ip || '127.0.0.1';
+      const ipHash = hashIp(clientIp);
+
+      const now = new Date();
+      const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+      const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+      // Per-IP rate limiting: at most 5 sends per IP per hour, and 20 sends per IP per day
+      const hourlyRequestsForIp = await strapi.documents('api::otp-request.otp-request').findMany({
+        filters: {
+          ipHash: { $eq: ipHash },
+          createdAt: { $gte: oneHourAgo.toISOString() },
+        },
+      });
+
+      if (hourlyRequestsForIp.length >= 5) {
+        ctx.status = 429;
+        ctx.body = { success: false, message: 'Too many requests. Please try again later.', retryAfterSeconds: 3600 };
+        return;
+      }
+
+      const dailyRequestsForIp = await strapi.documents('api::otp-request.otp-request').findMany({
+        filters: {
+          ipHash: { $eq: ipHash },
+          createdAt: { $gte: oneDayAgo.toISOString() },
+        },
+      });
+
+      if (dailyRequestsForIp.length >= 20) {
+        ctx.status = 429;
+        ctx.body = { success: false, message: 'Too many requests. Please try again later.', retryAfterSeconds: 86400 };
+        return;
       }
 
       const { phone } = (ctx.request.body ?? {}) as { phone?: string };
@@ -49,10 +90,7 @@ export default factories.createCoreController(
         return;
       }
 
-      const now = new Date();
-      const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-
-      // Check limits
+      // Check per-phone limits
       const recentRequests = await strapi.documents('api::otp-request.otp-request').findMany({
         filters: {
           phone: { $eq: phone },
@@ -87,7 +125,14 @@ export default factories.createCoreController(
       const expiresAt = new Date(now.getTime() + OTP_TTL_MS);
 
       await strapi.documents('api::otp-request.otp-request').create({
-        data: { phone, code: hashOtp(phone, code), expiresAt: expiresAt.toISOString(), verified: false, attempts: 0 },
+        data: {
+          phone,
+          code: hashOtp(phone, code),
+          expiresAt: expiresAt.toISOString(),
+          verified: false,
+          attempts: 0,
+          ipHash,
+        },
       });
 
       try {
@@ -134,7 +179,6 @@ export default factories.createCoreController(
     },
 
     async verifyOtp(ctx: Context) {
-
       // Inject sanitization
       try {
         const { sanitizePayload, validateStringLengths } = require('../../../utils/sanitize-input');
@@ -150,14 +194,12 @@ export default factories.createCoreController(
         // Ignore if file not found, but it should exist
       }
 
-      if (process.env.REQUIRE_INTERNAL_SECRET === 'true') {
-        const secret = ctx.request.headers['x-internal-secret'];
-        const expected = process.env.INTERNAL_API_SECRET;
-        if (!expected || !secret || typeof secret !== 'string' || !safeCompare(secret, expected)) {
-          ctx.status = 403;
-          ctx.body = { success: false, message: 'Forbidden' };
-          return;
-        }
+      const secret = ctx.request.headers['x-internal-secret'];
+      const expected = process.env.INTERNAL_API_SECRET;
+      if (!expected || !secret || typeof secret !== 'string' || !safeCompare(secret, expected)) {
+        ctx.status = 403;
+        ctx.body = { success: false, message: 'Forbidden' };
+        return;
       }
 
       const { phone, otp, name, email, state, city, branchCode, address, purity, weight, message, consent, sourceForm, enquiryType } = (ctx.request.body ?? {}) as {
@@ -226,7 +268,7 @@ export default factories.createCoreController(
           state,
           city,
           message,
-          consent: !!consent
+          consent: !!consent,
         },
       });
 
@@ -321,6 +363,5 @@ export default factories.createCoreController(
       ctx.status = 200;
       ctx.body = { success: true, verified: true };
     },
-
   })
 );

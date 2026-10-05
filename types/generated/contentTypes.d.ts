@@ -1609,6 +1609,7 @@ export interface ApiOtpRequestOtpRequest extends Struct.CollectionTypeSchema {
     expiresAt: Schema.Attribute.DateTime &
       Schema.Attribute.Required &
       Schema.Attribute.Private;
+    ipHash: Schema.Attribute.String & Schema.Attribute.Private;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',

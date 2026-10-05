@@ -56,6 +56,9 @@
     "installId": "366f1797487865fcace5117a5af01329fe5fae75d7f959734f033f50b899fc67"
   },
   "overrides": {
-    "axios": "^1.20.0"
+    "axios": "^1.20.0",
+    "nodemailer": "^10.0.14",
+    "dompurify": "^3.4.16",
+    "markdown-it": "^14.3.1"
   }
 }
