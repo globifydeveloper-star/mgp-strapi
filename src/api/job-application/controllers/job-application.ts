@@ -4,44 +4,9 @@ import { factories } from '@strapi/strapi';
 import PDFDocument from 'pdfkit';
 import { PassThrough } from 'stream';
 import { enforceRateLimit } from '../../../utils/rate-limit';
+import { verifyAdminSession } from '../../../utils/verify-admin-session';
 
 const { ValidationError } = errors;
-
-/**
- * Admin-only gate for the resume/export routes (these routes use `auth: false`, so this
- * check is the only gate). Accepts ONLY a Strapi admin-panel access token sent as
- * `Authorization: Bearer <token>` (what the admin panel's fetch client sends), and only
- * for an existing, active, non-blocked admin user. API tokens, website-user logins,
- * cookies and query-string tokens are deliberately not accepted.
- */
-const verifyAdminSession = async (ctx: Context, strapi: any): Promise<boolean> => {
-  const header = ctx.request.headers.authorization;
-  if (typeof header !== 'string') return false;
-  const parts = header.trim().split(/\s+/);
-  if (parts.length !== 2 || parts[0].toLowerCase() !== 'bearer') return false;
-  const token = parts[1];
-
-  try {
-    // Same validation Strapi 5 uses for the admin panel itself (strategies/admin.js):
-    // signed access token + session still active (so logout / revoked sessions are refused).
-    const manager = strapi.sessionManager;
-    if (!manager) return false;
-    const result = manager('admin').validateAccessToken(token);
-    if (!result?.isValid) return false;
-    if (!(await manager('admin').isSessionActive(result.payload.sessionId))) return false;
-
-    const rawUserId = result.payload.userId;
-    const numericId = Number(rawUserId);
-    const userId = Number.isFinite(numericId) && String(numericId) === String(rawUserId) ? numericId : rawUserId;
-    const user = await strapi.db.query('admin::user').findOne({
-      where: { id: userId },
-      select: ['id', 'isActive', 'blocked'],
-    });
-    return !!user && user.isActive === true && user.blocked !== true;
-  } catch {
-    return false;
-  }
-};
 
 const createPdfBuffer = (builder: (doc: PDFKit.PDFDocument) => void): Promise<Buffer> => {
   return new Promise((resolve, reject) => {
