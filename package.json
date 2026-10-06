@@ -12,25 +12,22 @@
     "start": "strapi start",
     "strapi": "strapi",
     "upgrade": "npx @strapi/upgrade latest",
-    "upgrade:dry": "npx @strapi/upgrade latest --dry"
+    "upgrade:dry": "npx @strapi/upgrade latest --dry",
+    "migrate:s3": "tsx scripts/migrate-media-to-s3.ts",
+    "migrate:s3:dry": "cross-env DRY_RUN=true tsx scripts/migrate-media-to-s3.ts",
+    "migrate:blog": "tsx scripts/migrate-blog-from-muthootgoldpoint.ts",
+    "migrate:blog:dry": "cross-env DRY_RUN=true tsx scripts/migrate-blog-from-muthootgoldpoint.ts"
   },
   "dependencies": {
     "@3xweb/strapi-provider-email-resend": "^1.2.1",
-    "@ai-sdk/provider-utils": "^4.0.20",
     "@strapi/database": "5.56.0",
     "@strapi/plugin-cloud": "5.56.0",
     "@strapi/plugin-users-permissions": "5.56.0",
     "@strapi/provider-upload-aws-s3": "5.56.0",
     "@strapi/strapi": "5.56.0",
-    "@types/archiver": "^8.0.0",
-    "@types/pdfkit": "^0.17.6",
     "archiver": "^8.0.0",
     "better-sqlite3": "12.8.0",
-    "brace-expansion": "^1.1.18",
-    "fast-uri": "^4.1.4",
-    "js-yaml": "^5.4.2",
-    "jsonwebtoken": "^9.0.3",
-    "knex": "^3.2.9",
+    "cheerio": "^1.2.0",
     "mysql2": "^3.23.2",
     "pdfkit": "^0.19.1",
     "react": "^18.0.0",
@@ -42,9 +39,13 @@
     "styled-components": "^6.0.0"
   },
   "devDependencies": {
+    "@types/archiver": "^8.0.0",
     "@types/node": "^20",
+    "@types/pdfkit": "^0.17.6",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "cross-env": "^7.0.3",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   },
   "engines": {

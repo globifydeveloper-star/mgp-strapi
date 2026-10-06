@@ -1,22 +1,13 @@
 /**
- * scripts/migrate-cloudinary-to-r2.ts
+ * scripts/migrate-media-to-s3.ts
  *
- * Migrates every Media Library file NOT already on R2 (i.e. still on
- * Cloudinary, or still a local /uploads/ path from before Cloudinary was
- * ever wired up) onto R2, in place — same Media Library entries, just
- * repointed at new R2 URLs. Handles the responsive format variants too
- * (thumbnail/small/medium/large), not just the original.
+ * Migrates any Media Library file NOT already on AWS S3 (e.g. still on
+ * Cloudinary, R2, or local /uploads/) onto AWS S3 in place — updating the
+ * Strapi Media Library entries to new S3 URLs, including all responsive formats.
  *
  * Usage:
- *   DRY_RUN=true npx tsx scripts/migrate-cloudinary-to-r2.ts   // preview only, no writes
- *   npx tsx scripts/migrate-cloudinary-to-r2.ts                // actually migrates
- *
- * IMPORTANT:
- *   - Run DRY_RUN=true first and read the console output before running for real.
- *   - Test against a non-production Strapi instance / DB copy first (per your
- *     own workflow rule for anything transfer/migration-related).
- *   - Requires plugins.ts already switched to the R2 provider (aws-s3 + R2
- *     endpoint) — this script uses whatever provider is currently configured.
+ *   DRY_RUN=true npx tsx scripts/migrate-media-to-s3.ts   // preview only, no writes
+ *   npx tsx scripts/migrate-media-to-s3.ts                // actually migrates
  */
 
 import path from 'path';
@@ -24,7 +15,7 @@ import fs from 'fs/promises';
 import { createStrapi, compileStrapi } from '@strapi/strapi';
 
 const DRY_RUN = process.env.DRY_RUN === 'true';
-const R2_PUBLIC_MARKER = process.env.R2_PUBLIC_URL_MARKER ?? 'r2.dev'; // change to your custom domain once cut over
+const S3_MARKER = 'amazonaws.com';
 
 async function getFileBuffer(strapi: any, url: string): Promise<Buffer> {
     if (url.startsWith('http')) {
@@ -38,6 +29,8 @@ async function getFileBuffer(strapi: any, url: string): Promise<Buffer> {
 }
 
 async function run() {
+    console.log(`Starting media migration script (Dry run: ${DRY_RUN})...`);
+    console.log('Compiling and initializing Strapi instance (please wait)...');
     const app = await compileStrapi();
     const strapi = await createStrapi(app).load();
 
@@ -46,11 +39,11 @@ async function run() {
 
         const files = await strapi.db.query('plugin::upload.file').findMany({
             where: {
-                url: { $notContains: R2_PUBLIC_MARKER },
+                url: { $notContains: S3_MARKER },
             },
         });
 
-        console.log(`Found ${files.length} files to migrate. Dry run: ${DRY_RUN}`);
+        console.log(`Found ${files.length} files to migrate to AWS S3. Dry run: ${DRY_RUN}`);
 
         let success = 0;
         let failed = 0;
