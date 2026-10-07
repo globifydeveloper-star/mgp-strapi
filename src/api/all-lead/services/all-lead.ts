@@ -5,7 +5,11 @@ export type FormSource =
   | 'Gold Rate Check'
   | 'Mobile Van'
   | 'Blog Enquiry'
-  | 'Enquiry';
+  | 'Enquiry'
+  | 'Sell Gold Modal'
+  | 'Gold Value Form'
+  | 'Sell Gold Page'
+  | 'Page Builder Enquiry';
 
 export interface AllLeadMirrorPayload {
   name: string;

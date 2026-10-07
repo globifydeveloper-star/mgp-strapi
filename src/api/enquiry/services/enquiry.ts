@@ -2,6 +2,7 @@ import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
 import { createCrmService } from './crm';
 import { buildRemarks } from '../utils/remarks';
+import type { FormSource } from '../../all-lead/services/all-lead';
 
 const { ValidationError } = errors;
 const SOURCES = ['BLOG', 'CONTACT_US', 'HOME_PAGE', 'LANDING_PAGE', 'OTHER'] as const;
@@ -23,6 +24,7 @@ export interface CreateEnquiryInput {
   city?: string;
   state?: string;
   branchName?: string;
+  branchValidated?: boolean;
 }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -79,6 +81,7 @@ const validateInput = (payload: unknown): CreateEnquiryInput => {
   const city = typeof input.city === 'string' && input.city.trim() ? input.city.trim() : undefined;
   const state = typeof input.state === 'string' && input.state.trim() ? input.state.trim() : undefined;
   const branchName = typeof input.branchName === 'string' && input.branchName.trim() ? input.branchName.trim() : undefined;
+  const branchValidated = typeof input.branchValidated === 'boolean' ? input.branchValidated : undefined;
 
   return {
     name,
@@ -96,6 +99,7 @@ const validateInput = (payload: unknown): CreateEnquiryInput => {
     city,
     state,
     branchName,
+    branchValidated,
   };
 };
 
@@ -115,9 +119,10 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
       enquiryType: input.enquiryType,
       state: input.state,
       city: input.city,
-      branch: input.branch,
+      branch: input.branchName || input.branch,
       branchName: input.branchName,
       branchCode: input.branchCode,
+      branchValidated: input.branchValidated,
       message: input.remarks,
     });
 
@@ -136,7 +141,14 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
       },
     });
 
-    // Mirror directly to All Leads
+    // Mirror directly to All Leads with specific formSource
+    let allLeadFormSource: FormSource = 'Enquiry';
+    if (input.formType === 'sell-gold-page') {
+      allLeadFormSource = 'Sell Gold Page';
+    } else if (input.formType === 'page-builder') {
+      allLeadFormSource = 'Page Builder Enquiry';
+    }
+
     try {
       const allLeadService = strapi.service('api::all-lead.all-lead') as any;
       if (allLeadService?.mirrorLead) {
@@ -145,9 +157,9 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
             name: input.name,
             phone: input.mobile,
             email: input.email,
-            formSource: 'Enquiry',
+            formSource: allLeadFormSource,
             sourceFormDetail: input.sourceForm || input.source,
-            branch: input.branch || input.branchName,
+            branch: input.branchName || input.branch,
             branchCode: input.branchCode,
             submittedAt: new Date().toISOString(),
             crmPushStatus: 'Pending',

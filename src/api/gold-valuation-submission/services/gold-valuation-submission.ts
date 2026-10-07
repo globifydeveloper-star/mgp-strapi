@@ -2,6 +2,7 @@ import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
 import { createCrmService } from '../../enquiry/services/crm';
 import { buildRemarks } from '../../enquiry/utils/remarks';
+import type { FormSource } from '../../all-lead/services/all-lead';
 
 const { ValidationError } = errors;
 
@@ -12,9 +13,6 @@ const requiredString = (value: unknown, field: string): string => {
   return value.trim();
 };
 
-// Retail walk-in/mobile-van gold-sell submissions are individual jewellery items,
-// not bulk bullion — cap well below what a legitimate submission could ever be
-// so an in-range tampered value can't still inflate a lead's apparent worth.
 const MAX_WEIGHT_GRAMS = 1000;
 
 const validateWeight = (value: string, field: string): string => {
@@ -38,7 +36,10 @@ export default factories.createCoreService(
       const phone = requiredString(input.phone ?? input.mobile, 'phone');
       const email = typeof input.email === 'string' && input.email.trim() ? input.email.trim() : undefined;
       const branch = typeof input.branch === 'string' && input.branch.trim() ? input.branch.trim() : undefined;
+      const branchName = typeof input.branchName === 'string' && input.branchName.trim() ? input.branchName.trim() : undefined;
       const branchCode = typeof input.branchCode === 'string' && input.branchCode.trim() ? input.branchCode.trim() : undefined;
+      const branchValidated = typeof input.branchValidated === 'boolean' ? input.branchValidated : undefined;
+      const formType = typeof input.formType === 'string' && input.formType.trim() ? input.formType.trim() : undefined;
       const purity = typeof input.purity === 'string' && input.purity.trim() ? input.purity.trim() : undefined;
       const weight = input.weight !== undefined && input.weight !== null
         ? validateWeight(String(input.weight).trim(), 'weight')
@@ -57,7 +58,7 @@ export default factories.createCoreService(
           name,
           phone,
           email,
-          branch,
+          branch: branchName || branch,
           purity,
           weight,
           sourceForm,
@@ -72,6 +73,14 @@ export default factories.createCoreService(
         timeout: number;
       };
 
+      // Determine All Leads Form Source label from formType
+      let allLeadFormSource: FormSource = 'Gold Rate Check';
+      if (formType === 'sell-gold-modal') {
+        allLeadFormSource = 'Sell Gold Modal';
+      } else if (formType === 'gold-value') {
+        allLeadFormSource = 'Gold Value Form';
+      }
+
       // Mirror to All Leads (fire-and-forget)
       const allLeadService = strapi.service('api::all-lead.all-lead') as any;
       if (allLeadService?.mirrorLead) {
@@ -80,9 +89,9 @@ export default factories.createCoreService(
             name,
             phone,
             email,
-            formSource: 'Gold Rate Check',
+            formSource: allLeadFormSource,
             sourceFormDetail: sourceForm,
-            branch,
+            branch: branchName || branch,
             branchCode,
             extraData: { purity, weight, ...(details ?? {}) },
             submittedAt: new Date().toISOString(),
@@ -96,12 +105,14 @@ export default factories.createCoreService(
       }
 
       const formattedRemarks = buildRemarks({
-        formType: sourceForm?.includes('Modal') ? 'sell-gold-modal' : 'gold-value',
+        formType: formType || 'gold-value',
         sourceForm,
         purity,
         weight,
-        branch,
+        branch: branchName || branch,
+        branchName,
         branchCode,
+        branchValidated,
         message: details?.message ? String(details.message) : undefined,
       });
 

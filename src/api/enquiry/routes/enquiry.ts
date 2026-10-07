@@ -5,9 +5,8 @@ export default {
       path: '/enquiries',
       handler: 'enquiry.create',
       config: {
+        auth: false,
       },
     },
   ],
 };
-
-

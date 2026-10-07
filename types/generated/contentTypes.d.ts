@@ -585,6 +585,10 @@ export interface ApiAllLeadAllLead extends Struct.CollectionTypeSchema {
         'Mobile Van',
         'Blog Enquiry',
         'Enquiry',
+        'Sell Gold Modal',
+        'Gold Value Form',
+        'Sell Gold Page',
+        'Page Builder Enquiry',
       ]
     > &
       Schema.Attribute.Required;

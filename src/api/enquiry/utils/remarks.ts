@@ -10,6 +10,7 @@ export interface RemarksParams {
   purity?: string;
   weight?: string | number;
   message?: string;
+  branchValidated?: boolean;
 }
 
 /**
@@ -73,6 +74,11 @@ export function buildRemarks(params: RemarksParams): string {
   // Message
   if (params.message && params.message.trim()) {
     parts.push(`Msg: ${params.message.trim()}`);
+  }
+
+  // Branch validation status
+  if (params.branchValidated === false) {
+    parts.push('Branch unverified');
   }
 
   const result = parts.join(' | ');

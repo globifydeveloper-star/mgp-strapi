@@ -24,9 +24,13 @@ export default factories.createCoreService(
       const name = requiredString(input.name, 'name');
       const phone = requiredString(input.phone ?? input.mobile, 'phone');
       const email = typeof input.email === 'string' && input.email.trim() ? input.email.trim() : undefined;
-      const city = typeof input.city === 'string' && input.city.trim() ? input.city.trim() : (input.branch as string ?? undefined);
+      const city = typeof input.city === 'string' && input.city.trim() ? input.city.trim() : undefined;
       const state = typeof input.state === 'string' && input.state.trim() ? input.state.trim() : undefined;
+      const branchName = typeof input.branchName === 'string' && input.branchName.trim()
+        ? input.branchName.trim()
+        : (typeof input.branch === 'string' && input.branch.trim() ? input.branch.trim() : undefined);
       const branchCode = typeof input.branchCode === 'string' && input.branchCode.trim() ? input.branchCode.trim() : undefined;
+      const branchValidated = typeof input.branchValidated === 'boolean' ? input.branchValidated : undefined;
       const address = typeof input.address === 'string' && input.address.trim() ? input.address.trim() : undefined;
       const preferredDate = typeof input.preferredDate === 'string' ? input.preferredDate.trim() : undefined;
       const details = typeof input.details === 'object' && input.details !== null ? (input.details as Record<string, unknown>) : undefined;
@@ -38,7 +42,7 @@ export default factories.createCoreService(
           name,
           phone,
           email,
-          city,
+          city: city || branchName,
           state,
           address,
           preferredDate,
@@ -62,9 +66,9 @@ export default factories.createCoreService(
             phone,
             email,
             formSource: 'Mobile Van',
-            branch: city,
+            branch: branchName || city,
             branchCode,
-            extraData: { city, state, address, preferredDate, ...(details ?? {}) },
+            extraData: { city, state, branchName, address, preferredDate, ...(details ?? {}) },
             submittedAt: new Date().toISOString(),
             crmPushStatus: 'Pending',
           })
@@ -81,8 +85,10 @@ export default factories.createCoreService(
         enquiryType: 'Mobile Van',
         city,
         state,
-        branch: city,
+        branch: branchName || city,
+        branchName,
         branchCode,
+        branchValidated,
         message: address ? `Address: ${address}${preferredDate ? `, Date: ${preferredDate}` : ''}` : (preferredDate ? `Date: ${preferredDate}` : undefined),
       });
 

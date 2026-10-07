@@ -211,6 +211,7 @@ export default factories.createCoreController(
         city,
         branchCode,
         branchName,
+        branchValidated,
         address,
         purity,
         weight,
@@ -228,6 +229,7 @@ export default factories.createCoreController(
         city?: string;
         branchCode?: string;
         branchName?: string;
+        branchValidated?: boolean;
         address?: string;
         purity?: string;
         weight?: string;
@@ -308,7 +310,9 @@ export default factories.createCoreController(
                 phone,
                 email,
                 branch: branchName || location || undefined,
+                branchName: branchName || undefined,
                 branchCode: branchCode || undefined,
+                branchValidated,
                 message: message || undefined,
                 enquiryType: enquiryType || 'Contact Us',
                 submittedAt,
@@ -322,7 +326,10 @@ export default factories.createCoreController(
                 phone,
                 email,
                 branch: branchName || location || undefined,
+                branchName: branchName || undefined,
                 branchCode: branchCode || undefined,
+                branchValidated,
+                formType: 'sell-gold-modal',
                 purity: purity || undefined,
                 weight: weight || undefined,
                 sourceForm: sourceForm || 'Sell Gold Modal',
@@ -339,7 +346,10 @@ export default factories.createCoreController(
                 email,
                 city: city || undefined,
                 state: state || undefined,
+                branch: branchName || undefined,
+                branchName: branchName || undefined,
                 branchCode: branchCode || undefined,
+                branchValidated,
                 address: address || undefined,
                 purity: purity || undefined,
                 weight: weight || undefined,
@@ -355,6 +365,7 @@ export default factories.createCoreController(
                 phone,
                 email,
                 branchCode: branchCode || undefined,
+                branchValidated,
                 blogTitle: sourceForm?.replace(/^Blog:\s*/i, '') || 'Blog',
                 submittedAt,
               });
@@ -370,13 +381,14 @@ export default factories.createCoreController(
                 otpVerified: true,
                 branchCode: branchCode || undefined,
                 branch: branchName || location || undefined,
+                branchName: branchName || undefined,
+                branchValidated,
                 remarks: message || undefined,
                 formType,
                 sourceForm: sourceForm || (formType === 'sell-gold-page' ? 'Sell Gold For Cash Page' : 'OTP Enquiry Form'),
                 enquiryType: enquiryType || (formType === 'sell-gold-page' ? 'Sell Gold' : 'Enquire Now'),
                 city: city || undefined,
                 state: state || undefined,
-                branchName: branchName || undefined,
               });
             }
           } else if (formType === 'gold-value') {
@@ -387,7 +399,10 @@ export default factories.createCoreController(
                 phone,
                 email,
                 branch: branchName || location || undefined,
+                branchName: branchName || undefined,
                 branchCode: branchCode || undefined,
+                branchValidated,
+                formType: 'gold-value',
                 purity: purity || undefined,
                 weight: weight || undefined,
                 sourceForm: sourceForm || 'Gold Value Form',
@@ -409,7 +424,10 @@ export default factories.createCoreController(
                   email,
                   city: city || undefined,
                   state: state || undefined,
+                  branch: branchName || undefined,
+                  branchName: branchName || undefined,
                   branchCode: branchCode || undefined,
+                  branchValidated,
                   address: address || undefined,
                   purity: purity || undefined,
                   weight: weight || undefined,
@@ -426,6 +444,7 @@ export default factories.createCoreController(
                   email,
                   branch: location || undefined,
                   branchCode: branchCode || undefined,
+                  branchValidated,
                   message: message || undefined,
                   submittedAt,
                 });
@@ -438,6 +457,7 @@ export default factories.createCoreController(
                   phone,
                   email,
                   branchCode: branchCode || undefined,
+                  branchValidated,
                   blogTitle: sourceForm?.replace(/^Blog:\s*/i, '') || 'Blog',
                   submittedAt,
                 });
@@ -451,6 +471,7 @@ export default factories.createCoreController(
                   email,
                   branch: location || undefined,
                   branchCode: branchCode || undefined,
+                  branchValidated,
                   purity: purity || undefined,
                   weight: weight || undefined,
                   sourceForm: sourceForm || `Sell Gold Modal (Purity: ${purity || 'N/A'}, Weight: ${weight || '0'}g)`,
@@ -468,6 +489,7 @@ export default factories.createCoreController(
                   source: 'HOME_PAGE',
                   otpVerified: true,
                   branchCode: branchCode || undefined,
+                  branchValidated,
                 });
               }
             }

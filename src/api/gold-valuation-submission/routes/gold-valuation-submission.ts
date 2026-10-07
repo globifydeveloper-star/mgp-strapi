@@ -5,6 +5,7 @@ export default {
       path: '/gold-valuation-submissions',
       handler: 'gold-valuation-submission.create',
       config: {
+        auth: false,
       },
     },
     {
@@ -14,5 +15,3 @@ export default {
     },
   ],
 };
-
-
