@@ -1106,41 +1106,21 @@ export interface ApiFooterSettingFooterSetting extends Struct.SingleTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
-    copyrightText: Schema.Attribute.String &
-      Schema.Attribute.DefaultTo<'Copyright \u00A9 Muthoot Exim {year}. All Rights Reserved.'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    facebookUrl: Schema.Attribute.String &
-      Schema.Attribute.DefaultTo<'https://www.facebook.com/MGoldPoint/'>;
-    footerDescription: Schema.Attribute.Text &
-      Schema.Attribute.DefaultTo<'Muthoot Gold Point is the first National level organized sector venture to get into recycling of Gold, backed by a 133+ year legacy.'>;
-    instagramUrl: Schema.Attribute.String &
-      Schema.Attribute.DefaultTo<'https://www.instagram.com/muthoot.goldpoint/'>;
     legalLinks: Schema.Attribute.Component<'navigation.nav-item', true>;
-    linkedinUrl: Schema.Attribute.String &
-      Schema.Attribute.DefaultTo<'https://www.linkedin.com/company/muthoot-exim-private-limited/'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::footer-setting.footer-setting'
     > &
       Schema.Attribute.Private;
-    officeAddress: Schema.Attribute.Text &
-      Schema.Attribute.DefaultTo<'Muthoot Exim Private Limited Ground Floor Muthoot Towers, M.G.Road, Opposite Abad Plaza Ernakulam, Kerala, 682035'>;
-    officeHours: Schema.Attribute.String &
-      Schema.Attribute.DefaultTo<'9:00 AM - 6:00 PM'>;
     publishedAt: Schema.Attribute.DateTime;
     quickLinks: Schema.Attribute.Component<'navigation.nav-item', true>;
-    tollFreeNumber: Schema.Attribute.String &
-      Schema.Attribute.DefaultTo<'1800 102 1616'>;
-    twitterUrl: Schema.Attribute.String &
-      Schema.Attribute.DefaultTo<'https://x.com/muthootindia?lang=en'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    youtubeUrl: Schema.Attribute.String &
-      Schema.Attribute.DefaultTo<'https://www.youtube.com/watch?v=qntmLoXsN_c'>;
   };
 }
 

@@ -653,6 +653,50 @@ export default {
       await strapi.documents(sharedMediaUid).create({ data: {} });
     }
 
+    // 8h. Seed Footer Setting Presence States
+    const footerSettingUid = 'api::footer-setting.footer-setting';
+    const defaultPresenceStates = [
+      { label: 'Madhya Pradesh', url: '/#branches' },
+      { label: 'Andhra Pradesh', url: '/#branches' },
+      { label: 'Kerala', url: '/#branches' },
+      { label: 'Telangana', url: '/#branches' },
+      { label: 'Maharashtra', url: '/#branches' },
+      { label: 'Tamil Nadu', url: '/#branches' },
+      { label: 'Karnataka', url: '/#branches' },
+      { label: 'Uttar Pradesh', url: '/#branches' },
+      { label: 'Delhi NCR', url: '/#branches' },
+      { label: 'West Bengal', url: '/#branches' },
+      { label: 'Haryana', url: '/#branches' },
+      { label: 'Rajasthan', url: '/#branches' },
+      { label: 'Odisha', url: '/#branches' },
+      { label: 'Punjab', url: '/#branches' },
+      { label: 'Uttarakhand', url: '/#branches' },
+      { label: 'Gujarat', url: '/#branches' },
+      { label: 'Chhattisgarh', url: '/#branches' },
+      { label: 'Assam', url: '/#branches' },
+    ];
+
+    const footerSettingDocs = strapi.documents(footerSettingUid) as any;
+    const footerSettingExisting = await footerSettingDocs.findFirst({ populate: ['presenceStates', 'quickLinks', 'legalLinks'] });
+    if (!footerSettingExisting) {
+      strapi.log.info('Seeding Footer Setting with default presence states...');
+      await footerSettingDocs.create({
+        data: {
+          presenceHeading: 'Our Presence - States',
+          presenceStates: defaultPresenceStates,
+        }
+      });
+    } else if (!footerSettingExisting.presenceStates || (Array.isArray(footerSettingExisting.presenceStates) && footerSettingExisting.presenceStates.length === 0)) {
+      strapi.log.info('Updating Footer Setting with default presence states...');
+      await footerSettingDocs.update({
+        documentId: footerSettingExisting.documentId,
+        data: {
+          presenceHeading: footerSettingExisting.presenceHeading || 'Our Presence - States',
+          presenceStates: defaultPresenceStates,
+        }
+      });
+    }
+
     // 9. Auto-configure Public Role Permissions
     try {
       const publicRole = await strapi.db.connection('up_roles').where('type', 'public').first();
@@ -683,6 +727,8 @@ export default {
           'api::job-department.job-department.find',
           'api::job-position.job-position.find',
           'api::job-position.job-position.findOne',
+          'api::navbar-setting.navbar-setting.find',
+          'api::footer-setting.footer-setting.find',
           'api::job-application.job-application.create',
           'api::gold-valuation-submission.gold-valuation-submission.create',
           'api::all-lead.all-lead.create'
