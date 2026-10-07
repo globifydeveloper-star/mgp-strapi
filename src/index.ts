@@ -41,6 +41,20 @@ function parseBranches(content: string) {
   return branches;
 }
 
+/**
+ * HTML escape helper to prevent injection in email templates
+ */
+function escapeHtml(text: string): string {
+  const map: Record<string, string> = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;',
+  };
+  return text.replace(/[&<>"']/g, (m) => map[m]);
+}
+
 export default {
   register() {
     if (process.env.NODE_ENV === 'production') {
@@ -49,7 +63,8 @@ export default {
         'ENCRYPTION_KEY', 'DATABASE_PASSWORD', 'AWS_ACCESS_KEY_ID',
         'AWS_SECRET_ACCESS_KEY', 'AWS_REGION', 'AWS_BUCKET', 'RESEND_API_KEY',
         'PINNACLE_API_URL', 'PINNACLE_ACCESS_KEY', 'CRM_AUTH_URL',
-        'CRM_USERNAME', 'CRM_PASSWORD', 'CRM_BASE_URL', 'OTP_SALT'
+        'CRM_USERNAME', 'CRM_PASSWORD', 'CRM_BASE_URL', 'OTP_SALT',
+        'ADMIN_PUBLIC_URL'
       ];
       const missing = requiredSecrets.filter(s => !process.env[s]);
       if (missing.length > 0) {
@@ -859,6 +874,110 @@ export default {
     } catch (err: any) {
       strapi.log.warn('Could not auto-configure Content Manager Organizer:', err.message || err);
     }
+
+    // 11. Admin User Invitation Email Database Lifecycle
+    strapi.db.lifecycles.subscribe({
+      models: ['admin::user'],
+      async afterCreate(event) {
+        try {
+          const user = event.result;
+          const registrationToken = user?.registrationToken || event.params?.data?.registrationToken;
+          const email = user?.email || event.params?.data?.email;
+
+          // 2. Only act when created user has a registrationToken and an email address
+          if (!registrationToken || !email) {
+            return;
+          }
+
+          const adminPublicUrl = process.env.ADMIN_PUBLIC_URL?.replace(/\/+$/, '');
+          if (!adminPublicUrl) {
+            if (process.env.NODE_ENV === 'production') {
+              throw new Error('ADMIN_PUBLIC_URL environment variable is missing');
+            }
+            strapi.log.warn('Admin invitation email skipped: ADMIN_PUBLIC_URL is not configured.');
+            return;
+          }
+
+          // 3. Build the exact registration link
+          const link = `${adminPublicUrl}/admin/auth/register?registrationToken=${encodeURIComponent(registrationToken)}`;
+
+          const rawFirstName = user?.firstname || event.params?.data?.firstname || '';
+          const escapedFirstName = escapeHtml(rawFirstName);
+          const greetingHtml = escapedFirstName ? `Hello ${escapedFirstName},` : 'Hello,';
+          const greetingText = rawFirstName ? `Hello ${rawFirstName},` : 'Hello,';
+
+          // 4. Dispatch invitation email with subject, text, and html
+          const subject = "You've been invited to the MGP admin panel";
+          const text = `${greetingText}\n\nYou have been invited to join the MGP admin panel.\n\nPlease complete your account registration using the following link:\n${link}\n\nPlease note: This link is personal and single-use.\nIf you weren't expecting this, ignore this email.`;
+
+          const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Admin Panel Invitation</title>
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #1e293b; background-color: #f8fafc; margin: 0; padding: 24px;">
+  <div style="max-width: 560px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); border: 1px solid #e2e8f0;">
+    <h2 style="color: #0f172a; margin-top: 0; margin-bottom: 20px;">You've been invited to the MGP admin panel</h2>
+    <p style="font-size: 15px; margin-bottom: 16px;">${greetingHtml}</p>
+    <p style="font-size: 15px; margin-bottom: 24px;">You have been invited to join the <strong>MGP Admin Panel</strong>. Please complete your registration by clicking the button below:</p>
+    <div style="margin: 28px 0; text-align: left;">
+      <a href="${link}" style="background-color: #1e40af; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; font-size: 15px;">Accept Invitation & Register</a>
+    </div>
+    <p style="font-size: 13px; color: #64748b; line-height: 1.5; margin-bottom: 20px;">Or copy and paste this URL into your browser:<br/><a href="${link}" style="color: #1e40af; word-break: break-all;">${link}</a></p>
+    <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0;" />
+    <p style="font-size: 13px; color: #64748b; margin-bottom: 8px;"><strong>Note:</strong> This link is personal and single-use.</p>
+    <p style="font-size: 13px; color: #94a3b8; margin: 0;">If you weren't expecting this, ignore this email.</p>
+  </div>
+</body>
+</html>`;
+
+          await strapi.plugin('email').service('email').send({
+            to: email,
+            subject,
+            text,
+            html,
+          });
+
+          strapi.log.info(`Invitation email sent to admin user ${email}`);
+
+          // 5. Optional notification notice to INVITE_NOTIFY_EMAIL (WITHOUT registration link)
+          const notifyEmail = process.env.INVITE_NOTIFY_EMAIL;
+          if (notifyEmail) {
+            const inviterUser = (strapi.requestContext?.get()?.state as any)?.user;
+            const inviter = inviterUser
+              ? [inviterUser.firstname, inviterUser.lastname].filter(Boolean).join(' ') || inviterUser.username || inviterUser.email || 'An admin'
+              : 'A super admin';
+
+            let roleName = 'Admin';
+            if (Array.isArray(user?.roles) && user.roles.length > 0) {
+              roleName = user.roles.map((r: any) => r.name || r.code || r).join(', ');
+            } else if (event.params?.data?.roles) {
+              const roleIds = Array.isArray(event.params.data.roles) ? event.params.data.roles : [event.params.data.roles];
+              const fetchedRoles = await strapi.db.query('admin::role').findMany({ where: { id: { $in: roleIds } } });
+              if (fetchedRoles?.length > 0) {
+                roleName = fetchedRoles.map((r: any) => r.name || r.code).join(', ');
+              }
+            }
+
+            const notifySubject = `Admin user invited: ${email}`;
+            const notifyText = `${inviter} invited ${email} as ${roleName}.`;
+            const notifyHtml = `<p><strong>${escapeHtml(inviter)}</strong> invited <strong>${escapeHtml(email)}</strong> as <strong>${escapeHtml(roleName)}</strong>.</p>`;
+
+            await strapi.plugin('email').service('email').send({
+              to: notifyEmail,
+              subject: notifySubject,
+              text: notifyText,
+              html: notifyHtml,
+            });
+          }
+        } catch (err: any) {
+          // 6. Never log token or link; log short error code only without blocking user creation
+          const errorCode = err?.code || err?.name || 'EMAIL_SEND_FAILED';
+          strapi.log.error(`Failed to send admin invitation email [${errorCode}]`);
+        }
+      },
+    });
   },
 };
 

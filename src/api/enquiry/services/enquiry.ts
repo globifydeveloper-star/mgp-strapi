@@ -1,6 +1,7 @@
 import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
 import { createCrmService } from './crm';
+import { buildRemarks } from '../utils/remarks';
 
 const { ValidationError } = errors;
 const SOURCES = ['BLOG', 'CONTACT_US', 'HOME_PAGE', 'LANDING_PAGE', 'OTHER'] as const;
@@ -14,6 +15,14 @@ export interface CreateEnquiryInput {
   otpVerified: true;
   blog?: string;
   branchCode?: string;
+  branch?: string;
+  remarks?: string;
+  formType?: string;
+  sourceForm?: string;
+  enquiryType?: string;
+  city?: string;
+  state?: string;
+  branchName?: string;
 }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -62,7 +71,32 @@ const validateInput = (payload: unknown): CreateEnquiryInput => {
     branchCode = requiredString(input.branchCode, 'branchCode');
   }
 
-  return { name, mobile, email, source: source as EnquirySource, otpVerified: true, blog, branchCode };
+  const branch = typeof input.branch === 'string' && input.branch.trim() ? input.branch.trim() : undefined;
+  const remarks = typeof input.remarks === 'string' && input.remarks.trim() ? input.remarks.trim() : undefined;
+  const formType = typeof input.formType === 'string' && input.formType.trim() ? input.formType.trim() : undefined;
+  const sourceForm = typeof input.sourceForm === 'string' && input.sourceForm.trim() ? input.sourceForm.trim() : undefined;
+  const enquiryType = typeof input.enquiryType === 'string' && input.enquiryType.trim() ? input.enquiryType.trim() : undefined;
+  const city = typeof input.city === 'string' && input.city.trim() ? input.city.trim() : undefined;
+  const state = typeof input.state === 'string' && input.state.trim() ? input.state.trim() : undefined;
+  const branchName = typeof input.branchName === 'string' && input.branchName.trim() ? input.branchName.trim() : undefined;
+
+  return {
+    name,
+    mobile,
+    email,
+    source: source as EnquirySource,
+    otpVerified: true,
+    blog,
+    branchCode,
+    branch,
+    remarks,
+    formType,
+    sourceForm,
+    enquiryType,
+    city,
+    state,
+    branchName,
+  };
 };
 
 const publicEnquiry = (enquiry: Record<string, unknown>) => {
@@ -75,10 +109,28 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
     const input = validateInput(payload);
     const documents = strapi.documents('api::enquiry.enquiry');
 
+    const formattedRemarks = buildRemarks({
+      formType: input.formType || 'sell-gold-page',
+      sourceForm: input.sourceForm || input.source,
+      enquiryType: input.enquiryType,
+      state: input.state,
+      city: input.city,
+      branch: input.branch,
+      branchName: input.branchName,
+      branchCode: input.branchCode,
+      message: input.remarks,
+    });
+
     // Persistence deliberately precedes the external call so a CRM outage cannot lose a lead.
     let enquiry = await documents.create({
       data: {
-        ...input,
+        name: input.name,
+        mobile: input.mobile,
+        email: input.email,
+        source: input.source,
+        otpVerified: true,
+        blog: input.blog,
+        branchCode: input.branchCode,
         crmStatus: 'PENDING',
         syncAttempts: 0,
       },
@@ -94,7 +146,8 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
             phone: input.mobile,
             email: input.email,
             formSource: 'Enquiry',
-            sourceFormDetail: input.source,
+            sourceFormDetail: input.sourceForm || input.source,
+            branch: input.branch || input.branchName,
             branchCode: input.branchCode,
             submittedAt: new Date().toISOString(),
             crmPushStatus: 'Pending',
@@ -105,43 +158,55 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
       strapi.log.error('[enquiry] Failed to mirror to all-leads:', mirrorErr);
     }
 
-    // CRM Sync disabled as per client request (only contact forms should be sent, which is handled via mirror to contact-submission)
-    /*
     const crmConfig = strapi.config.get('crm') as {
       baseUrl: string;
       timeout: number;
     };
-    const crm = createCrmService(crmConfig);
 
-    try {
-      const result = await crm.syncEnquiry(input);
-      const updated = await documents.update({
-        documentId: enquiry.documentId,
-        data: {
-          crmStatus: 'SYNCED',
-          crmLeadId: result.leadId,
-          crmResponse: JSON.parse(JSON.stringify(result.response)),
-          syncAttempts: 1,
-          lastSyncAt: new Date().toISOString(),
-        },
-      });
-      if (updated) enquiry = updated;
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown CRM error.';
-      strapi.log.error(`[enquiry] CRM sync failed for ${enquiry.documentId}: ${message}`);
-
-      const updated = await documents.update({
-        documentId: enquiry.documentId,
-        data: {
-          crmStatus: 'FAILED',
-          crmError: message,
-          syncAttempts: 1,
-          lastSyncAt: new Date().toISOString(),
-        },
-      });
-      if (updated) enquiry = updated;
+    if (!input.branchCode) {
+      strapi.log.warn(`[crm] missing branchCode for api::enquiry.enquiry / ${enquiry.documentId}`);
     }
-    */
+
+    // Fire-and-forget background CRM call
+    (async () => {
+      try {
+        const crm = createCrmService(crmConfig);
+        const result = await crm.syncEnquiry({
+          name: input.name,
+          mobile: input.mobile,
+          email: input.email,
+          leadSource: input.source,
+          branchCode: input.branchCode ?? '',
+          remarks: formattedRemarks,
+        });
+
+        const updated = await documents.update({
+          documentId: enquiry.documentId,
+          data: {
+            crmStatus: 'SYNCED',
+            crmLeadId: result.leadId,
+            crmResponse: JSON.parse(JSON.stringify(result.response)),
+            syncAttempts: 1,
+            lastSyncAt: new Date().toISOString(),
+          },
+        });
+        if (updated) enquiry = updated;
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown CRM error.';
+        strapi.log.error(`[enquiry] CRM sync failed for ${enquiry.documentId}: ${message}`);
+
+        const updated = await documents.update({
+          documentId: enquiry.documentId,
+          data: {
+            crmStatus: 'FAILED',
+            crmError: message,
+            syncAttempts: 1,
+            lastSyncAt: new Date().toISOString(),
+          },
+        });
+        if (updated) enquiry = updated;
+      }
+    })().catch((e) => strapi.log.error('[enquiry] CRM async error:', e));
 
     return publicEnquiry(enquiry as unknown as Record<string, unknown>);
   },

@@ -4,7 +4,7 @@ export default {
       method: 'POST',
       path: '/job-applications',
       handler: 'job-application.create',
-      config: {},
+      config: {}, 
     },
     // Admin-only routes: Strapi's content-API login is skipped because it rejects
     // admin-panel tokens. The controller's verifyAdminSession() is the gate and

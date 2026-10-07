@@ -202,7 +202,24 @@ export default factories.createCoreController(
         return;
       }
 
-      const { phone, otp, name, email, state, city, branchCode, address, purity, weight, message, consent, sourceForm, enquiryType } = (ctx.request.body ?? {}) as {
+      const {
+        phone,
+        otp,
+        name,
+        email,
+        state,
+        city,
+        branchCode,
+        branchName,
+        address,
+        purity,
+        weight,
+        message,
+        consent,
+        sourceForm,
+        enquiryType,
+        formType,
+      } = (ctx.request.body ?? {}) as {
         phone?: string;
         otp?: string;
         name?: string;
@@ -210,6 +227,7 @@ export default factories.createCoreController(
         state?: string;
         city?: string;
         branchCode?: string;
+        branchName?: string;
         address?: string;
         purity?: string;
         weight?: string;
@@ -217,6 +235,7 @@ export default factories.createCoreController(
         consent?: boolean;
         sourceForm?: string;
         enquiryType?: string;
+        formType?: string;
       };
 
       if (typeof phone !== 'string' || !PHONE_REGEX.test(phone) || typeof otp !== 'string') {
@@ -275,13 +294,44 @@ export default factories.createCoreController(
       // Dual-Write Mirror to Target Collection
       if (name && typeof name === 'string' && name.trim()) {
         try {
-          const srcStr = `${sourceForm || ''} ${enquiryType || ''}`.toLowerCase();
           const location = [city, state].filter(Boolean).join(', ');
+          const submittedAt = new Date().toISOString();
 
-          if (srcStr.includes('van') || srcStr.includes('mobile')) {
-            const vanService = strapi.service('api::mobile-van-submission.mobile-van-submission') as unknown as {
-              submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
-            };
+          if (formType === 'gold-value-precheck') {
+            // OTP verification step for Gold Value Form: verify OTP only, create no lead yet
+            // (The lead is created with branch in Step 2 via LocationPopup -> submitFormSubmission)
+          } else if (formType === 'contact') {
+            const contactService = strapi.service('api::contact-submission.contact-submission') as any;
+            if (contactService) {
+              await contactService.submitAndSync({
+                name: name.trim(),
+                phone,
+                email,
+                branch: branchName || location || undefined,
+                branchCode: branchCode || undefined,
+                message: message || undefined,
+                enquiryType: enquiryType || 'Contact Us',
+                submittedAt,
+              });
+            }
+          } else if (formType === 'sell-gold-modal') {
+            const goldService = strapi.service('api::gold-valuation-submission.gold-valuation-submission') as any;
+            if (goldService) {
+              await goldService.submitAndSync({
+                name: name.trim(),
+                phone,
+                email,
+                branch: branchName || location || undefined,
+                branchCode: branchCode || undefined,
+                purity: purity || undefined,
+                weight: weight || undefined,
+                sourceForm: sourceForm || 'Sell Gold Modal',
+                details: { purity, weight, city, state, branchName, message },
+                submittedAt,
+              });
+            }
+          } else if (formType === 'mobile-van') {
+            const vanService = strapi.service('api::mobile-van-submission.mobile-van-submission') as any;
             if (vanService) {
               await vanService.submitAndSync({
                 name: name.trim(),
@@ -293,29 +343,12 @@ export default factories.createCoreController(
                 address: address || undefined,
                 purity: purity || undefined,
                 weight: weight || undefined,
-                details: { purity, weight, city, state, address, message },
-                submittedAt: new Date().toISOString(),
+                details: { purity, weight, city, state, branchName, address, message },
+                submittedAt,
               });
             }
-          } else if (srcStr.includes('contact')) {
-            const contactService = strapi.service('api::contact-submission.contact-submission') as unknown as {
-              submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
-            };
-            if (contactService) {
-              await contactService.submitAndSync({
-                name: name.trim(),
-                phone,
-                email,
-                branch: location || undefined,
-                branchCode: branchCode || undefined,
-                message: message || undefined,
-                submittedAt: new Date().toISOString(),
-              });
-            }
-          } else if (srcStr.includes('blog')) {
-            const blogEnquiryService = strapi.service('api::blog-enquiry.blog-enquiry') as unknown as {
-              submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
-            };
+          } else if (formType === 'blog') {
+            const blogEnquiryService = strapi.service('api::blog-enquiry.blog-enquiry') as any;
             if (blogEnquiryService) {
               await blogEnquiryService.submitAndSync({
                 name: name.trim(),
@@ -323,40 +356,124 @@ export default factories.createCoreController(
                 email,
                 branchCode: branchCode || undefined,
                 blogTitle: sourceForm?.replace(/^Blog:\s*/i, '') || 'Blog',
-                submittedAt: new Date().toISOString(),
+                submittedAt,
               });
             }
-          } else if (srcStr.includes('value') || srcStr.includes('valuation') || srcStr.includes('modal') || srcStr.includes('rate')) {
-            const goldService = strapi.service('api::gold-valuation-submission.gold-valuation-submission') as any;
-            if (goldService) {
-              await goldService.submitAndSync({
-                name: name.trim(),
-                phone,
-                email,
-                branch: location || undefined,
-                branchCode: branchCode || undefined,
-                purity: purity || undefined,
-                weight: weight || undefined,
-                sourceForm: sourceForm || `Sell Gold Modal (Purity: ${purity || 'N/A'}, Weight: ${weight || '0'}g)`,
-                details: { purity, weight, city, state, message },
-                submittedAt: new Date().toISOString(),
-              });
-            }
-          } else {
+          } else if (formType === 'sell-gold-page' || formType === 'page-builder') {
             const enquiryService = strapi.service('api::enquiry.enquiry') as any;
             if (enquiryService && enquiryService.createVerifiedEnquiry) {
               await enquiryService.createVerifiedEnquiry({
                 name: name.trim(),
                 mobile: phone,
                 email: email || undefined,
-                source: 'HOME_PAGE',
+                source: 'LANDING_PAGE',
                 otpVerified: true,
                 branchCode: branchCode || undefined,
+                branch: branchName || location || undefined,
+                remarks: message || undefined,
+                formType,
+                sourceForm: sourceForm || (formType === 'sell-gold-page' ? 'Sell Gold For Cash Page' : 'OTP Enquiry Form'),
+                enquiryType: enquiryType || (formType === 'sell-gold-page' ? 'Sell Gold' : 'Enquire Now'),
+                city: city || undefined,
+                state: state || undefined,
+                branchName: branchName || undefined,
               });
+            }
+          } else if (formType === 'gold-value') {
+            const goldService = strapi.service('api::gold-valuation-submission.gold-valuation-submission') as any;
+            if (goldService) {
+              await goldService.submitAndSync({
+                name: name.trim(),
+                phone,
+                email,
+                branch: branchName || location || undefined,
+                branchCode: branchCode || undefined,
+                purity: purity || undefined,
+                weight: weight || undefined,
+                sourceForm: sourceForm || 'Gold Value Form',
+                details: { purity, weight, city, state, branchName, message },
+                submittedAt,
+              });
+            }
+          } else {
+            // Fallback for requests without explicit formType (old cached JS bundles)
+            strapi.log.warn(`[otp-request] Fallback keyword routing used for missing formType: sourceForm="${sourceForm}", enquiryType="${enquiryType}"`);
+            const srcStr = `${sourceForm || ''} ${enquiryType || ''}`.toLowerCase();
+
+            if (srcStr.includes('van') || srcStr.includes('mobile')) {
+              const vanService = strapi.service('api::mobile-van-submission.mobile-van-submission') as any;
+              if (vanService) {
+                await vanService.submitAndSync({
+                  name: name.trim(),
+                  phone,
+                  email,
+                  city: city || undefined,
+                  state: state || undefined,
+                  branchCode: branchCode || undefined,
+                  address: address || undefined,
+                  purity: purity || undefined,
+                  weight: weight || undefined,
+                  details: { purity, weight, city, state, address, message },
+                  submittedAt,
+                });
+              }
+            } else if (srcStr.includes('contact')) {
+              const contactService = strapi.service('api::contact-submission.contact-submission') as any;
+              if (contactService) {
+                await contactService.submitAndSync({
+                  name: name.trim(),
+                  phone,
+                  email,
+                  branch: location || undefined,
+                  branchCode: branchCode || undefined,
+                  message: message || undefined,
+                  submittedAt,
+                });
+              }
+            } else if (srcStr.includes('blog')) {
+              const blogEnquiryService = strapi.service('api::blog-enquiry.blog-enquiry') as any;
+              if (blogEnquiryService) {
+                await blogEnquiryService.submitAndSync({
+                  name: name.trim(),
+                  phone,
+                  email,
+                  branchCode: branchCode || undefined,
+                  blogTitle: sourceForm?.replace(/^Blog:\s*/i, '') || 'Blog',
+                  submittedAt,
+                });
+              }
+            } else if (srcStr.includes('value') || srcStr.includes('valuation') || srcStr.includes('modal') || srcStr.includes('rate')) {
+              const goldService = strapi.service('api::gold-valuation-submission.gold-valuation-submission') as any;
+              if (goldService) {
+                await goldService.submitAndSync({
+                  name: name.trim(),
+                  phone,
+                  email,
+                  branch: location || undefined,
+                  branchCode: branchCode || undefined,
+                  purity: purity || undefined,
+                  weight: weight || undefined,
+                  sourceForm: sourceForm || `Sell Gold Modal (Purity: ${purity || 'N/A'}, Weight: ${weight || '0'}g)`,
+                  details: { purity, weight, city, state, message },
+                  submittedAt,
+                });
+              }
+            } else {
+              const enquiryService = strapi.service('api::enquiry.enquiry') as any;
+              if (enquiryService && enquiryService.createVerifiedEnquiry) {
+                await enquiryService.createVerifiedEnquiry({
+                  name: name.trim(),
+                  mobile: phone,
+                  email: email || undefined,
+                  source: 'HOME_PAGE',
+                  otpVerified: true,
+                  branchCode: branchCode || undefined,
+                });
+              }
             }
           }
         } catch (mirrorErr) {
-          strapi.log.error('[otp-request] Failed to mirror submission to target collection');
+          strapi.log.error('[otp-request] Failed to mirror submission to target collection:', mirrorErr);
         }
       }
 

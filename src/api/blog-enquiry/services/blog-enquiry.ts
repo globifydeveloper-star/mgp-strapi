@@ -1,6 +1,7 @@
 import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
 import { createCrmService } from '../../enquiry/services/crm';
+import { buildRemarks } from '../../enquiry/utils/remarks';
 
 const { ValidationError } = errors;
 
@@ -70,11 +71,29 @@ export default factories.createCoreService(
           .catch((e: unknown) => strapi.log.error('[blog-enquiry] All Leads mirror error:', e));
       }
 
+      if (!branchCode) {
+        strapi.log.warn(`[crm] missing branchCode for api::blog-enquiry.blog-enquiry / ${entry.documentId}`);
+      }
+
+      const formattedRemarks = buildRemarks({
+        formType: 'blog',
+        sourceForm: blogTitle ? `Blog: ${blogTitle}` : 'Blog',
+        enquiryType: 'Blog Enquiry',
+        branchCode,
+      });
+
       // Background CRM Push Enabled
       (async () => {
         try {
           const crm = createCrmService(crmConfig);
-          const result = await crm.syncEnquiry({ name, mobile, email, leadSource: 'BLOG', branchCode: branchCode ?? "" });
+          const result = await crm.syncEnquiry({
+            name,
+            mobile,
+            email,
+            leadSource: 'BLOG',
+            branchCode: branchCode ?? '',
+            remarks: formattedRemarks,
+          });
 
           const updated = await documents.update({
             documentId: entry.documentId,

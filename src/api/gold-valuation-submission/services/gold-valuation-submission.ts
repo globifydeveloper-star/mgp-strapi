@@ -1,6 +1,7 @@
 import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
 import { createCrmService } from '../../enquiry/services/crm';
+import { buildRemarks } from '../../enquiry/utils/remarks';
 
 const { ValidationError } = errors;
 
@@ -90,10 +91,31 @@ export default factories.createCoreService(
           .catch((e: unknown) => strapi.log.error('[gold-valuation-submission] All Leads mirror error:', e));
       }
 
+      if (!branchCode) {
+        strapi.log.warn(`[crm] missing branchCode for api::gold-valuation-submission.gold-valuation-submission / ${entry.documentId}`);
+      }
+
+      const formattedRemarks = buildRemarks({
+        formType: sourceForm?.includes('Modal') ? 'sell-gold-modal' : 'gold-value',
+        sourceForm,
+        purity,
+        weight,
+        branch,
+        branchCode,
+        message: details?.message ? String(details.message) : undefined,
+      });
+
       (async () => {
         try {
           const crm = createCrmService(crmConfig);
-          const result = await crm.syncEnquiry({ name, mobile: phone, email, leadSource: 'HOME_PAGE', branchCode: branchCode ?? "" });
+          const result = await crm.syncEnquiry({
+            name,
+            mobile: phone,
+            email,
+            leadSource: 'HOME_PAGE',
+            branchCode: branchCode ?? '',
+            remarks: formattedRemarks,
+          });
 
           const updated = await documents.update({
             documentId: entry.documentId,

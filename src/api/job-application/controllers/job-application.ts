@@ -50,6 +50,46 @@ const resolveResumeFetchUrl = async (strapi: any, file: any): Promise<string> =>
   return fileUrl;
 };
 
+interface NewApplicationDetails {
+  fullName: string;
+  email: string;
+  phone: string;
+  experienceYears?: string;
+  currentCity?: string;
+  jobPositionTitle?: string;
+}
+
+const notifyHrOfNewApplication = async (strapi: any, details: NewApplicationDetails): Promise<void> => {
+  const hrEmail = process.env.HR_NOTIFICATION_EMAIL;
+  if (!hrEmail) {
+    strapi.log.warn('[job-application] HR_NOTIFICATION_EMAIL is not set; skipping HR notification email.');
+    return;
+  }
+
+  const roleStr = details.jobPositionTitle || 'Not specified';
+
+  try {
+    await strapi.plugin('email').service('email').send({
+      to: hrEmail,
+      subject: `New Job Application: ${details.fullName} (${roleStr})`,
+      text: [
+        'A new job application has been submitted.',
+        '',
+        `Name: ${details.fullName}`,
+        `Email: ${details.email}`,
+        `Phone: ${details.phone}`,
+        `Position Applied For: ${roleStr}`,
+        `Experience: ${details.experienceYears || 'N/A'}`,
+        `Current City: ${details.currentCity || 'N/A'}`,
+        '',
+        'Log in to the Strapi admin panel to review the full application and resume.',
+      ].join('\n'),
+    });
+  } catch (err) {
+    strapi.log.error('[job-application] Failed to send HR notification email:', err);
+  }
+};
+
 export default factories.createCoreController(
   'api::job-application.job-application',
   ({ strapi }) => ({
@@ -144,6 +184,7 @@ export default factories.createCoreController(
       }
 
       let resolvedJobPositionDocId: string | undefined = undefined;
+      let resolvedJobPositionTitle: string | undefined = undefined;
       let finalCoverNote = typeof coverNote === 'string' ? coverNote.trim() : undefined;
 
       if (typeof jobPosition === 'string' && jobPosition.trim()) {
@@ -159,6 +200,7 @@ export default factories.createCoreController(
           });
           if (posDoc) {
             resolvedJobPositionDocId = posDoc.documentId;
+            resolvedJobPositionTitle = posDoc.title ?? undefined;
           } else {
             // Append general position title to cover note so info isn't lost
             finalCoverNote = finalCoverNote
@@ -183,6 +225,15 @@ export default factories.createCoreController(
           submittedAt: new Date().toISOString(),
           applicationStatus: 'New',
         },
+      });
+
+      await notifyHrOfNewApplication(strapi, {
+        fullName: fullName.trim(),
+        email: email.trim().toLowerCase(),
+        phone: phone.trim(),
+        experienceYears: typeof experienceYears === 'string' ? experienceYears.trim() : undefined,
+        currentCity: typeof currentCity === 'string' ? currentCity.trim() : undefined,
+        jobPositionTitle: resolvedJobPositionTitle,
       });
 
       ctx.status = 201;

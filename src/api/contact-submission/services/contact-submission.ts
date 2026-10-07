@@ -1,6 +1,7 @@
 import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
 import { createCrmService } from '../../enquiry/services/crm';
+import { buildRemarks } from '../../enquiry/utils/remarks';
 
 const { ValidationError } = errors;
 
@@ -25,6 +26,7 @@ export default factories.createCoreService(
       const email = typeof input.email === 'string' && input.email.trim() ? input.email.trim() : undefined;
       const branch = typeof input.branch === 'string' && input.branch.trim() ? input.branch.trim() : undefined;
       const branchCode = typeof input.branchCode === 'string' && input.branchCode.trim() ? input.branchCode.trim() : undefined;
+      const enquiryType = typeof input.enquiryType === 'string' && input.enquiryType.trim() ? input.enquiryType.trim() : undefined;
       const message = typeof input.message === 'string' ? input.message.trim() : (typeof input.details === 'string' ? input.details.trim() : undefined);
 
       const documents = strapi.documents('api::contact-submission.contact-submission');
@@ -64,33 +66,53 @@ export default factories.createCoreService(
           .catch((e: unknown) => strapi.log.error('[contact-submission] All Leads mirror error:', e));
       }
 
+      if (!branchCode) {
+        strapi.log.warn(`[crm] missing branchCode for api::contact-submission.contact-submission / ${entry.documentId}`);
+      }
+
+      const formattedRemarks = buildRemarks({
+        formType: 'contact',
+        sourceForm: 'Contact Us Page',
+        enquiryType: enquiryType || 'Contact Us',
+        branch,
+        branchCode,
+        message,
+      });
+
       // Background CRM Push
       (async () => {
         try {
           const crm = createCrmService(crmConfig);
-        const result = await crm.syncEnquiry({ name, mobile: phone, email, leadSource: 'CONTACT_US', branchCode: branchCode ?? "" });
+          const result = await crm.syncEnquiry({
+            name,
+            mobile: phone,
+            email,
+            leadSource: 'CONTACT_US',
+            branchCode: branchCode ?? '',
+            remarks: formattedRemarks,
+          });
 
-        const updated = await documents.update({
-          documentId: entry.documentId,
-          data: {
-            crmPushStatus: 'Sent',
-            crmLeadId: result.leadId,
-            crmResponse: JSON.parse(JSON.stringify(result.response)),
-          },
-        });
-        if (updated) entry = updated;
-      } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown CRM error.';
-        strapi.log.error(`[contact-submission] CRM push failed for entry ${entry.documentId}: ${message}`);
+          const updated = await documents.update({
+            documentId: entry.documentId,
+            data: {
+              crmPushStatus: 'Sent',
+              crmLeadId: result.leadId,
+              crmResponse: JSON.parse(JSON.stringify(result.response)),
+            },
+          });
+          if (updated) entry = updated;
+        } catch (error) {
+          const message = error instanceof Error ? error.message : 'Unknown CRM error.';
+          strapi.log.error(`[contact-submission] CRM push failed for entry ${entry.documentId}: ${message}`);
 
-        const updated = await documents.update({
-          documentId: entry.documentId,
-          data: {
-            crmPushStatus: 'Failed',
-            crmError: message,
-          },
-        });
-        if (updated) entry = updated;
+          const updated = await documents.update({
+            documentId: entry.documentId,
+            data: {
+              crmPushStatus: 'Failed',
+              crmError: message,
+            },
+          });
+          if (updated) entry = updated;
         }
       })().catch(e => strapi.log.error('CRM async error:', e));
 

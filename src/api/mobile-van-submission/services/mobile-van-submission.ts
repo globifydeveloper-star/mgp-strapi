@@ -1,6 +1,7 @@
 import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
 import { createCrmService } from '../../enquiry/services/crm';
+import { buildRemarks } from '../../enquiry/utils/remarks';
 
 const { ValidationError } = errors;
 
@@ -70,11 +71,33 @@ export default factories.createCoreService(
           .catch((e: unknown) => strapi.log.error('[mobile-van-submission] All Leads mirror error:', e));
       }
 
+      if (!branchCode) {
+        strapi.log.warn(`[crm] missing branchCode for api::mobile-van-submission.mobile-van-submission / ${entry.documentId}`);
+      }
+
+      const formattedRemarks = buildRemarks({
+        formType: 'mobile-van',
+        sourceForm: 'Mobile Van Appointment',
+        enquiryType: 'Mobile Van',
+        city,
+        state,
+        branch: city,
+        branchCode,
+        message: address ? `Address: ${address}${preferredDate ? `, Date: ${preferredDate}` : ''}` : (preferredDate ? `Date: ${preferredDate}` : undefined),
+      });
+
       // Background CRM Push Enabled
       (async () => {
         try {
           const crm = createCrmService(crmConfig);
-          const result = await crm.syncEnquiry({ name, mobile: phone, email, leadSource: 'HOME_PAGE', branchCode: branchCode ?? "" });
+          const result = await crm.syncEnquiry({
+            name,
+            mobile: phone,
+            email,
+            leadSource: 'HOME_PAGE',
+            branchCode: branchCode ?? '',
+            remarks: formattedRemarks,
+          });
 
           const updated = await documents.update({
             documentId: entry.documentId,
