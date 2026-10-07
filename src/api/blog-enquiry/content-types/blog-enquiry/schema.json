@@ -39,7 +39,8 @@
       "enum": [
         "Sent",
         "Pending",
-        "Failed"
+        "Failed",
+        "Processing"
       ],
       "default": "Pending",
       "required": true
@@ -52,6 +53,31 @@
     },
     "crmError": {
       "type": "text"
+    },
+    "crmRequest": {
+      "type": "json",
+      "private": true
+    },
+    "crmAttempts": {
+      "type": "integer",
+      "default": 0,
+      "private": true
+    },
+    "crmNextAttemptAt": {
+      "type": "datetime",
+      "private": true
+    },
+    "crmLastAttemptAt": {
+      "type": "datetime",
+      "private": true
+    },
+    "crmSyncedAt": {
+      "type": "datetime",
+      "private": true
+    },
+    "allLeadDocumentId": {
+      "type": "string",
+      "private": true
     }
   }
 }

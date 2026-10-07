@@ -570,12 +570,18 @@ export interface ApiAllLeadAllLead extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    crmAttempts: Schema.Attribute.Integer &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<0>;
     crmError: Schema.Attribute.Text;
     crmLeadId: Schema.Attribute.String;
-    crmPushStatus: Schema.Attribute.Enumeration<['Sent', 'Pending', 'Failed']> &
+    crmPushStatus: Schema.Attribute.Enumeration<
+      ['Sent', 'Pending', 'Failed', 'Processing']
+    > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'Pending'>;
     crmResponse: Schema.Attribute.JSON;
+    crmSyncedAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
     email: Schema.Attribute.Email & Schema.Attribute.Private;
     extraData: Schema.Attribute.JSON;
     formSource: Schema.Attribute.Enumeration<
@@ -623,16 +629,26 @@ export interface ApiBlogEnquiryBlogEnquiry extends Struct.CollectionTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
+    allLeadDocumentId: Schema.Attribute.String & Schema.Attribute.Private;
     blogTitle: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    crmAttempts: Schema.Attribute.Integer &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<0>;
     crmError: Schema.Attribute.Text;
+    crmLastAttemptAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
     crmLeadId: Schema.Attribute.String;
-    crmPushStatus: Schema.Attribute.Enumeration<['Sent', 'Pending', 'Failed']> &
+    crmNextAttemptAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
+    crmPushStatus: Schema.Attribute.Enumeration<
+      ['Sent', 'Pending', 'Failed', 'Processing']
+    > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'Pending'>;
+    crmRequest: Schema.Attribute.JSON & Schema.Attribute.Private;
     crmResponse: Schema.Attribute.JSON;
+    crmSyncedAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
     email: Schema.Attribute.Email & Schema.Attribute.Private;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -854,16 +870,26 @@ export interface ApiContactSubmissionContactSubmission
     draftAndPublish: false;
   };
   attributes: {
+    allLeadDocumentId: Schema.Attribute.String & Schema.Attribute.Private;
     branch: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    crmAttempts: Schema.Attribute.Integer &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<0>;
     crmError: Schema.Attribute.Text;
+    crmLastAttemptAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
     crmLeadId: Schema.Attribute.String;
-    crmPushStatus: Schema.Attribute.Enumeration<['Sent', 'Pending', 'Failed']> &
+    crmNextAttemptAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
+    crmPushStatus: Schema.Attribute.Enumeration<
+      ['Sent', 'Pending', 'Failed', 'Processing']
+    > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'Pending'>;
+    crmRequest: Schema.Attribute.JSON & Schema.Attribute.Private;
     crmResponse: Schema.Attribute.JSON;
+    crmSyncedAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
     email: Schema.Attribute.Email & Schema.Attribute.Private;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -980,17 +1006,24 @@ export interface ApiEnquiryEnquiry extends Struct.CollectionTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
+    allLeadDocumentId: Schema.Attribute.String & Schema.Attribute.Private;
     blog: Schema.Attribute.Relation<'manyToOne', 'api::blog-post.blog-post'>;
     branchCode: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     crmError: Schema.Attribute.Text;
+    crmLastAttemptAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
     crmLeadId: Schema.Attribute.String;
+    crmNextAttemptAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
+    crmRequest: Schema.Attribute.JSON & Schema.Attribute.Private;
     crmResponse: Schema.Attribute.JSON;
-    crmStatus: Schema.Attribute.Enumeration<['PENDING', 'SYNCED', 'FAILED']> &
+    crmStatus: Schema.Attribute.Enumeration<
+      ['PENDING', 'SYNCED', 'FAILED', 'PROCESSING']
+    > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'PENDING'>;
+    crmSyncedAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
     email: Schema.Attribute.Email & Schema.Attribute.Private;
     lastSyncAt: Schema.Attribute.DateTime;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -1215,16 +1248,26 @@ export interface ApiGoldValuationSubmissionGoldValuationSubmission
     draftAndPublish: false;
   };
   attributes: {
+    allLeadDocumentId: Schema.Attribute.String & Schema.Attribute.Private;
     branch: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    crmAttempts: Schema.Attribute.Integer &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<0>;
     crmError: Schema.Attribute.Text;
+    crmLastAttemptAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
     crmLeadId: Schema.Attribute.String;
-    crmPushStatus: Schema.Attribute.Enumeration<['Sent', 'Pending', 'Failed']> &
+    crmNextAttemptAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
+    crmPushStatus: Schema.Attribute.Enumeration<
+      ['Sent', 'Pending', 'Failed', 'Processing']
+    > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'Pending'>;
+    crmRequest: Schema.Attribute.JSON & Schema.Attribute.Private;
     crmResponse: Schema.Attribute.JSON;
+    crmSyncedAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
     details: Schema.Attribute.JSON;
     email: Schema.Attribute.Email & Schema.Attribute.Private;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -1368,6 +1411,7 @@ export interface ApiJobApplicationJobApplication
       'api::job-application.job-application'
     > &
       Schema.Attribute.Private;
+    noticePeriod: Schema.Attribute.String;
     phone: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Private;
@@ -1521,16 +1565,26 @@ export interface ApiMobileVanSubmissionMobileVanSubmission
   };
   attributes: {
     address: Schema.Attribute.Text & Schema.Attribute.Private;
+    allLeadDocumentId: Schema.Attribute.String & Schema.Attribute.Private;
     city: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    crmAttempts: Schema.Attribute.Integer &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<0>;
     crmError: Schema.Attribute.Text;
+    crmLastAttemptAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
     crmLeadId: Schema.Attribute.String;
-    crmPushStatus: Schema.Attribute.Enumeration<['Sent', 'Pending', 'Failed']> &
+    crmNextAttemptAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
+    crmPushStatus: Schema.Attribute.Enumeration<
+      ['Sent', 'Pending', 'Failed', 'Processing']
+    > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'Pending'>;
+    crmRequest: Schema.Attribute.JSON & Schema.Attribute.Private;
     crmResponse: Schema.Attribute.JSON;
+    crmSyncedAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
     details: Schema.Attribute.JSON;
     email: Schema.Attribute.Email & Schema.Attribute.Private;
     locale: Schema.Attribute.String & Schema.Attribute.Private;

@@ -44,7 +44,8 @@
       "enum": [
         "PENDING",
         "SYNCED",
-        "FAILED"
+        "FAILED",
+        "PROCESSING"
       ],
       "required": true,
       "default": "PENDING"
@@ -74,6 +75,26 @@
     },
     "branchCode": {
       "type": "string"
+    },
+    "crmRequest": {
+      "type": "json",
+      "private": true
+    },
+    "crmNextAttemptAt": {
+      "type": "datetime",
+      "private": true
+    },
+    "crmLastAttemptAt": {
+      "type": "datetime",
+      "private": true
+    },
+    "crmSyncedAt": {
+      "type": "datetime",
+      "private": true
+    },
+    "allLeadDocumentId": {
+      "type": "string",
+      "private": true
     }
   }
 }

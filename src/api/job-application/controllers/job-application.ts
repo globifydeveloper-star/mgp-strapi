@@ -56,6 +56,7 @@ interface NewApplicationDetails {
   phone: string;
   experienceYears?: string;
   currentCity?: string;
+  noticePeriod?: string;
   jobPositionTitle?: string;
 }
 
@@ -81,6 +82,7 @@ const notifyHrOfNewApplication = async (strapi: any, details: NewApplicationDeta
         `Position Applied For: ${roleStr}`,
         `Experience: ${details.experienceYears || 'N/A'}`,
         `Current City: ${details.currentCity || 'N/A'}`,
+        `Notice Period: ${details.noticePeriod || 'N/A'}`,
         '',
         'Log in to the Strapi admin panel to review the full application and resume.',
       ].join('\n'),
@@ -141,7 +143,7 @@ export default factories.createCoreController(
         } catch (_) { }
       }
 
-      const { fullName, email, phone, experienceYears, currentCity, coverNote, resume, jobPosition } = body as Record<string, unknown>;
+      const { fullName, email, phone, experienceYears, currentCity, noticePeriod, coverNote, resume, jobPosition } = body as Record<string, unknown>;
 
       if (typeof fullName !== 'string' || !fullName.trim()) {
         throw new ValidationError('fullName is required.');
@@ -219,6 +221,7 @@ export default factories.createCoreController(
           phone: phone.trim(),
           experienceYears: typeof experienceYears === 'string' ? experienceYears.trim() : undefined,
           currentCity: typeof currentCity === 'string' ? currentCity.trim() : undefined,
+          noticePeriod: typeof noticePeriod === 'string' ? noticePeriod.trim() : undefined,
           coverNote: finalCoverNote,
           resume: resumeMediaId as any,
           jobPosition: resolvedJobPositionDocId as any,
@@ -233,6 +236,7 @@ export default factories.createCoreController(
         phone: phone.trim(),
         experienceYears: typeof experienceYears === 'string' ? experienceYears.trim() : undefined,
         currentCity: typeof currentCity === 'string' ? currentCity.trim() : undefined,
+        noticePeriod: typeof noticePeriod === 'string' ? noticePeriod.trim() : undefined,
         jobPositionTitle: resolvedJobPositionTitle,
       });
 
@@ -359,7 +363,10 @@ export default factories.createCoreController(
         doc.font('Helvetica').text(appDoc.currentCity || 'N/A');
 
         doc.font('Helvetica-Bold').text('Experience: ', { continued: true });
-        doc.font('Helvetica').text(appDoc.experienceYears ? `${appDoc.experienceYears} Years` : 'N/A');
+        doc.font('Helvetica').text(appDoc.experienceYears || 'N/A');
+
+        doc.font('Helvetica-Bold').text('Notice Period: ', { continued: true });
+        doc.font('Helvetica').text(appDoc.noticePeriod || 'N/A');
         doc.moveDown(1);
 
         // Section: Position Details
@@ -544,12 +551,15 @@ export default factories.createCoreController(
         return `"${String(str).replace(/"/g, '""')}"`;
       };
 
-      const header = ['ID', 'Name', 'Email', 'Phone', 'Role', 'Department', 'Status', 'Applied Date', 'Has Resume'];
+      const header = ['ID', 'Name', 'Email', 'Phone', 'Experience', 'Current City', 'Notice Period', 'Role', 'Department', 'Status', 'Applied Date', 'Has Resume'];
       const rows = apps.map((app) => [
         escapeCsv(app.documentId),
         escapeCsv(app.fullName),
         escapeCsv(app.email),
         escapeCsv(app.phone),
+        escapeCsv(app.experienceYears || ''),
+        escapeCsv(app.currentCity || ''),
+        escapeCsv(app.noticePeriod || ''),
         escapeCsv(app.jobPosition?.title || ''),
         escapeCsv(app.jobPosition?.department?.name || ''),
         escapeCsv(app.applicationStatus || 'New'),

@@ -1,8 +1,8 @@
 import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
-import { createCrmService } from '../../enquiry/services/crm';
 import { buildRemarks } from '../../enquiry/utils/remarks';
 import type { FormSource } from '../../all-lead/services/all-lead';
+import type { EnquiryForCrm } from '../../enquiry/utils/crmMapper';
 
 const { ValidationError } = errors;
 
@@ -51,59 +51,6 @@ export default factories.createCoreService(
         validateWeight(String(details.weight).trim(), 'details.weight');
       }
 
-      const documents = strapi.documents('api::gold-valuation-submission.gold-valuation-submission');
-
-      let entry = await documents.create({
-        data: {
-          name,
-          phone,
-          email,
-          branch: branchName || branch,
-          purity,
-          weight,
-          sourceForm,
-          details: details ? JSON.parse(JSON.stringify(details)) : undefined,
-          submittedAt: new Date().toISOString(),
-          crmPushStatus: 'Pending',
-        },
-      });
-
-      const crmConfig = strapi.config.get('crm') as {
-        baseUrl: string;
-        timeout: number;
-      };
-
-      // Determine All Leads Form Source label from formType
-      let allLeadFormSource: FormSource = 'Gold Rate Check';
-      if (formType === 'sell-gold-modal') {
-        allLeadFormSource = 'Sell Gold Modal';
-      } else if (formType === 'gold-value') {
-        allLeadFormSource = 'Gold Value Form';
-      }
-
-      // Mirror to All Leads (fire-and-forget)
-      const allLeadService = strapi.service('api::all-lead.all-lead') as any;
-      if (allLeadService?.mirrorLead) {
-        allLeadService
-          .mirrorLead({
-            name,
-            phone,
-            email,
-            formSource: allLeadFormSource,
-            sourceFormDetail: sourceForm,
-            branch: branchName || branch,
-            branchCode,
-            extraData: { purity, weight, ...(details ?? {}) },
-            submittedAt: new Date().toISOString(),
-            crmPushStatus: 'Pending',
-          })
-          .catch((e: unknown) => strapi.log.error('[gold-valuation-submission] All Leads mirror error:', e));
-      }
-
-      if (!branchCode) {
-        strapi.log.warn(`[crm] missing branchCode for api::gold-valuation-submission.gold-valuation-submission / ${entry.documentId}`);
-      }
-
       const formattedRemarks = buildRemarks({
         formType: formType || 'gold-value',
         sourceForm,
@@ -116,41 +63,80 @@ export default factories.createCoreService(
         message: details?.message ? String(details.message) : undefined,
       });
 
+      const crmRequest: EnquiryForCrm = {
+        name,
+        mobile: phone,
+        email,
+        leadSource: 'HOME_PAGE',
+        branchCode: branchCode ?? '',
+        remarks: formattedRemarks,
+      };
+
+      const documents = strapi.documents('api::gold-valuation-submission.gold-valuation-submission');
+
+      const entry = await documents.create({
+        data: {
+          name,
+          phone,
+          email,
+          branch: branchName || branch,
+          purity,
+          weight,
+          sourceForm,
+          details: details ? JSON.parse(JSON.stringify(details)) : undefined,
+          submittedAt: new Date().toISOString(),
+          crmPushStatus: 'Pending',
+          crmRequest,
+        },
+      });
+
+      // Determine All Leads Form Source label from formType
+      let allLeadFormSource: FormSource = 'Gold Rate Check';
+      if (formType === 'sell-gold-modal') {
+        allLeadFormSource = 'Sell Gold Modal';
+      } else if (formType === 'gold-value') {
+        allLeadFormSource = 'Gold Value Form';
+      }
+
+      if (!branchCode) {
+        strapi.log.warn(`[crm] missing branchCode for api::gold-valuation-submission.gold-valuation-submission / ${entry.documentId}`);
+      }
+
+      // Background mirror and CRM push
       (async () => {
         try {
-          const crm = createCrmService(crmConfig);
-          const result = await crm.syncEnquiry({
-            name,
-            mobile: phone,
-            email,
-            leadSource: 'HOME_PAGE',
-            branchCode: branchCode ?? '',
-            remarks: formattedRemarks,
-          });
+          const allLeadService = strapi.service('api::all-lead.all-lead') as any;
+          let mirrorDocId: string | null = null;
+          if (allLeadService?.mirrorLead) {
+            mirrorDocId = await allLeadService.mirrorLead({
+              name,
+              phone,
+              email,
+              formSource: allLeadFormSource,
+              sourceFormDetail: sourceForm,
+              branch: branchName || branch,
+              branchCode,
+              extraData: { purity, weight, ...(details ?? {}) },
+              submittedAt: new Date().toISOString(),
+              crmPushStatus: 'Pending',
+            });
+          }
 
-          const updated = await documents.update({
-            documentId: entry.documentId,
-            data: {
-              crmPushStatus: 'Sent',
-              crmLeadId: result.leadId,
-              crmResponse: JSON.parse(JSON.stringify(result.response)),
-            },
-          });
-          if (updated) entry = updated;
-        } catch (error) {
-          const message = error instanceof Error ? error.message : 'Unknown CRM error.';
-          strapi.log.error(`[gold-valuation-submission] CRM push failed for entry ${entry.documentId}: ${message}`);
+          if (mirrorDocId) {
+            await documents.update({
+              documentId: entry.documentId,
+              data: { allLeadDocumentId: mirrorDocId },
+            });
+          }
 
-          const updated = await documents.update({
-            documentId: entry.documentId,
-            data: {
-              crmPushStatus: 'Failed',
-              crmError: message,
-            },
-          });
-          if (updated) entry = updated;
+          const crmSync = strapi.service('api::all-lead.crm-sync') as any;
+          if (crmSync?.pushOne) {
+            await crmSync.pushOne('api::gold-valuation-submission.gold-valuation-submission', entry.documentId);
+          }
+        } catch (bgErr) {
+          strapi.log.error(`[gold-valuation-submission] Background sync error for ${entry.documentId}:`, bgErr);
         }
-      })().catch(e => strapi.log.error('CRM async error:', e));
+      })().catch((e) => strapi.log.error('[gold-valuation-submission] Unhandled background error:', e));
 
       return entry;
     },

@@ -21,7 +21,7 @@ export interface AllLeadMirrorPayload {
   branchCode?: string;
   extraData?: Record<string, unknown>;
   submittedAt?: string;
-  crmPushStatus?: 'Sent' | 'Pending' | 'Failed';
+  crmPushStatus?: 'Sent' | 'Pending' | 'Failed' | 'Processing';
   crmLeadId?: string;
   crmResponse?: Record<string, unknown>;
   crmError?: string;
@@ -33,11 +33,12 @@ export default factories.createCoreService(
     /**
      * Mirror a lead from any form into the All Leads collection.
      * Called asynchronously by each specialised service after creating its own record.
+     * Returns the created mirror record's documentId (or null on failure).
      */
-    async mirrorLead(payload: AllLeadMirrorPayload): Promise<void> {
+    async mirrorLead(payload: AllLeadMirrorPayload): Promise<string | null> {
       try {
         const documents = strapi.documents('api::all-lead.all-lead');
-        await documents.create({
+        const entry = await documents.create({
           data: {
             name: payload.name,
             phone: payload.phone,
@@ -58,12 +59,14 @@ export default factories.createCoreService(
             crmError: payload.crmError,
           },
         });
+        return entry?.documentId ?? null;
       } catch (err) {
         strapi.log.error(
           `[all-lead] Failed to mirror lead from "${payload.formSource}": ${
             err instanceof Error ? err.message : String(err)
           }`
         );
+        return null;
       }
     },
   })

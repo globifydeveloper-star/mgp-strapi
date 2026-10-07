@@ -59,7 +59,8 @@
             "enum": [
                 "Sent",
                 "Pending",
-                "Failed"
+                "Failed",
+                "Processing"
             ],
             "default": "Pending",
             "required": true
@@ -72,6 +73,15 @@
         },
         "crmError": {
             "type": "text"
+        },
+        "crmAttempts": {
+            "type": "integer",
+            "default": 0,
+            "private": true
+        },
+        "crmSyncedAt": {
+            "type": "datetime",
+            "private": true
         }
     }
 }

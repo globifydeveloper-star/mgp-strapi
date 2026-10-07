@@ -1,7 +1,7 @@
 import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
-import { createCrmService } from '../../enquiry/services/crm';
 import { buildRemarks } from '../../enquiry/utils/remarks';
+import type { EnquiryForCrm } from '../../enquiry/utils/crmMapper';
 
 const { ValidationError } = errors;
 
@@ -35,50 +35,6 @@ export default factories.createCoreService(
       const preferredDate = typeof input.preferredDate === 'string' ? input.preferredDate.trim() : undefined;
       const details = typeof input.details === 'object' && input.details !== null ? (input.details as Record<string, unknown>) : undefined;
 
-      const documents = strapi.documents('api::mobile-van-submission.mobile-van-submission');
-
-      let entry = await documents.create({
-        data: {
-          name,
-          phone,
-          email,
-          city: city || branchName,
-          state,
-          address,
-          preferredDate,
-          details: details ? JSON.parse(JSON.stringify(details)) : undefined,
-          submittedAt: new Date().toISOString(),
-          crmPushStatus: 'Pending',
-        },
-      });
-
-      const crmConfig = strapi.config.get('crm') as {
-        baseUrl: string;
-        timeout: number;
-      };
-
-      // Mirror to All Leads (fire-and-forget)
-      const allLeadService = strapi.service('api::all-lead.all-lead') as any;
-      if (allLeadService?.mirrorLead) {
-        allLeadService
-          .mirrorLead({
-            name,
-            phone,
-            email,
-            formSource: 'Mobile Van',
-            branch: branchName || city,
-            branchCode,
-            extraData: { city, state, branchName, address, preferredDate, ...(details ?? {}) },
-            submittedAt: new Date().toISOString(),
-            crmPushStatus: 'Pending',
-          })
-          .catch((e: unknown) => strapi.log.error('[mobile-van-submission] All Leads mirror error:', e));
-      }
-
-      if (!branchCode) {
-        strapi.log.warn(`[crm] missing branchCode for api::mobile-van-submission.mobile-van-submission / ${entry.documentId}`);
-      }
-
       const formattedRemarks = buildRemarks({
         formType: 'mobile-van',
         sourceForm: 'Mobile Van Appointment',
@@ -92,42 +48,71 @@ export default factories.createCoreService(
         message: address ? `Address: ${address}${preferredDate ? `, Date: ${preferredDate}` : ''}` : (preferredDate ? `Date: ${preferredDate}` : undefined),
       });
 
-      // Background CRM Push Enabled
+      const crmRequest: EnquiryForCrm = {
+        name,
+        mobile: phone,
+        email,
+        leadSource: 'HOME_PAGE',
+        branchCode: branchCode ?? '',
+        remarks: formattedRemarks,
+      };
+
+      const documents = strapi.documents('api::mobile-van-submission.mobile-van-submission');
+
+      const entry = await documents.create({
+        data: {
+          name,
+          phone,
+          email,
+          city: city || branchName,
+          state,
+          address,
+          preferredDate,
+          details: details ? JSON.parse(JSON.stringify(details)) : undefined,
+          submittedAt: new Date().toISOString(),
+          crmPushStatus: 'Pending',
+          crmRequest,
+        },
+      });
+
+      if (!branchCode) {
+        strapi.log.warn(`[crm] missing branchCode for api::mobile-van-submission.mobile-van-submission / ${entry.documentId}`);
+      }
+
+      // Background mirror and CRM push
       (async () => {
         try {
-          const crm = createCrmService(crmConfig);
-          const result = await crm.syncEnquiry({
-            name,
-            mobile: phone,
-            email,
-            leadSource: 'HOME_PAGE',
-            branchCode: branchCode ?? '',
-            remarks: formattedRemarks,
-          });
+          const allLeadService = strapi.service('api::all-lead.all-lead') as any;
+          let mirrorDocId: string | null = null;
+          if (allLeadService?.mirrorLead) {
+            mirrorDocId = await allLeadService.mirrorLead({
+              name,
+              phone,
+              email,
+              formSource: 'Mobile Van',
+              branch: branchName || city,
+              branchCode,
+              extraData: { city, state, branchName, address, preferredDate, ...(details ?? {}) },
+              submittedAt: new Date().toISOString(),
+              crmPushStatus: 'Pending',
+            });
+          }
 
-          const updated = await documents.update({
-            documentId: entry.documentId,
-            data: {
-              crmPushStatus: 'Sent',
-              crmLeadId: result.leadId,
-              crmResponse: JSON.parse(JSON.stringify(result.response)),
-            },
-          });
-          if (updated) entry = updated;
-        } catch (error) {
-          const message = error instanceof Error ? error.message : 'Unknown CRM error.';
-          strapi.log.error(`[mobile-van-submission] CRM push failed for entry ${entry.documentId}: ${message}`);
+          if (mirrorDocId) {
+            await documents.update({
+              documentId: entry.documentId,
+              data: { allLeadDocumentId: mirrorDocId },
+            });
+          }
 
-          const updated = await documents.update({
-            documentId: entry.documentId,
-            data: {
-              crmPushStatus: 'Failed',
-              crmError: message,
-            },
-          });
-          if (updated) entry = updated;
+          const crmSync = strapi.service('api::all-lead.crm-sync') as any;
+          if (crmSync?.pushOne) {
+            await crmSync.pushOne('api::mobile-van-submission.mobile-van-submission', entry.documentId);
+          }
+        } catch (bgErr) {
+          strapi.log.error(`[mobile-van-submission] Background sync error for ${entry.documentId}:`, bgErr);
         }
-      })().catch(e => strapi.log.error('CRM async error:', e));
+      })().catch((e) => strapi.log.error('[mobile-van-submission] Unhandled background error:', e));
 
       return entry;
     },

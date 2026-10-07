@@ -1,8 +1,8 @@
 import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
-import { createCrmService } from './crm';
 import { buildRemarks } from '../utils/remarks';
 import type { FormSource } from '../../all-lead/services/all-lead';
+import type { EnquiryForCrm } from '../utils/crmMapper';
 
 const { ValidationError } = errors;
 const SOURCES = ['BLOG', 'CONTACT_US', 'HOME_PAGE', 'LANDING_PAGE', 'OTHER'] as const;
@@ -126,8 +126,17 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
       message: input.remarks,
     });
 
+    const crmRequest: EnquiryForCrm = {
+      name: input.name,
+      mobile: input.mobile,
+      email: input.email,
+      leadSource: input.source,
+      branchCode: input.branchCode ?? '',
+      remarks: formattedRemarks,
+    };
+
     // Persistence deliberately precedes the external call so a CRM outage cannot lose a lead.
-    let enquiry = await documents.create({
+    const enquiry = await documents.create({
       data: {
         name: input.name,
         mobile: input.mobile,
@@ -138,10 +147,11 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
         branchCode: input.branchCode,
         crmStatus: 'PENDING',
         syncAttempts: 0,
+        crmRequest,
       },
     });
 
-    // Mirror directly to All Leads with specific formSource
+    // Determine specific formSource for All Leads
     let allLeadFormSource: FormSource = 'Enquiry';
     if (input.formType === 'sell-gold-page') {
       allLeadFormSource = 'Sell Gold Page';
@@ -149,11 +159,17 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
       allLeadFormSource = 'Page Builder Enquiry';
     }
 
-    try {
-      const allLeadService = strapi.service('api::all-lead.all-lead') as any;
-      if (allLeadService?.mirrorLead) {
-        allLeadService
-          .mirrorLead({
+    if (!input.branchCode) {
+      strapi.log.warn(`[crm] missing branchCode for api::enquiry.enquiry / ${enquiry.documentId}`);
+    }
+
+    // Background mirror and CRM push
+    (async () => {
+      try {
+        const allLeadService = strapi.service('api::all-lead.all-lead') as any;
+        let mirrorDocId: string | null = null;
+        if (allLeadService?.mirrorLead) {
+          mirrorDocId = await allLeadService.mirrorLead({
             name: input.name,
             phone: input.mobile,
             email: input.email,
@@ -163,62 +179,24 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
             branchCode: input.branchCode,
             submittedAt: new Date().toISOString(),
             crmPushStatus: 'Pending',
-          })
-          .catch((e: unknown) => strapi.log.error('[enquiry] All Leads mirror error:', e));
+          });
+        }
+
+        if (mirrorDocId) {
+          await documents.update({
+            documentId: enquiry.documentId,
+            data: { allLeadDocumentId: mirrorDocId },
+          });
+        }
+
+        const crmSync = strapi.service('api::all-lead.crm-sync') as any;
+        if (crmSync?.pushOne) {
+          await crmSync.pushOne('api::enquiry.enquiry', enquiry.documentId);
+        }
+      } catch (bgErr) {
+        strapi.log.error(`[enquiry] Background sync error for ${enquiry.documentId}:`, bgErr);
       }
-    } catch (mirrorErr) {
-      strapi.log.error('[enquiry] Failed to mirror to all-leads:', mirrorErr);
-    }
-
-    const crmConfig = strapi.config.get('crm') as {
-      baseUrl: string;
-      timeout: number;
-    };
-
-    if (!input.branchCode) {
-      strapi.log.warn(`[crm] missing branchCode for api::enquiry.enquiry / ${enquiry.documentId}`);
-    }
-
-    // Fire-and-forget background CRM call
-    (async () => {
-      try {
-        const crm = createCrmService(crmConfig);
-        const result = await crm.syncEnquiry({
-          name: input.name,
-          mobile: input.mobile,
-          email: input.email,
-          leadSource: input.source,
-          branchCode: input.branchCode ?? '',
-          remarks: formattedRemarks,
-        });
-
-        const updated = await documents.update({
-          documentId: enquiry.documentId,
-          data: {
-            crmStatus: 'SYNCED',
-            crmLeadId: result.leadId,
-            crmResponse: JSON.parse(JSON.stringify(result.response)),
-            syncAttempts: 1,
-            lastSyncAt: new Date().toISOString(),
-          },
-        });
-        if (updated) enquiry = updated;
-      } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown CRM error.';
-        strapi.log.error(`[enquiry] CRM sync failed for ${enquiry.documentId}: ${message}`);
-
-        const updated = await documents.update({
-          documentId: enquiry.documentId,
-          data: {
-            crmStatus: 'FAILED',
-            crmError: message,
-            syncAttempts: 1,
-            lastSyncAt: new Date().toISOString(),
-          },
-        });
-        if (updated) enquiry = updated;
-      }
-    })().catch((e) => strapi.log.error('[enquiry] CRM async error:', e));
+    })().catch((e) => strapi.log.error('[enquiry] Unhandled background error:', e));
 
     return publicEnquiry(enquiry as unknown as Record<string, unknown>);
   },

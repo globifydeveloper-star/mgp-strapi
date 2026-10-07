@@ -1,7 +1,7 @@
 import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
-import { createCrmService } from '../../enquiry/services/crm';
 import { buildRemarks } from '../../enquiry/utils/remarks';
+import type { EnquiryForCrm } from '../../enquiry/utils/crmMapper';
 
 const { ValidationError } = errors;
 
@@ -31,45 +31,6 @@ export default factories.createCoreService(
 
       const documents = strapi.documents('api::contact-submission.contact-submission');
 
-      let entry = await documents.create({
-        data: {
-          name,
-          phone,
-          email,
-          branch,
-          message,
-          submittedAt: new Date().toISOString(),
-          crmPushStatus: 'Pending',
-        },
-      });
-
-      const crmConfig = strapi.config.get('crm') as {
-        baseUrl: string;
-        timeout: number;
-      };
-
-      // Mirror to All Leads (fire-and-forget)
-      const allLeadService = strapi.service('api::all-lead.all-lead') as any;
-      if (allLeadService?.mirrorLead) {
-        allLeadService
-          .mirrorLead({
-            name,
-            phone,
-            email,
-            formSource: 'Contact Submission',
-            sourceFormDetail: message,
-            branch,
-            branchCode,
-            submittedAt: new Date().toISOString(),
-            crmPushStatus: 'Pending',
-          })
-          .catch((e: unknown) => strapi.log.error('[contact-submission] All Leads mirror error:', e));
-      }
-
-      if (!branchCode) {
-        strapi.log.warn(`[crm] missing branchCode for api::contact-submission.contact-submission / ${entry.documentId}`);
-      }
-
       const formattedRemarks = buildRemarks({
         formType: 'contact',
         sourceForm: 'Contact Us Page',
@@ -79,42 +40,66 @@ export default factories.createCoreService(
         message,
       });
 
-      // Background CRM Push
+      const crmRequest: EnquiryForCrm = {
+        name,
+        mobile: phone,
+        email,
+        leadSource: 'CONTACT_US',
+        branchCode: branchCode ?? '',
+        remarks: formattedRemarks,
+      };
+
+      const entry = await documents.create({
+        data: {
+          name,
+          phone,
+          email,
+          branch,
+          message,
+          submittedAt: new Date().toISOString(),
+          crmPushStatus: 'Pending',
+          crmRequest,
+        },
+      });
+
+      if (!branchCode) {
+        strapi.log.warn(`[crm] missing branchCode for api::contact-submission.contact-submission / ${entry.documentId}`);
+      }
+
+      // Background mirror and CRM push
       (async () => {
         try {
-          const crm = createCrmService(crmConfig);
-          const result = await crm.syncEnquiry({
-            name,
-            mobile: phone,
-            email,
-            leadSource: 'CONTACT_US',
-            branchCode: branchCode ?? '',
-            remarks: formattedRemarks,
-          });
+          const allLeadService = strapi.service('api::all-lead.all-lead') as any;
+          let mirrorDocId: string | null = null;
+          if (allLeadService?.mirrorLead) {
+            mirrorDocId = await allLeadService.mirrorLead({
+              name,
+              phone,
+              email,
+              formSource: 'Contact Submission',
+              sourceFormDetail: message,
+              branch,
+              branchCode,
+              submittedAt: new Date().toISOString(),
+              crmPushStatus: 'Pending',
+            });
+          }
 
-          const updated = await documents.update({
-            documentId: entry.documentId,
-            data: {
-              crmPushStatus: 'Sent',
-              crmLeadId: result.leadId,
-              crmResponse: JSON.parse(JSON.stringify(result.response)),
-            },
-          });
-          if (updated) entry = updated;
-        } catch (error) {
-          const message = error instanceof Error ? error.message : 'Unknown CRM error.';
-          strapi.log.error(`[contact-submission] CRM push failed for entry ${entry.documentId}: ${message}`);
+          if (mirrorDocId) {
+            await documents.update({
+              documentId: entry.documentId,
+              data: { allLeadDocumentId: mirrorDocId },
+            });
+          }
 
-          const updated = await documents.update({
-            documentId: entry.documentId,
-            data: {
-              crmPushStatus: 'Failed',
-              crmError: message,
-            },
-          });
-          if (updated) entry = updated;
+          const crmSync = strapi.service('api::all-lead.crm-sync') as any;
+          if (crmSync?.pushOne) {
+            await crmSync.pushOne('api::contact-submission.contact-submission', entry.documentId);
+          }
+        } catch (bgErr) {
+          strapi.log.error(`[contact-submission] Background sync error for ${entry.documentId}:`, bgErr);
         }
-      })().catch(e => strapi.log.error('CRM async error:', e));
+      })().catch((e) => strapi.log.error('[contact-submission] Unhandled background error:', e));
 
       return entry;
     },

@@ -20,15 +20,28 @@ export interface QuickUpdatePayload {
 
 export class CrmServiceError extends Error {
   readonly cause?: unknown;
+  readonly status?: number;
+  readonly retryable: boolean;
+  readonly responseBody?: unknown;
 
-  constructor(message: string, cause?: unknown) {
+  constructor(
+    message: string,
+    options?: { cause?: unknown; status?: number; retryable?: boolean; responseBody?: unknown }
+  ) {
     super(message);
     this.name = 'CrmServiceError';
-    this.cause = cause;
+    this.cause = options?.cause;
+    this.status = options?.status;
+    this.retryable = options?.retryable ?? true;
+    this.responseBody = options?.responseBody;
   }
 }
 
 let cachedCrmToken: { token: string; expiresAt: number } | null = null;
+
+export function clearCrmTokenCache(): void {
+  cachedCrmToken = null;
+}
 
 async function resolveCrmToken(): Promise<string | null> {
   if (cachedCrmToken && Date.now() < cachedCrmToken.expiresAt) {
@@ -98,15 +111,6 @@ const readResponse = async (response: Response): Promise<unknown> => {
 };
 
 export const createCrmService = (config: CrmConfig) => {
-  const getHeaders = async () => {
-    const token = await resolveCrmToken();
-    return {
-      Authorization: `Bearer ${token || ''}`,
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    };
-  };
-
   const getBaseUrl = () => {
     const url = config.baseUrl.trim();
     if (url.includes('/ChannelLead')) {
@@ -115,49 +119,86 @@ export const createCrmService = (config: CrmConfig) => {
     return url.replace(/\/$/, '');
   };
 
+  const executeWithAuthRetry = async (
+    targetUrl: string,
+    method: string,
+    bodyPayload?: unknown,
+    timeoutMs: number = config.timeout
+  ): Promise<{ response: Response; body: unknown }> => {
+    if (!config.baseUrl) {
+      throw new CrmServiceError('CRM integration is not configured. Base URL is missing.', { retryable: true });
+    }
+
+    const token = await resolveCrmToken();
+    if (!token) {
+      throw new CrmServiceError('CRM integration is not configured. CRM_USERNAME or CRM_PASSWORD is missing or login failed.', { retryable: true });
+    }
+
+    const doFetch = async (authToken: string) => {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        const response = await fetch(targetUrl, {
+          method,
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: bodyPayload !== undefined ? JSON.stringify(bodyPayload) : undefined,
+          signal: controller.signal,
+        });
+        const body = await readResponse(response);
+        return { response, body };
+      } finally {
+        clearTimeout(timeoutId);
+      }
+    };
+
+    try {
+      let result = await doFetch(token);
+
+      if (result.response.status === 401) {
+        // 401 received -> clear token cache and retry once with fresh token
+        clearCrmTokenCache();
+        const freshToken = await resolveCrmToken();
+        if (freshToken) {
+          result = await doFetch(freshToken);
+        }
+      }
+
+      if (!result.response.ok) {
+        const status = result.response.status;
+        const isRetryable = status === 401 || status === 429 || status >= 500;
+        const errorMsg = isRetryable
+          ? `CRM responded with HTTP ${status}.`
+          : `CRM rejected request with HTTP ${status}: ${typeof result.body === 'object' ? JSON.stringify(result.body) : String(result.body)}`;
+        throw new CrmServiceError(errorMsg, {
+          status,
+          retryable: isRetryable,
+          responseBody: result.body,
+        });
+      }
+
+      return result;
+    } catch (error) {
+      if (error instanceof CrmServiceError) throw error;
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new CrmServiceError('CRM request timed out.', { cause: error, retryable: true });
+      }
+      throw new CrmServiceError('CRM request failed.', { cause: error, retryable: true });
+    }
+  };
+
   return {
     /**
      * 1. POST /ChannelLead/Upsert
      * Primary endpoint: Create or update a lead with full details
      */
     async syncEnquiry(enquiry: EnquiryForCrm): Promise<CrmSyncResult> {
-      if (!config.baseUrl) {
-        throw new CrmServiceError('CRM integration is not configured. Base URL is missing.');
-      }
-
-      const headers = await getHeaders();
-      if (!headers.Authorization || headers.Authorization === 'Bearer ') {
-        throw new CrmServiceError('CRM integration is not configured. CRM_USERNAME or CRM_PASSWORD is missing.');
-      }
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), config.timeout);
-
-      try {
-        const targetUrl = `${getBaseUrl()}/ChannelLead/Upsert`;
-        const response = await fetch(targetUrl, {
-          method: 'POST',
-          headers,
-          body: JSON.stringify(mapEnquiryToCrm(enquiry)),
-          signal: controller.signal,
-        });
-
-        const responseBody = await readResponse(response);
-
-        if (!response.ok) {
-          throw new CrmServiceError(`CRM responded with HTTP ${response.status}.`);
-        }
-
-        return { leadId: getLeadId(responseBody), response: responseBody };
-      } catch (error) {
-        if (error instanceof CrmServiceError) throw error;
-        if (error instanceof Error && error.name === 'AbortError') {
-          throw new CrmServiceError('CRM request timed out.', error);
-        }
-        throw new CrmServiceError('CRM request failed.', error);
-      } finally {
-        clearTimeout(timeoutId);
-      }
+      const targetUrl = `${getBaseUrl()}/ChannelLead/Upsert`;
+      const { body } = await executeWithAuthRetry(targetUrl, 'POST', mapEnquiryToCrm(enquiry));
+      return { leadId: getLeadId(body), response: body };
     },
 
     /**
@@ -165,12 +206,8 @@ export const createCrmService = (config: CrmConfig) => {
      */
     async fetchLead(leadId: string | number): Promise<unknown> {
       const targetUrl = `${getBaseUrl()}/ChannelLead/Fetch/${leadId}`;
-      const headers = await getHeaders();
-      const response = await fetch(targetUrl, {
-        method: 'GET',
-        headers,
-      });
-      return readResponse(response);
+      const { body } = await executeWithAuthRetry(targetUrl, 'GET');
+      return body;
     },
 
     /**
@@ -178,12 +215,8 @@ export const createCrmService = (config: CrmConfig) => {
      */
     async listLeads(pageSize: number = 10, pageNumber: number = 1): Promise<unknown> {
       const targetUrl = `${getBaseUrl()}/ChannelLead/List/${pageSize}/${pageNumber}`;
-      const headers = await getHeaders();
-      const response = await fetch(targetUrl, {
-        method: 'GET',
-        headers,
-      });
-      return readResponse(response);
+      const { body } = await executeWithAuthRetry(targetUrl, 'GET');
+      return body;
     },
 
     /**
@@ -191,12 +224,8 @@ export const createCrmService = (config: CrmConfig) => {
      */
     async getFollowUpList(channelId: string | number): Promise<unknown> {
       const targetUrl = `${getBaseUrl()}/ChannelLead/FollowUpList/${channelId}`;
-      const headers = await getHeaders();
-      const response = await fetch(targetUrl, {
-        method: 'GET',
-        headers,
-      });
-      return readResponse(response);
+      const { body } = await executeWithAuthRetry(targetUrl, 'GET');
+      return body;
     },
 
     /**
@@ -204,19 +233,14 @@ export const createCrmService = (config: CrmConfig) => {
      */
     async quickUpdateLead(leadId: string | number, payload: QuickUpdatePayload): Promise<unknown> {
       const targetUrl = `${getBaseUrl()}/ChannelLead/QuickUpdate/${leadId}`;
-      const headers = await getHeaders();
-      const response = await fetch(targetUrl, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          leadStatus: payload.leadStatus ?? 'Open',
-          losingReason: payload.losingReason ?? '',
-          uniqCustId: payload.uniqCustId ?? '',
-          newFollowUpDate: payload.newFollowUpDate ?? new Date().toISOString(),
-          followUpComments: payload.followUpComments ?? '',
-        }),
+      const { body } = await executeWithAuthRetry(targetUrl, 'POST', {
+        leadStatus: payload.leadStatus ?? 'Open',
+        losingReason: payload.losingReason ?? '',
+        uniqCustId: payload.uniqCustId ?? '',
+        newFollowUpDate: payload.newFollowUpDate ?? new Date().toISOString(),
+        followUpComments: payload.followUpComments ?? '',
       });
-      return readResponse(response);
+      return body;
     },
   };
 };
