@@ -14,6 +14,7 @@ export interface EnquiryForCrm {
   followupDate?: string;
   remarks?: string;
   branchCode?: string;
+  [key: string]: any;
 }
 
 export interface CrmLeadPayload {

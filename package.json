@@ -12,11 +12,7 @@
     "start": "strapi start",
     "strapi": "strapi",
     "upgrade": "npx @strapi/upgrade latest",
-    "upgrade:dry": "npx @strapi/upgrade latest --dry",
-    "migrate:s3": "tsx scripts/migrate-media-to-s3.ts",
-    "migrate:s3:dry": "cross-env DRY_RUN=true tsx scripts/migrate-media-to-s3.ts",
-    "migrate:blog": "tsx scripts/migrate-blog-from-muthootgoldpoint.ts",
-    "migrate:blog:dry": "cross-env DRY_RUN=true tsx scripts/migrate-blog-from-muthootgoldpoint.ts"
+    "upgrade:dry": "npx @strapi/upgrade latest --dry"
   },
   "dependencies": {
     "@3xweb/strapi-provider-email-resend": "^1.2.1",

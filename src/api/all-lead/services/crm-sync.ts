@@ -367,7 +367,7 @@ export default ({ strapi }: { strapi: any }) => ({
       uid: string;
       id: number;
       documentId: string;
-      submittedAt: string | null;
+      createdAt: string | null;
     }
 
     const candidates: PendingCandidate[] = [];
@@ -375,7 +375,7 @@ export default ({ strapi }: { strapi: any }) => ({
     for (const conf of Object.values(COLLECTIONS)) {
       try {
         const rows = await strapi.db.connection(conf.tableName)
-          .select('id', 'document_id as documentId', 'submitted_at as submittedAt')
+          .select('id', 'document_id as documentId', 'created_at as createdAt')
           .where(conf.statusCol, conf.statusEnum.pending)
           .andWhere((builder: any) => {
             builder.whereNull(conf.nextAttemptCol).orWhere(conf.nextAttemptCol, '<=', now);
@@ -388,7 +388,7 @@ export default ({ strapi }: { strapi: any }) => ({
             uid: conf.uid,
             id: r.id,
             documentId: r.documentId,
-            submittedAt: r.submittedAt,
+            createdAt: r.createdAt,
           });
         }
       } catch (err) {
@@ -397,8 +397,8 @@ export default ({ strapi }: { strapi: any }) => ({
     }
 
     candidates.sort((a, b) => {
-      const timeA = a.submittedAt ? new Date(a.submittedAt).getTime() : 0;
-      const timeB = b.submittedAt ? new Date(b.submittedAt).getTime() : 0;
+      const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
       return timeA - timeB;
     });
 
