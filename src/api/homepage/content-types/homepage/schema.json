@@ -63,7 +63,19 @@
     "seoTitle": {
       "type": "string"
     },
-    "seoDescription": {
+        "locatorHeading": {
+      "type": "string"
+    },
+    "locatorHighlight": {
+      "type": "string"
+    },
+    "locatorSubtitle": {
+      "type": "text"
+    },
+    "locatorBranchesCount": {
+      "type": "string"
+    },
+      "seoDescription": {
       "type": "text"
     },
     "ogImage": {
