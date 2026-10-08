@@ -3,10 +3,97 @@ import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
 import PDFDocument from 'pdfkit';
 import { PassThrough } from 'stream';
+import fs from 'fs';
+import path from 'path';
+import { randomUUID } from 'crypto';
 import { enforceRateLimit } from '../../../utils/rate-limit';
 import { verifyAdminSession } from '../../../utils/verify-admin-session';
 
 const { ValidationError } = errors;
+
+const INDIAN_MOBILE_REGEX = /^[6-9]\d{9}$/;
+const RESUME_REJECTION_MESSAGE = 'Please upload a PDF, DOC, or DOCX file under 5 MB.';
+
+/**
+ * Strips spaces/dashes and a leading country code or trunk "0" (covers "+91 98765 43210",
+ * "91-9876543210", "09876543210") before checking against the 10-digit Indian mobile pattern.
+ */
+const normalizePhone = (raw: string): string => {
+  let p = raw.replace(/[\s-]/g, '');
+  if (p.startsWith('+91')) {
+    p = p.slice(3);
+  } else if (p.startsWith('91') && p.length === 12) {
+    p = p.slice(2);
+  } else if (p.startsWith('0') && p.length === 11) {
+    p = p.slice(1);
+  }
+  return p;
+};
+
+const ALLOWED_RESUME_EXTENSIONS = new Set(['.pdf', '.docx', '.doc']);
+const ALLOWED_RESUME_MIME_TYPES = new Set([
+  'application/pdf',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/msword',
+]);
+const MAX_RESUME_SIZE_BYTES = 5 * 1024 * 1024;
+
+const PDF_MAGIC = Buffer.from('%PDF-', 'ascii');
+const ZIP_MAGIC = Buffer.from([0x50, 0x4b, 0x03, 0x04]);
+const OLE_MAGIC = Buffer.from([0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1]);
+
+/**
+ * Server-side resume gate for the job-application upload path, which (unlike the generic
+ * /api/upload route) calls the upload plugin's service layer directly and so never passes
+ * through @strapi/upload's own enforceUploadSecurity/mime-validation middleware.
+ * Checks last-extension, declared MIME, size, and hand-rolled magic bytes before the file
+ * is ever handed to the upload service.
+ */
+const validateResumeFile = (file: any): { valid: boolean; error?: string } => {
+  const originalName = String(file?.originalFilename || file?.name || '');
+  const ext = path.extname(originalName).toLowerCase();
+  if (!ext || !ALLOWED_RESUME_EXTENSIONS.has(ext)) {
+    return { valid: false, error: RESUME_REJECTION_MESSAGE };
+  }
+
+  const declaredMime = String(file?.mimetype || file?.type || '').toLowerCase();
+  if (declaredMime && declaredMime !== 'application/octet-stream' && !ALLOWED_RESUME_MIME_TYPES.has(declaredMime)) {
+    return { valid: false, error: RESUME_REJECTION_MESSAGE };
+  }
+
+  const size = Number(file?.size) || 0;
+  if (size <= 0 || size > MAX_RESUME_SIZE_BYTES) {
+    return { valid: false, error: RESUME_REJECTION_MESSAGE };
+  }
+
+  const filepath = file?.filepath || file?.path;
+  if (!filepath) {
+    return { valid: false, error: 'Could not read the uploaded file. Please try again.' };
+  }
+
+  let buffer: Buffer;
+  try {
+    buffer = fs.readFileSync(filepath);
+  } catch {
+    return { valid: false, error: 'Could not read the uploaded file. Please try again.' };
+  }
+
+  if (ext === '.pdf') {
+    if (!buffer.subarray(0, 5).equals(PDF_MAGIC)) {
+      return { valid: false, error: RESUME_REJECTION_MESSAGE };
+    }
+  } else if (ext === '.docx') {
+    if (!buffer.subarray(0, 4).equals(ZIP_MAGIC) || !buffer.includes('word/document.xml')) {
+      return { valid: false, error: RESUME_REJECTION_MESSAGE };
+    }
+  } else if (ext === '.doc') {
+    if (!buffer.subarray(0, 8).equals(OLE_MAGIC)) {
+      return { valid: false, error: RESUME_REJECTION_MESSAGE };
+    }
+  }
+
+  return { valid: true };
+};
 
 const createPdfBuffer = (builder: (doc: PDFKit.PDFDocument) => void): Promise<Buffer> => {
   return new Promise((resolve, reject) => {
@@ -154,6 +241,10 @@ export default factories.createCoreController(
       if (typeof phone !== 'string' || !phone.trim()) {
         throw new ValidationError('phone is required.');
       }
+      const normalizedPhone = normalizePhone(phone.trim());
+      if (!INDIAN_MOBILE_REGEX.test(normalizedPhone)) {
+        throw new ValidationError('Please enter a valid 10-digit mobile number.');
+      }
 
       let resumeMediaId: number | string | undefined =
         typeof resume === 'number' || typeof resume === 'string' ? resume : undefined;
@@ -169,10 +260,20 @@ export default factories.createCoreController(
       }
 
       if (uploadedFile) {
+        const validation = validateResumeFile(uploadedFile);
+        if (!validation.valid) {
+          const rejectedName = String(uploadedFile?.originalFilename || uploadedFile?.name || 'unknown');
+          strapi.log.warn(`[job-application] Rejected resume upload: file ending in "...${rejectedName.slice(-12)}" failed extension/MIME/magic-byte/size validation.`);
+          throw new ValidationError(validation.error || RESUME_REJECTION_MESSAGE);
+        }
+
+        const originalFilename = String(uploadedFile.originalFilename || uploadedFile.name || 'resume').replace(/[\r\n]/g, '');
+        const randomName = randomUUID();
+
         try {
           const uploadService = strapi.plugin('upload').service('upload');
           const uploaded = await uploadService.upload({
-            data: {},
+            data: { fileInfo: { name: randomName, caption: originalFilename } },
             files: uploadedFile,
           });
           const fileEntry = Array.isArray(uploaded) ? uploaded[0] : uploaded;
@@ -218,7 +319,7 @@ export default factories.createCoreController(
         data: {
           fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
-          phone: phone.trim(),
+          phone: normalizedPhone,
           experienceYears: typeof experienceYears === 'string' ? experienceYears.trim() : undefined,
           currentCity: typeof currentCity === 'string' ? currentCity.trim() : undefined,
           noticePeriod: typeof noticePeriod === 'string' ? noticePeriod.trim() : undefined,
@@ -233,7 +334,7 @@ export default factories.createCoreController(
       await notifyHrOfNewApplication(strapi, {
         fullName: fullName.trim(),
         email: email.trim().toLowerCase(),
-        phone: phone.trim(),
+        phone: normalizedPhone,
         experienceYears: typeof experienceYears === 'string' ? experienceYears.trim() : undefined,
         currentCity: typeof currentCity === 'string' ? currentCity.trim() : undefined,
         noticePeriod: typeof noticePeriod === 'string' ? noticePeriod.trim() : undefined,
@@ -286,7 +387,7 @@ export default factories.createCoreController(
         }
 
         const extension = typeof resume.ext === 'string' ? resume.ext : '';
-        let filename = String(resume.name || `resume${extension}`).replace(/[\r\n]/g, '');
+        let filename = String(resume.caption || resume.name || `resume${extension}`).replace(/[\r\n]/g, '');
         if (extension && !filename.toLowerCase().endsWith(extension.toLowerCase())) {
           filename += extension;
         }
@@ -397,7 +498,7 @@ export default factories.createCoreController(
         doc.moveDown(0.5);
 
         doc.font('Helvetica-Bold').fontSize(10).fillColor('#333333').text('Resume File: ', { continued: true });
-        doc.font('Helvetica').text(resume.name || 'No resume uploaded');
+        doc.font('Helvetica').text(resume.caption || resume.name || 'No resume uploaded');
 
         doc.font('Helvetica-Bold').text('File Format: ', { continued: true });
         doc.font('Helvetica').text(resume.ext ? resume.ext.toUpperCase() : (resume.mime || 'N/A'));
@@ -626,7 +727,7 @@ export default factories.createCoreController(
                 }
                 if (response.ok) {
                   const extension = typeof resume.ext === 'string' ? resume.ext : '';
-                  let filename = String(resume.name || `resume${extension}`).replace(/[\r\n]/g, '');
+                  let filename = String(resume.caption || resume.name || `resume${extension}`).replace(/[\r\n]/g, '');
                   if (extension && !filename.toLowerCase().endsWith(extension.toLowerCase())) {
                     filename += extension;
                   }
