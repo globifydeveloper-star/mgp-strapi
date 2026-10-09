@@ -2,25 +2,22 @@ import type { Context } from 'koa';
 import { factories } from '@strapi/strapi';
 import { verifyAdminSession } from '../../../utils/verify-admin-session';
 import { enforceRateLimit } from '../../../utils/rate-limit';
+import { sanitizePayload, validateStringLengths } from '../../../utils/sanitize-input';
+import { requireVerifiedOtp } from '../../../utils/require-verified-otp';
 
 export default factories.createCoreController(
   'api::gold-valuation-submission.gold-valuation-submission',
   ({ strapi }) => ({
     async create(ctx: Context) {
 
-      // Inject sanitization
-      try {
-        const { sanitizePayload, validateStringLengths } = require('../../../utils/sanitize-input');
-        if (ctx.request.body) {
-          if (!validateStringLengths(ctx.request.body)) {
-            ctx.status = 400;
-            ctx.body = { success: false, message: 'Payload contains strings that are too long' };
-            return;
-          }
-          ctx.request.body = sanitizePayload(ctx.request.body);
+      // Sanitization (fails loudly if the util is missing/broken, instead of silently skipping it)
+      if (ctx.request.body) {
+        if (!validateStringLengths(ctx.request.body)) {
+          ctx.status = 400;
+          ctx.body = { success: false, message: 'Payload contains strings that are too long' };
+          return;
         }
-      } catch (err) {
-        // Ignore if file not found, but it should exist
+        ctx.request.body = sanitizePayload(ctx.request.body);
       }
 
       if (process.env.REQUIRE_INTERNAL_SECRET === 'true') {
@@ -39,6 +36,11 @@ export default factories.createCoreController(
       if (body && typeof body === 'object' && 'data' in body && body.data && typeof body.data === 'object') {
         body = body.data;
       }
+
+      const input = (body ?? {}) as Record<string, unknown>;
+      // Security boundary: regardless of route auth or Public-role RBAC, no lead is
+      // created without a fresh, verified, unused OTP for this phone.
+      await requireVerifiedOtp(strapi, input.phone ?? input.mobile, typeof input.formType === 'string' ? input.formType : undefined);
 
       const service = strapi.service('api::gold-valuation-submission.gold-valuation-submission') as unknown as {
         submitAndSync(payload: unknown): Promise<Record<string, unknown>>;

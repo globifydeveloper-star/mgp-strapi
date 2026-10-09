@@ -1,6 +1,7 @@
 import type { Context } from 'koa';
 import { factories } from '@strapi/strapi';
 import { createHmac, timingSafeEqual, randomInt } from 'crypto';
+import { sanitizePayload, validateStringLengths } from '../../../utils/sanitize-input';
 
 const OTP_TTL_MS = 5 * 60 * 1000;
 const RESEND_COOLDOWN_MS = 60 * 1000;
@@ -179,19 +180,14 @@ export default factories.createCoreController(
     },
 
     async verifyOtp(ctx: Context) {
-      // Inject sanitization
-      try {
-        const { sanitizePayload, validateStringLengths } = require('../../../utils/sanitize-input');
-        if (ctx.request.body) {
-          if (!validateStringLengths(ctx.request.body)) {
-            ctx.status = 400;
-            ctx.body = { success: false, message: 'Payload contains strings that are too long' };
-            return;
-          }
-          ctx.request.body = sanitizePayload(ctx.request.body);
+      // Sanitization (fails loudly if the util is missing/broken, instead of silently skipping it)
+      if (ctx.request.body) {
+        if (!validateStringLengths(ctx.request.body)) {
+          ctx.status = 400;
+          ctx.body = { success: false, message: 'Payload contains strings that are too long' };
+          return;
         }
-      } catch (err) {
-        // Ignore if file not found, but it should exist
+        ctx.request.body = sanitizePayload(ctx.request.body);
       }
 
       const secret = ctx.request.headers['x-internal-secret'];
@@ -280,10 +276,16 @@ export default factories.createCoreController(
         return;
       }
 
+      const verifiedAt = new Date();
       await strapi.documents('api::otp-request.otp-request').update({
         documentId: entry.documentId,
         data: {
           verified: true,
+          verifiedAt: verifiedAt.toISOString(),
+          // gold-value-precheck only verifies the phone; the lead (and the consume)
+          // happens later via LocationPopup -> requireVerifiedOtp. Every other
+          // formType creates its lead right here, so the OTP is consumed now.
+          ...(formType !== 'gold-value-precheck' ? { consumedAt: verifiedAt.toISOString() } : {}),
           attempts: nextAttempts,
           name,
           state,

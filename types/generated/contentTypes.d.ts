@@ -1354,6 +1354,10 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
       'api::homepage.homepage'
     > &
       Schema.Attribute.Private;
+    locatorBranchesCount: Schema.Attribute.String;
+    locatorHeading: Schema.Attribute.String;
+    locatorHighlight: Schema.Attribute.String;
+    locatorSubtitle: Schema.Attribute.Text;
     ogImage: Schema.Attribute.Media<'images'>;
     processSectionImage: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
@@ -1664,6 +1668,7 @@ export interface ApiOtpRequestOtpRequest extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required &
       Schema.Attribute.Private;
     consent: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    consumedAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1690,6 +1695,7 @@ export interface ApiOtpRequestOtpRequest extends Struct.CollectionTypeSchema {
     verified: Schema.Attribute.Boolean &
       Schema.Attribute.Private &
       Schema.Attribute.DefaultTo<false>;
+    verifiedAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
   };
 }
 

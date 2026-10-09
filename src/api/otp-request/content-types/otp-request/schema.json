@@ -35,6 +35,14 @@
       "default": 0,
       "private": true
     },
+    "verifiedAt": {
+      "type": "datetime",
+      "private": true
+    },
+    "consumedAt": {
+      "type": "datetime",
+      "private": true
+    },
     "name": {
       "type": "string"
     },
