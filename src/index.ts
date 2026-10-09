@@ -58,7 +58,12 @@ function escapeHtml(text: string): string {
 const KNOWN_PLACEHOLDER_SECRETS = new Set([
   'your_shared_secret',
   'mgp_dev_internal_secret_2026',
+  'your_super_secret_random_string123',
 ]);
+
+// Defense in depth: a real random hex/base64 secret cannot plausibly contain
+// these words, so this heuristic catches placeholders we haven't enumerated above.
+const PLACEHOLDER_SECRET_PATTERN = /your[-_]?|placeholder|changeme|example|random[-_]?string/i;
 
 export default {
   register() {
@@ -83,7 +88,7 @@ export default {
       if (internalSecret.length < 32) {
         throw new Error('INTERNAL_API_SECRET is too short (must be at least 32 characters).');
       }
-      if (KNOWN_PLACEHOLDER_SECRETS.has(internalSecret)) {
+      if (KNOWN_PLACEHOLDER_SECRETS.has(internalSecret) || PLACEHOLDER_SECRET_PATTERN.test(internalSecret)) {
         throw new Error('INTERNAL_API_SECRET is still set to a known placeholder value. Rotate it before starting in production.');
       }
     }
