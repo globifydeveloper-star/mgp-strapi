@@ -2,6 +2,7 @@ import type { Context } from 'koa';
 import { errors } from '@strapi/utils';
 import { factories } from '@strapi/strapi';
 import { enforceRateLimit } from '../../../utils/rate-limit';
+import { sanitizePayload, validateStringLengths } from '../../../utils/sanitize-input';
 
 const { ValidationError } = errors;
 
@@ -16,19 +17,14 @@ export default factories.createCoreController('api::enquiry.enquiry', ({ strapi 
 
   async create(ctx: Context) {
 
-      // Inject sanitization
-      try {
-        const { sanitizePayload, validateStringLengths } = require('../../../utils/sanitize-input');
-        if (ctx.request.body) {
-          if (!validateStringLengths(ctx.request.body)) {
-            ctx.status = 400;
-            ctx.body = { success: false, message: 'Payload contains strings that are too long' };
-            return;
-          }
-          ctx.request.body = sanitizePayload(ctx.request.body);
+      // Sanitization (fails loudly if the util is missing/broken, instead of silently skipping it)
+      if (ctx.request.body) {
+        if (!validateStringLengths(ctx.request.body)) {
+          ctx.status = 400;
+          ctx.body = { success: false, message: 'Payload contains strings that are too long' };
+          return;
         }
-      } catch (err) {
-        // Ignore if file not found, but it should exist
+        ctx.request.body = sanitizePayload(ctx.request.body);
       }
 
       if (process.env.REQUIRE_INTERNAL_SECRET === 'true') {
