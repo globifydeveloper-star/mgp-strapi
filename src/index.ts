@@ -55,6 +55,11 @@ function escapeHtml(text: string): string {
   return text.replace(/[&<>"']/g, (m) => map[m]);
 }
 
+const KNOWN_PLACEHOLDER_SECRETS = new Set([
+  'your_shared_secret',
+  'mgp_dev_internal_secret_2026',
+]);
+
 export default {
   register() {
     if (process.env.NODE_ENV === 'production') {
@@ -69,6 +74,17 @@ export default {
       const missing = requiredSecrets.filter(s => !process.env[s]);
       if (missing.length > 0) {
         throw new Error(`Missing required production secrets: ${missing.join(', ')}`);
+      }
+
+      const internalSecret = process.env.INTERNAL_API_SECRET;
+      if (!internalSecret) {
+        throw new Error('INTERNAL_API_SECRET is not set.');
+      }
+      if (internalSecret.length < 32) {
+        throw new Error('INTERNAL_API_SECRET is too short (must be at least 32 characters).');
+      }
+      if (KNOWN_PLACEHOLDER_SECRETS.has(internalSecret)) {
+        throw new Error('INTERNAL_API_SECRET is still set to a known placeholder value. Rotate it before starting in production.');
       }
     }
   },
