@@ -65,17 +65,17 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
     config: {
       provider: 'nodemailer',
       providerOptions: {
-        host: env('SMTP_HOST', env('HOST_SMTP', 'localhost')),
-        port: env.int('SMTP_PORT', env.int('EMAIL_PORT', 587)),
+        host: env('SMTP_HOST') || env('HOST_SMTP') || 'localhost',
+        port: env.int('SMTP_PORT', 587),
         secure: env.bool('SMTP_SECURE', env.int('SMTP_PORT', 587) === 465),
         auth: {
-          user: env('SMTP_USERNAME', env('SMTP_USER', env('SMTP_FROM_EMAIL', env('FROM_EMAIL', env('EMAIL_DEFAULT_FROM'))))),
-          pass: env('SMTP_PASSWORD', env('SMTP_PASS', env('EMAIL_PASSWORD'))),
+          user: env('SMTP_USERNAME') || env('SMTP_USER') || env('SMTP_FROM_EMAIL') || env('FROM_EMAIL') || env('EMAIL_DEFAULT_FROM'),
+          pass: env('SMTP_PASSWORD') || env('SMTP_PASS') || env('EMAIL_PASSWORD'),
         },
       },
       settings: {
-        defaultFrom: env('SMTP_FROM_EMAIL', env('FROM_EMAIL', env('EMAIL_DEFAULT_FROM'))),
-        defaultReplyTo: env('SMTP_REPLY_TO', env('SMTP_FROM_EMAIL', env('FROM_EMAIL', env('EMAIL_DEFAULT_FROM')))),
+        defaultFrom: env('SMTP_FROM_EMAIL') || env('FROM_EMAIL') || env('EMAIL_DEFAULT_FROM'),
+        defaultReplyTo: env('SMTP_REPLY_TO') || env('SMTP_FROM_EMAIL') || env('FROM_EMAIL') || env('EMAIL_DEFAULT_FROM'),
       },
     },
   },
