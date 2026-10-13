@@ -296,6 +296,7 @@ export default factories.createCoreController(
       });
 
       // Dual-Write Mirror to Target Collection
+      let leadRef: string | undefined;
       if (name && typeof name === 'string' && name.trim()) {
         try {
           const location = [city, state].filter(Boolean).join(', ');
@@ -307,7 +308,7 @@ export default factories.createCoreController(
           } else if (formType === 'contact') {
             const contactService = strapi.service('api::contact-submission.contact-submission') as any;
             if (contactService) {
-              await contactService.submitAndSync({
+              const created = await contactService.submitAndSync({
                 name: name.trim(),
                 phone,
                 email,
@@ -319,11 +320,14 @@ export default factories.createCoreController(
                 enquiryType: enquiryType || 'Contact Us',
                 submittedAt,
               });
+              if (created?.documentId) {
+                leadRef = String(created.documentId);
+              }
             }
           } else if (formType === 'sell-gold-modal') {
             const goldService = strapi.service('api::gold-valuation-submission.gold-valuation-submission') as any;
             if (goldService) {
-              await goldService.submitAndSync({
+              const created = await goldService.submitAndSync({
                 name: name.trim(),
                 phone,
                 email,
@@ -338,11 +342,14 @@ export default factories.createCoreController(
                 details: { purity, weight, city, state, branchName, message },
                 submittedAt,
               });
+              if (created?.documentId) {
+                leadRef = String(created.documentId);
+              }
             }
           } else if (formType === 'mobile-van') {
             const vanService = strapi.service('api::mobile-van-submission.mobile-van-submission') as any;
             if (vanService) {
-              await vanService.submitAndSync({
+              const created = await vanService.submitAndSync({
                 name: name.trim(),
                 phone,
                 email,
@@ -358,11 +365,14 @@ export default factories.createCoreController(
                 details: { purity, weight, city, state, branchName, address, message },
                 submittedAt,
               });
+              if (created?.documentId) {
+                leadRef = String(created.documentId);
+              }
             }
           } else if (formType === 'blog') {
             const blogEnquiryService = strapi.service('api::blog-enquiry.blog-enquiry') as any;
             if (blogEnquiryService) {
-              await blogEnquiryService.submitAndSync({
+              const created = await blogEnquiryService.submitAndSync({
                 name: name.trim(),
                 phone,
                 email,
@@ -371,11 +381,14 @@ export default factories.createCoreController(
                 blogTitle: sourceForm?.replace(/^Blog:\s*/i, '') || 'Blog',
                 submittedAt,
               });
+              if (created?.documentId) {
+                leadRef = String(created.documentId);
+              }
             }
           } else if (formType === 'sell-gold-page' || formType === 'page-builder') {
             const enquiryService = strapi.service('api::enquiry.enquiry') as any;
             if (enquiryService && enquiryService.createVerifiedEnquiry) {
-              await enquiryService.createVerifiedEnquiry({
+              const created = await enquiryService.createVerifiedEnquiry({
                 name: name.trim(),
                 mobile: phone,
                 email: email || undefined,
@@ -392,11 +405,14 @@ export default factories.createCoreController(
                 city: city || undefined,
                 state: state || undefined,
               });
+              if (created?.documentId) {
+                leadRef = String(created.documentId);
+              }
             }
           } else if (formType === 'gold-value') {
             const goldService = strapi.service('api::gold-valuation-submission.gold-valuation-submission') as any;
             if (goldService) {
-              await goldService.submitAndSync({
+              const created = await goldService.submitAndSync({
                 name: name.trim(),
                 phone,
                 email,
@@ -411,6 +427,9 @@ export default factories.createCoreController(
                 details: { purity, weight, city, state, branchName, message },
                 submittedAt,
               });
+              if (created?.documentId) {
+                leadRef = String(created.documentId);
+              }
             }
           } else {
             // Fallback for requests without explicit formType (old cached JS bundles)
@@ -420,7 +439,7 @@ export default factories.createCoreController(
             if (srcStr.includes('van') || srcStr.includes('mobile')) {
               const vanService = strapi.service('api::mobile-van-submission.mobile-van-submission') as any;
               if (vanService) {
-                await vanService.submitAndSync({
+                const created = await vanService.submitAndSync({
                   name: name.trim(),
                   phone,
                   email,
@@ -436,11 +455,14 @@ export default factories.createCoreController(
                   details: { purity, weight, city, state, address, message },
                   submittedAt,
                 });
+                if (created?.documentId) {
+                  leadRef = String(created.documentId);
+                }
               }
             } else if (srcStr.includes('contact')) {
               const contactService = strapi.service('api::contact-submission.contact-submission') as any;
               if (contactService) {
-                await contactService.submitAndSync({
+                const created = await contactService.submitAndSync({
                   name: name.trim(),
                   phone,
                   email,
@@ -450,11 +472,14 @@ export default factories.createCoreController(
                   message: message || undefined,
                   submittedAt,
                 });
+                if (created?.documentId) {
+                  leadRef = String(created.documentId);
+                }
               }
             } else if (srcStr.includes('blog')) {
               const blogEnquiryService = strapi.service('api::blog-enquiry.blog-enquiry') as any;
               if (blogEnquiryService) {
-                await blogEnquiryService.submitAndSync({
+                const created = await blogEnquiryService.submitAndSync({
                   name: name.trim(),
                   phone,
                   email,
@@ -463,11 +488,14 @@ export default factories.createCoreController(
                   blogTitle: sourceForm?.replace(/^Blog:\s*/i, '') || 'Blog',
                   submittedAt,
                 });
+                if (created?.documentId) {
+                  leadRef = String(created.documentId);
+                }
               }
             } else if (srcStr.includes('value') || srcStr.includes('valuation') || srcStr.includes('modal') || srcStr.includes('rate')) {
               const goldService = strapi.service('api::gold-valuation-submission.gold-valuation-submission') as any;
               if (goldService) {
-                await goldService.submitAndSync({
+                const created = await goldService.submitAndSync({
                   name: name.trim(),
                   phone,
                   email,
@@ -480,11 +508,14 @@ export default factories.createCoreController(
                   details: { purity, weight, city, state, message },
                   submittedAt,
                 });
+                if (created?.documentId) {
+                  leadRef = String(created.documentId);
+                }
               }
             } else {
               const enquiryService = strapi.service('api::enquiry.enquiry') as any;
               if (enquiryService && enquiryService.createVerifiedEnquiry) {
-                await enquiryService.createVerifiedEnquiry({
+                const created = await enquiryService.createVerifiedEnquiry({
                   name: name.trim(),
                   mobile: phone,
                   email: email || undefined,
@@ -493,6 +524,9 @@ export default factories.createCoreController(
                   branchCode: branchCode || undefined,
                   branchValidated,
                 });
+                if (created?.documentId) {
+                  leadRef = String(created.documentId);
+                }
               }
             }
           }
@@ -502,7 +536,11 @@ export default factories.createCoreController(
       }
 
       ctx.status = 200;
-      ctx.body = { success: true, verified: true };
+      ctx.body = {
+        success: true,
+        verified: true,
+        ...(leadRef ? { leadRef } : {}),
+      };
     },
   })
 );

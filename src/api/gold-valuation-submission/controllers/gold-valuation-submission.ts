@@ -46,10 +46,13 @@ export default factories.createCoreController(
         submitAndSync(payload: unknown): Promise<Record<string, unknown>>;
       };
 
-      await service.submitAndSync(body);
+      const entry = await service.submitAndSync(body);
 
       ctx.status = 201;
-      ctx.body = { success: true };
+      ctx.body = {
+        success: true,
+        ...(entry?.documentId ? { leadRef: String(entry.documentId) } : {}),
+      };
     },
 
     async find(ctx: Context) {
