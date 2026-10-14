@@ -536,6 +536,7 @@ export interface ApiAboutUsPageAboutUsPage extends Struct.SingleTypeSchema {
     philanthropyInitiativeDesc: Schema.Attribute.Text;
     philanthropyInitiativeTitle: Schema.Attribute.String;
     philanthropyLink: Schema.Attribute.String;
+    philanthropyLinkText: Schema.Attribute.String;
     philanthropyPillars: Schema.Attribute.Component<'shared.pillar-item', true>;
     philanthropySubtitle: Schema.Attribute.String;
     philanthropyTitle: Schema.Attribute.String;

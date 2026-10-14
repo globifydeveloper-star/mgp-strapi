@@ -159,7 +159,11 @@
     },
     "philanthropyLink": {
       "type": "string",
-      "description": "Where clicking the initiative images goes. Default: /community"
+      "description": "Where the CSR link and initiative images go. Default: /community"
+    },
+    "philanthropyLinkText": {
+      "type": "string",
+      "description": "Text of the link under the initiative description. Default: Explore all our CSR initiatives"
     },
     "philanthropyPillars": {
       "type": "component",
