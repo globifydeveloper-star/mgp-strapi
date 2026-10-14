@@ -72,9 +72,6 @@
     "locatorSubtitle": {
       "type": "text"
     },
-    "locatorBranchesCount": {
-      "type": "string"
-    },
       "seoDescription": {
       "type": "text"
     },

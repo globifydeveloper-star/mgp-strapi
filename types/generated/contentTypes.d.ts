@@ -501,12 +501,15 @@ export interface ApiAboutUsPageAboutUsPage extends Struct.SingleTypeSchema {
     heroDescription: Schema.Attribute.Text;
     heroEyebrow: Schema.Attribute.String;
     heroImages: Schema.Attribute.Media<'images', true>;
+    heroInfoCards: Schema.Attribute.Component<'shared.text-section', true>;
     heroStats: Schema.Attribute.Component<'shared.stat-item', true>;
     heroTitle: Schema.Attribute.String;
+    heroWhoWeAreHeading: Schema.Attribute.String;
     hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     historyDescription: Schema.Attribute.Text;
     historyMilestones: Schema.Attribute.Component<'shared.milestone', true>;
+    historySections: Schema.Attribute.Component<'shared.text-section', true>;
     historySubtitle: Schema.Attribute.String;
     historyTitle: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -518,15 +521,21 @@ export interface ApiAboutUsPageAboutUsPage extends Struct.SingleTypeSchema {
     ogImage: Schema.Attribute.Media<'images'>;
     parentChecklist: Schema.Attribute.Component<'shared.check-item', true>;
     parentCompareHeading: Schema.Attribute.String;
+    parentCtaLink: Schema.Attribute.String;
+    parentCtaText: Schema.Attribute.String;
     parentDescription: Schema.Attribute.Text;
     parentEyebrow: Schema.Attribute.String;
     parentPortraitImage: Schema.Attribute.Media<'images'>;
     parentStats: Schema.Attribute.Component<'shared.stat-item', true>;
+    parentTableHeaderLeft: Schema.Attribute.String;
+    parentTableHeaderRight: Schema.Attribute.String;
     parentTitle: Schema.Attribute.String;
     philanthropyConclusion: Schema.Attribute.Text;
     philanthropyDescription: Schema.Attribute.Text;
+    philanthropyImages: Schema.Attribute.Media<'images', true>;
     philanthropyInitiativeDesc: Schema.Attribute.Text;
     philanthropyInitiativeTitle: Schema.Attribute.String;
+    philanthropyLink: Schema.Attribute.String;
     philanthropyPillars: Schema.Attribute.Component<'shared.pillar-item', true>;
     philanthropySubtitle: Schema.Attribute.String;
     philanthropyTitle: Schema.Attribute.String;
@@ -1087,7 +1096,7 @@ export interface ApiFaqFaq extends Struct.CollectionTypeSchema {
     page: Schema.Attribute.Relation<'manyToOne', 'api::page.page'>;
     publishedAt: Schema.Attribute.DateTime;
     question: Schema.Attribute.String;
-    section: Schema.Attribute.Enumeration<['home', 'gold-rate']>;
+    section: Schema.Attribute.Enumeration<['home', 'gold-rate', 'about-us']>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1355,7 +1364,6 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
       'api::homepage.homepage'
     > &
       Schema.Attribute.Private;
-    locatorBranchesCount: Schema.Attribute.String;
     locatorHeading: Schema.Attribute.String;
     locatorHighlight: Schema.Attribute.String;
     locatorSubtitle: Schema.Attribute.Text;
