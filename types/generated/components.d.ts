@@ -238,6 +238,23 @@ export interface SharedServiceItem extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedSlideFeature extends Struct.ComponentSchema {
+  collectionName: 'components_shared_slide_features';
+  info: {
+    description: 'Sub-card or feature point for hero slides';
+    displayName: 'Slide Feature';
+  };
+  attributes: {
+    desc: Schema.Attribute.Text;
+    iconType: Schema.Attribute.Enumeration<
+      ['nature', 'economy', 'trust', 'default']
+    > &
+      Schema.Attribute.DefaultTo<'default'>;
+    tag: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface SharedStatItem extends Struct.ComponentSchema {
   collectionName: 'components_shared_stat_items';
   info: {
@@ -247,6 +264,18 @@ export interface SharedStatItem extends Struct.ComponentSchema {
   attributes: {
     label: Schema.Attribute.String;
     number: Schema.Attribute.String;
+  };
+}
+
+export interface SharedTextSection extends Struct.ComponentSchema {
+  collectionName: 'components_shared_text_sections';
+  info: {
+    description: 'A heading with a body. Separate paragraphs with a blank line; inline HTML links (<a href="...">) are allowed.';
+    displayName: 'Text Section';
+  };
+  attributes: {
+    body: Schema.Attribute.Text;
+    heading: Schema.Attribute.String;
   };
 }
 
@@ -272,7 +301,9 @@ declare module '@strapi/strapi' {
       'shared.process-step': SharedProcessStep;
       'shared.promo-slide': SharedPromoSlide;
       'shared.service-item': SharedServiceItem;
+      'shared.slide-feature': SharedSlideFeature;
       'shared.stat-item': SharedStatItem;
+      'shared.text-section': SharedTextSection;
     }
   }
 }

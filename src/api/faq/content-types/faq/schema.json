@@ -20,7 +20,8 @@
       "type": "enumeration",
       "enum": [
         "home",
-        "gold-rate"
+        "gold-rate",
+        "about-us"
       ]
     },
     "order": {

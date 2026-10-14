@@ -17,6 +17,10 @@
     "heroTitle": {
       "type": "string"
     },
+    "heroWhoWeAreHeading": {
+      "type": "string",
+      "description": "Heading above the hero description. Default: Who We Are"
+    },
     "heroDescription": {
       "type": "text"
     },
@@ -30,6 +34,12 @@
       "type": "component",
       "repeatable": true,
       "component": "shared.check-item"
+    },
+    "heroInfoCards": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.text-section",
+      "description": "Cards below the hero (Corporate Information, Industry Pioneer, Transparent Process). A link with href=\"#sell-gold\" opens the Sell Gold form."
     },
     "heroStats": {
       "type": "component",
@@ -67,6 +77,12 @@
     "historyDescription": {
       "type": "text"
     },
+    "historySections": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.text-section",
+      "description": "Long-form history text shown above the timeline"
+    },
     "historyMilestones": {
       "type": "component",
       "repeatable": true,
@@ -94,6 +110,22 @@
       "repeatable": true,
       "component": "shared.stat-item"
     },
+    "parentTableHeaderLeft": {
+      "type": "string",
+      "description": "Default: Muthoot Pappachan Group"
+    },
+    "parentTableHeaderRight": {
+      "type": "string",
+      "description": "Default: At a Glance"
+    },
+    "parentCtaText": {
+      "type": "string",
+      "description": "Default: Visit muthoot.com"
+    },
+    "parentCtaLink": {
+      "type": "string",
+      "description": "Default: https://muthoot.com"
+    },
     "parentPortraitImage": {
       "type": "media",
       "multiple": false,
@@ -116,6 +148,18 @@
     },
     "philanthropyInitiativeDesc": {
       "type": "text"
+    },
+    "philanthropyImages": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Initiative images: the first is the large image, the second the overlapping one. Falls back to the built-in football photos."
+    },
+    "philanthropyLink": {
+      "type": "string",
+      "description": "Where clicking the initiative images goes. Default: /community"
     },
     "philanthropyPillars": {
       "type": "component",

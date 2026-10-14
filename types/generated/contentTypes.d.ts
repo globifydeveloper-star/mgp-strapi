@@ -1310,6 +1310,7 @@ export interface ApiHeroSlideHeroSlide extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    features: Schema.Attribute.Component<'shared.slide-feature', true>;
     heroImage: Schema.Attribute.Media<'images'>;
     heroSubtext: Schema.Attribute.Text;
     heroText: Schema.Attribute.Text;

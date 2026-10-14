@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_shared_slide_features",
+  "info": {
+    "displayName": "Slide Feature",
+    "description": "Sub-card or feature point for hero slides"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "desc": {
+      "type": "text"
+    },
+    "tag": {
+      "type": "string"
+    },
+    "iconType": {
+      "type": "enumeration",
+      "enum": [
+        "nature",
+        "economy",
+        "trust",
+        "default"
+      ],
+      "default": "default"
+    }
+  }
+}

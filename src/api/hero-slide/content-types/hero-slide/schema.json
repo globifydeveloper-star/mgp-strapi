@@ -36,6 +36,11 @@
       "type": "component",
       "component": "blog.cta",
       "repeatable": false
+    },
+    "features": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.slide-feature"
     }
   }
 }

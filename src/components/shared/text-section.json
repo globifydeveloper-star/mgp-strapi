@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_shared_text_sections",
+  "info": {
+    "displayName": "Text Section",
+    "description": "A heading with a body. Separate paragraphs with a blank line; inline HTML links (<a href=\"...\">) are allowed."
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "body": {
+      "type": "text"
+    }
+  }
+}
