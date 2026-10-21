@@ -5,6 +5,12 @@ if (process.env.NODE_ENV === 'production' && !process.env.CORS_ORIGINS) {
 }
 const origins = process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',').map(s => s.trim()) : [];
 
+// Upload bucket host for admin media previews; follows the upload provider's bucket per environment.
+const uploadBucketHost =
+  process.env.AWS_BUCKET && process.env.AWS_REGION
+    ? `${process.env.AWS_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com`
+    : 'mgpwebsiteuat.s3.ap-south-1.amazonaws.com';
+
 const config: Core.Config.Middlewares = [
   'strapi::logger',
   'strapi::errors',
@@ -24,14 +30,14 @@ const config: Core.Config.Middlewares = [
             'data:',
             'blob:',
             'market-assets.strapi.io',
-            'mgpwebsiteuat.s3.ap-south-1.amazonaws.com',
+            uploadBucketHost,
           ],
           'media-src': [
             "'self'",
             'data:',
             'blob:',
             'market-assets.strapi.io',
-            'mgpwebsiteuat.s3.ap-south-1.amazonaws.com',
+            uploadBucketHost,
           ],
           upgradeInsecureRequests: null,
         },
