@@ -151,7 +151,7 @@ export default {
       await strapi.documents(heroSlideUid).create({
         data: {
           heroText: 'Sell Your Gold. Get Cash Today.',
-          heroSubtext: 'Get the True Market Value Old, Unused or pledged gold through a transparent process conducted entirely in front of you',
+          heroSubtext: 'Get the fair value of your gold through a transparent and reliable process, conducted entirely in front of you.',
           slideLink: '#branches',
           button1: { enabled: true, label: 'Find Nearest Branch', link: '#branches' },
           button2: { enabled: true, label: 'See how it works', link: '#gold-sell-process' }
