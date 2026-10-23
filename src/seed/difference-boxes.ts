@@ -78,24 +78,49 @@ async function toData(strapi: Core.Strapi, box: (typeof CURRENT_BOXES)[number]) 
   return boxImage ? { ...fields, boxImage } : fields;
 }
 
-export async function seedDifferenceBoxes(strapi: Core.Strapi) {
-  const existing = await strapi.documents(UID).findMany({ limit: 100 });
+const normalizeTitle = (title?: string) => (title || '').trim().toLowerCase().replace(/[’']/g, "'");
 
-  if (existing.length === 0) {
-    strapi.log.info('Seeding Difference Boxes...');
-    for (const box of CURRENT_BOXES) {
-      await strapi.documents(UID).create({ data: (await toData(strapi, box)) as any });
-    }
-    return;
+// Fills only what an existing current card is missing; anything an editor set is kept.
+async function fillMissing(strapi: Core.Strapi, entry: any, box: (typeof CURRENT_BOXES)[number]) {
+  const data: Record<string, unknown> = {};
+  if (!entry.boxDescription?.trim()) data.boxDescription = box.boxDescription;
+  if (!entry.iconType || entry.iconType === 'default') data.iconType = box.iconType;
+  if (entry.order === null || entry.order === undefined) data.order = box.order;
+  if (!entry.boxImage) {
+    const boxImage = await uploadImage(strapi, box.image);
+    if (boxImage) data.boxImage = boxImage;
   }
+  if (Object.keys(data).length === 0) return;
+  strapi.log.info(`Why Choose Gold Point: filling ${Object.keys(data).join(', ')} on "${entry.boxTitle}"`);
+  await strapi.documents(UID).update({ documentId: entry.documentId, data: data as any });
+}
 
-  for (const entry of existing as any[]) {
-    const idx = LEGACY_TITLES[(entry.boxTitle || '').trim().toLowerCase()];
-    if (idx === undefined) continue;
-    strapi.log.info(`Replacing legacy Difference Box "${entry.boxTitle}" with "${CURRENT_BOXES[idx].boxTitle}"`);
-    await strapi.documents(UID).update({
-      documentId: entry.documentId,
-      data: (await toData(strapi, CURRENT_BOXES[idx])) as any,
-    });
+export async function seedDifferenceBoxes(strapi: Core.Strapi) {
+  try {
+    const existing = await strapi.documents(UID).findMany({ limit: 100, populate: ['boxImage'] as any });
+
+    if (existing.length === 0) {
+      strapi.log.info('Seeding Why Choose Gold Point cards...');
+      for (const box of CURRENT_BOXES) {
+        await strapi.documents(UID).create({ data: (await toData(strapi, box)) as any });
+      }
+      return;
+    }
+
+    for (const entry of existing as any[]) {
+      const legacyIdx = LEGACY_TITLES[normalizeTitle(entry.boxTitle)];
+      if (legacyIdx !== undefined) {
+        strapi.log.info(`Replacing legacy Why Choose Gold Point card "${entry.boxTitle}" with "${CURRENT_BOXES[legacyIdx].boxTitle}"`);
+        await strapi.documents(UID).update({
+          documentId: entry.documentId,
+          data: (await toData(strapi, CURRENT_BOXES[legacyIdx])) as any,
+        });
+        continue;
+      }
+      const current = CURRENT_BOXES.find((box) => normalizeTitle(box.boxTitle) === normalizeTitle(entry.boxTitle));
+      if (current) await fillMissing(strapi, entry, current);
+    }
+  } catch (err) {
+    strapi.log.warn(`Skipped Why Choose Gold Point seed: ${err instanceof Error ? err.message : err}`);
   }
 }

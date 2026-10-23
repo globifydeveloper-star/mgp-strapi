@@ -33,6 +33,20 @@ export interface CommunityInitiative extends Struct.ComponentSchema {
   };
 }
 
+export interface MobileVanLocation extends Struct.ComponentSchema {
+  collectionName: 'components_mobile_van_locations';
+  info: {
+    description: 'A city served by the mobile van';
+    displayName: 'Service Location';
+    icon: 'pinMap';
+  };
+  attributes: {
+    city: Schema.Attribute.String;
+    desc: Schema.Attribute.Text;
+    phones: Schema.Attribute.Text;
+  };
+}
+
 export interface NavigationNavItem extends Struct.ComponentSchema {
   collectionName: 'components_navigation_nav_items';
   info: {
@@ -304,6 +318,7 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'blog.cta': BlogCta;
       'community.initiative': CommunityInitiative;
+      'mobile-van.location': MobileVanLocation;
       'navigation.nav-item': NavigationNavItem;
       'page-section.contact-form': PageSectionContactForm;
       'page-section.difference-grid': PageSectionDifferenceGrid;

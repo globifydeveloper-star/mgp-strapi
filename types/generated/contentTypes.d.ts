@@ -530,6 +530,7 @@ export interface ApiAboutUsPageAboutUsPage extends Struct.SingleTypeSchema {
     parentTableHeaderLeft: Schema.Attribute.String;
     parentTableHeaderRight: Schema.Attribute.String;
     parentTitle: Schema.Attribute.String;
+    philanthropyBadgeText: Schema.Attribute.String;
     philanthropyConclusion: Schema.Attribute.Text;
     philanthropyDescription: Schema.Attribute.Text;
     philanthropyImages: Schema.Attribute.Media<'images', true>;
@@ -776,20 +777,69 @@ export interface ApiCareerPageSettingCareerPageSetting
     cultureDescription: Schema.Attribute.Text;
     cultureHeading: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'Why Join Muthoot?'>;
+    experienceOptions: Schema.Attribute.Component<'shared.check-item', true>;
+    formCityLabel: Schema.Attribute.String;
+    formCityPlaceholder: Schema.Attribute.String;
+    formEmailLabel: Schema.Attribute.String;
+    formEmailPlaceholder: Schema.Attribute.String;
+    formExperienceLabel: Schema.Attribute.String;
+    formExperiencePlaceholder: Schema.Attribute.String;
+    formGeneralApplicationLabel: Schema.Attribute.String;
+    formMessageLabel: Schema.Attribute.String;
+    formMessagePlaceholder: Schema.Attribute.String;
+    formNameLabel: Schema.Attribute.String;
+    formNamePlaceholder: Schema.Attribute.String;
+    formNoticeLabel: Schema.Attribute.String;
+    formNoticePlaceholder: Schema.Attribute.String;
+    formPhoneLabel: Schema.Attribute.String;
+    formPhonePlaceholder: Schema.Attribute.String;
+    formPositionLabel: Schema.Attribute.String;
+    formPositionPlaceholder: Schema.Attribute.String;
+    formResumeBrowseText: Schema.Attribute.String;
+    formResumeDropText: Schema.Attribute.String;
+    formResumeHint: Schema.Attribute.String;
+    formResumeLabel: Schema.Attribute.String;
+    formResumeSelectedLabel: Schema.Attribute.String;
+    formSubmitLabel: Schema.Attribute.String;
+    formSubmittingLabel: Schema.Attribute.String;
+    formSubtitle: Schema.Attribute.String;
+    formSuccessText: Schema.Attribute.String;
+    formTitle: Schema.Attribute.String;
+    heroApplyLabel: Schema.Attribute.String;
     heroDescription: Schema.Attribute.Text;
     heroHeading: Schema.Attribute.String;
     heroImage: Schema.Attribute.Media<'images'>;
+    heroOpeningsLabel: Schema.Attribute.String;
     heroSubheading: Schema.Attribute.String;
+    hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    jobApplyLabel: Schema.Attribute.String;
+    jobDescriptionLabel: Schema.Attribute.String;
+    jobRequirementsLabel: Schema.Attribute.String;
+    jobResponsibilitiesLabel: Schema.Attribute.String;
+    jobSummaryLabel: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::career-page-setting.career-page-setting'
     > &
       Schema.Attribute.Private;
+    noticePeriodOptions: Schema.Attribute.Component<'shared.check-item', true>;
     ogImage: Schema.Attribute.Media<'images'>;
+    openingsAllLabel: Schema.Attribute.String;
+    openingsEmptyText: Schema.Attribute.String;
+    openingsHeading: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.String;
     seoTitle: Schema.Attribute.String;
+    successDoneLabel: Schema.Attribute.String;
+    successRoleLabel: Schema.Attribute.String;
+    successText: Schema.Attribute.Text;
+    successThanksFallback: Schema.Attribute.String;
+    successThanksPrefix: Schema.Attribute.String;
+    successThanksSuffix: Schema.Attribute.String;
+    successTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1013,10 +1063,19 @@ export interface ApiContactUsPageContactUsPage extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    formMessagePlaceholder: Schema.Attribute.String;
+    formResetLabel: Schema.Attribute.String;
+    formSendingLabel: Schema.Attribute.String;
+    formServicePlaceholder: Schema.Attribute.String;
+    formServices: Schema.Attribute.Component<'shared.check-item', true>;
+    formSubmitLabel: Schema.Attribute.String;
+    formSuccessText: Schema.Attribute.String;
     formTitle: Schema.Attribute.String;
     heroHeading: Schema.Attribute.String;
     heroImage: Schema.Attribute.Media<'images'>;
     heroLead: Schema.Attribute.Text;
+    hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1031,9 +1090,11 @@ export interface ApiContactUsPageContactUsPage extends Struct.SingleTypeSchema {
     officeName: Schema.Attribute.String;
     officePhone1: Schema.Attribute.String;
     officePhone2: Schema.Attribute.String;
+    officeTitle: Schema.Attribute.String;
     ogImage: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
     seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.String;
     seoTitle: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1045,7 +1106,8 @@ export interface ApiDifferenceBoxDifferenceBox
   extends Struct.CollectionTypeSchema {
   collectionName: 'difference_boxes';
   info: {
-    displayName: 'Difference Box';
+    description: 'Cards in the homepage "Why Choose Gold Point" section. Lowest order shows first.';
+    displayName: 'Why Choose Gold Point';
     pluralName: 'difference-boxes';
     singularName: 'difference-box';
   };
@@ -1060,7 +1122,7 @@ export interface ApiDifferenceBoxDifferenceBox
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     iconType: Schema.Attribute.Enumeration<
-      ['flask', 'scale', 'rupee', 'default']
+      ['flask', 'scale', 'rupee', 'leaf', 'default']
     > &
       Schema.Attribute.DefaultTo<'default'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -1255,7 +1317,9 @@ export interface ApiFooterSettingFooterSetting extends Struct.SingleTypeSchema {
       Schema.Attribute.DefaultTo<'Muthoot Gold Point is the first National level organized sector venture to get into recycling of Gold, backed by a 133+ year legacy.'>;
     instagramUrl: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'https://www.instagram.com/muthoot.goldpoint/'>;
+    legalEmail: Schema.Attribute.String;
     legalLinks: Schema.Attribute.Component<'navigation.nav-item', true>;
+    legalText: Schema.Attribute.String;
     linkedinUrl: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'https://www.linkedin.com/company/muthoot-exim-private-limited/'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -1266,13 +1330,20 @@ export interface ApiFooterSettingFooterSetting extends Struct.SingleTypeSchema {
       Schema.Attribute.Private;
     officeAddress: Schema.Attribute.Text &
       Schema.Attribute.DefaultTo<'Muthoot Exim Private Limited Ground Floor Muthoot Towers, M.G.Road, Opposite Abad Plaza Ernakulam, Kerala, 682035'>;
+    officeHeading: Schema.Attribute.String;
     officeHours: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'9:00 AM - 6:00 PM'>;
+    otherWebsites: Schema.Attribute.Component<'navigation.nav-item', true>;
+    otherWebsitesLabel: Schema.Attribute.String;
     presenceHeading: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'Our Presence - States'>;
     presenceStates: Schema.Attribute.Component<'navigation.nav-item', true>;
     publishedAt: Schema.Attribute.DateTime;
     quickLinks: Schema.Attribute.Component<'navigation.nav-item', true>;
+    quickLinksHeading: Schema.Attribute.String;
+    socialsHeading: Schema.Attribute.String;
+    tollFreeDescription: Schema.Attribute.String;
+    tollFreeHeading: Schema.Attribute.String;
     tollFreeNumber: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'1800 102 1616'>;
     twitterUrl: Schema.Attribute.String &
@@ -1352,10 +1423,20 @@ export interface ApiGoldRatePageGoldRatePage extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    ctaPrimaryLabel: Schema.Attribute.String;
+    ctaSecondaryLabel: Schema.Attribute.String;
+    ctaSecondaryLink: Schema.Attribute.String;
+    ctaSubtext: Schema.Attribute.String;
+    ctaTitle: Schema.Attribute.String;
+    faqHeading: Schema.Attribute.String;
     faqs: Schema.Attribute.Relation<'oneToMany', 'api::faq.faq'>;
+    heroCalculateLabel: Schema.Attribute.String;
     heroDescription: Schema.Attribute.Text;
     heroImage: Schema.Attribute.Media<'images'>;
+    heroLiveLabel: Schema.Attribute.String;
+    heroSellLabel: Schema.Attribute.String;
     heroTitle: Schema.Attribute.String;
+    heroUpdatedTime: Schema.Attribute.String;
     hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -1369,10 +1450,20 @@ export interface ApiGoldRatePageGoldRatePage extends Struct.SingleTypeSchema {
     seoDescription: Schema.Attribute.Text;
     seoKeywords: Schema.Attribute.String;
     seoTitle: Schema.Attribute.String;
+    trustItems: Schema.Attribute.Component<'shared.check-item', true>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    valuationProcessImage: Schema.Attribute.Media<'images'>;
+    valuationSteps: Schema.Attribute.Component<'shared.benefit-card', true>;
+    valuationTitle: Schema.Attribute.String;
+    valuationTitleHighlight: Schema.Attribute.String;
+    valuationTitleSuffix: Schema.Attribute.String;
     whyGoldRateChangesImage: Schema.Attribute.Media<'images'>;
+    whyReasons: Schema.Attribute.Component<'shared.benefit-card', true>;
+    whyTitle: Schema.Attribute.String;
+    whyTitleHighlight: Schema.Attribute.String;
+    whyTitleSuffix: Schema.Attribute.String;
   };
 }
 
@@ -1480,9 +1571,20 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    diffHeading: Schema.Attribute.String;
+    diffHeadingHighlight: Schema.Attribute.String;
+    diffSubtitle: Schema.Attribute.String;
     estimateGoldHeading: Schema.Attribute.String;
     estimateGoldHeadingHighlight: Schema.Attribute.String;
     estimateGoldNote: Schema.Attribute.String;
+    faqHeading: Schema.Attribute.String;
+    faqHeadingHighlight: Schema.Attribute.String;
+    faqReadMoreLabel: Schema.Attribute.String;
+    faqViewLessLabel: Schema.Attribute.String;
+    feedbackHeading: Schema.Attribute.String;
+    heroArcLabel1: Schema.Attribute.Text;
+    heroArcLabel2: Schema.Attribute.Text;
+    heroArcLabel3: Schema.Attribute.Text;
     heroFirstSlideImage: Schema.Attribute.Media<'images'>;
     hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -1497,8 +1599,17 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
     locatorHighlight: Schema.Attribute.String;
     locatorSubtitle: Schema.Attribute.Text;
     ogImage: Schema.Attribute.Media<'images'>;
+    processHeading: Schema.Attribute.String;
+    processHeadingHighlight: Schema.Attribute.String;
     processSectionImage: Schema.Attribute.Media<'images'>;
+    processStepLabel: Schema.Attribute.String;
+    processSubtitle: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    recentPostsEmptyText: Schema.Attribute.String;
+    recentPostsHeading: Schema.Attribute.String;
+    recentPostsHeadingHighlight: Schema.Attribute.String;
+    recentPostsHeadingSuffix: Schema.Attribute.String;
+    recentPostsReadMoreLabel: Schema.Attribute.String;
     seoDescription: Schema.Attribute.Text;
     seoKeywords: Schema.Attribute.String;
     seoTitle: Schema.Attribute.String;
@@ -1513,6 +1624,7 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
       Schema.Attribute.Private;
     vanButtonLabel: Schema.Attribute.String;
     vanDescription: Schema.Attribute.Text;
+    vanFeatures: Schema.Attribute.Component<'shared.check-item', true>;
     vanHeadingBold: Schema.Attribute.String;
     vanHeadingLight: Schema.Attribute.String;
     vanImage: Schema.Attribute.Media<'images'>;
@@ -1661,7 +1773,16 @@ export interface ApiMobileVanPageMobileVanPage extends Struct.SingleTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
+    appointmentAddressLabel: Schema.Attribute.String;
+    appointmentAddressPlaceholder: Schema.Attribute.String;
     appointmentDescription: Schema.Attribute.Text;
+    appointmentNamePlaceholder: Schema.Attribute.String;
+    appointmentOtpPlaceholder: Schema.Attribute.String;
+    appointmentPhonePlaceholder: Schema.Attribute.String;
+    appointmentResetLabel: Schema.Attribute.String;
+    appointmentSubmitLabel: Schema.Attribute.String;
+    appointmentSubmittingLabel: Schema.Attribute.String;
+    appointmentSuccessText: Schema.Attribute.String;
     appointmentTitle: Schema.Attribute.String;
     bookVanFormImage: Schema.Attribute.Media<'images'>;
     createdAt: Schema.Attribute.DateTime;
@@ -1687,6 +1808,7 @@ export interface ApiMobileVanPageMobileVanPage extends Struct.SingleTypeSchema {
     seoDescription: Schema.Attribute.Text;
     seoKeywords: Schema.Attribute.String;
     seoTitle: Schema.Attribute.String;
+    serviceLocations: Schema.Attribute.Component<'mobile-van.location', true>;
     testingMethods: Schema.Attribute.Component<'shared.benefit-card', true>;
     testingMethodsImage: Schema.Attribute.Media<'images'>;
     testingMethodsTitle: Schema.Attribute.String;
@@ -2009,9 +2131,26 @@ export interface ApiSellGoldPageSettingSellGoldPageSetting
     draftAndPublish: false;
   };
   attributes: {
+    contactDescription: Schema.Attribute.String;
+    contactEmail: Schema.Attribute.String;
+    contactPhone: Schema.Attribute.String;
+    contactSuccessText: Schema.Attribute.String;
+    contactTitle: Schema.Attribute.String;
+    contactTitleHighlight: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    heroBullets: Schema.Attribute.Component<'shared.check-item', true>;
+    heroFormResetLabel: Schema.Attribute.String;
+    heroFormSubtitle: Schema.Attribute.String;
+    heroFormSuccessText: Schema.Attribute.String;
+    heroFormTitle: Schema.Attribute.String;
+    heroImage: Schema.Attribute.Media<'images'>;
+    heroSubtitle: Schema.Attribute.String;
+    heroTitle: Schema.Attribute.String;
+    heroTitleHighlight: Schema.Attribute.String;
+    hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -2019,6 +2158,19 @@ export interface ApiSellGoldPageSettingSellGoldPageSetting
     > &
       Schema.Attribute.Private;
     ogImage: Schema.Attribute.Media<'images'>;
+    overviewButtonLabel: Schema.Attribute.String;
+    overviewButtonLink: Schema.Attribute.String;
+    overviewDescription: Schema.Attribute.Text;
+    overviewEyebrow: Schema.Attribute.String;
+    overviewImage1: Schema.Attribute.Media<'images'>;
+    overviewImage2: Schema.Attribute.Media<'images'>;
+    overviewSubtitle: Schema.Attribute.String;
+    overviewTile1: Schema.Attribute.Text;
+    overviewTile2: Schema.Attribute.Text;
+    overviewTile3: Schema.Attribute.Text;
+    overviewTile4: Schema.Attribute.Text;
+    overviewTitle: Schema.Attribute.String;
+    overviewTitleHighlight: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     seoDescription: Schema.Attribute.Text;
     seoKeywords: Schema.Attribute.Text;
@@ -2032,6 +2184,8 @@ export interface ApiSellGoldPageSettingSellGoldPageSetting
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    videoModalTitle: Schema.Attribute.String;
+    watchNowLabel: Schema.Attribute.String;
     weBuyGoldImage: Schema.Attribute.Media<'images'> &
       Schema.Attribute.Required;
   };
@@ -2063,6 +2217,149 @@ export interface ApiSharedMediaSharedMedia extends Struct.SingleTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+  };
+}
+
+export interface ApiSiteTextSiteText extends Struct.SingleTypeSchema {
+  collectionName: 'site_texts';
+  info: {
+    description: 'Labels and copy shared across the site: forms, pop-ups, branch locator, comparison table and default SEO. Leave a field empty to use the built-in text.';
+    displayName: 'Site Text';
+    pluralName: 'site-texts';
+    singularName: 'site-text';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    branchSelectorButtonLabel: Schema.Attribute.String;
+    branchSelectorSubtitle: Schema.Attribute.String;
+    branchSelectorTitle: Schema.Attribute.String;
+    branchTiming: Schema.Attribute.String;
+    comparisonMgpShortLabel: Schema.Attribute.String;
+    comparisonOtherLabel: Schema.Attribute.String;
+    comparisonOtherShortLabel: Schema.Attribute.String;
+    comparisonProcessLabel: Schema.Attribute.String;
+    comparisonTitle: Schema.Attribute.Text;
+    consentLessLabel: Schema.Attribute.String;
+    consentMoreLabel: Schema.Attribute.String;
+    consentRest: Schema.Attribute.Text;
+    consentShort: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    enquiryResetLabel: Schema.Attribute.String;
+    enquirySubtitle: Schema.Attribute.String;
+    enquirySuccessText: Schema.Attribute.String;
+    enquiryTitle: Schema.Attribute.String;
+    formBranchLabel: Schema.Attribute.String;
+    formCityLabel: Schema.Attribute.String;
+    formCloseLabel: Schema.Attribute.String;
+    formConsentRequired: Schema.Attribute.String;
+    formEmailPlaceholder: Schema.Attribute.String;
+    formEmailShortPlaceholder: Schema.Attribute.String;
+    formFullNamePlaceholder: Schema.Attribute.String;
+    formGetOtp: Schema.Attribute.String;
+    formMessagePlaceholder: Schema.Attribute.String;
+    formMobilePlaceholder: Schema.Attribute.String;
+    formNameLabel: Schema.Attribute.String;
+    formNamePlaceholder: Schema.Attribute.String;
+    formOtpInvalidMessage: Schema.Attribute.String;
+    formOtpPlaceholder: Schema.Attribute.String;
+    formOtpShortPlaceholder: Schema.Attribute.String;
+    formPhoneLabel: Schema.Attribute.String;
+    formPhonePlaceholder: Schema.Attribute.String;
+    formResendLabel: Schema.Attribute.String;
+    formResendOtp: Schema.Attribute.String;
+    formSelectBranch: Schema.Attribute.String;
+    formSelectBranchCityFirst: Schema.Attribute.String;
+    formSelectCity: Schema.Attribute.String;
+    formSelectCityStateFirst: Schema.Attribute.String;
+    formSelectState: Schema.Attribute.String;
+    formStateLabel: Schema.Attribute.String;
+    formSubmit: Schema.Attribute.String;
+    formSubmitEnquiry: Schema.Attribute.String;
+    formSubmitting: Schema.Attribute.String;
+    formSuccessTitle: Schema.Attribute.String;
+    formVerifying: Schema.Attribute.String;
+    formWeightHelper: Schema.Attribute.String;
+    formWeightLabel: Schema.Attribute.String;
+    formWeightPlaceholder: Schema.Attribute.String;
+    goldRateCardTitle: Schema.Attribute.String;
+    goldRateFullRateLabel: Schema.Attribute.String;
+    goldRateLiveLabel: Schema.Attribute.String;
+    goldRateUnavailableLabel: Schema.Attribute.String;
+    goldRateUpdatingLabel: Schema.Attribute.String;
+    goldValueButtonLabel: Schema.Attribute.String;
+    goldValueHeading: Schema.Attribute.String;
+    goldValueImageAlt: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::site-text.site-text'
+    > &
+      Schema.Attribute.Private;
+    locationPopupSuccessText: Schema.Attribute.String;
+    locationPopupSuccessTitle: Schema.Attribute.String;
+    locationPopupTitle: Schema.Attribute.String;
+    locatorAllStates: Schema.Attribute.String;
+    locatorBranchCountMany: Schema.Attribute.String;
+    locatorBranchCountOne: Schema.Attribute.String;
+    locatorClearSearch: Schema.Attribute.String;
+    locatorEmailLabel: Schema.Attribute.String;
+    locatorFallbackCount: Schema.Attribute.String;
+    locatorFetching: Schema.Attribute.String;
+    locatorGeoFailed: Schema.Attribute.String;
+    locatorGeoUnsupported: Schema.Attribute.String;
+    locatorHeading: Schema.Attribute.String;
+    locatorHighlight: Schema.Attribute.String;
+    locatorLoadingStates: Schema.Attribute.String;
+    locatorMobileLabel: Schema.Attribute.String;
+    locatorNearMeLabel: Schema.Attribute.String;
+    locatorNoResults: Schema.Attribute.Text;
+    locatorPhoneLabel: Schema.Attribute.String;
+    locatorResultsFor: Schema.Attribute.String;
+    locatorResultsLabel: Schema.Attribute.String;
+    locatorSearchButton: Schema.Attribute.String;
+    locatorSearchPlaceholder: Schema.Attribute.String;
+    locatorSelectState: Schema.Attribute.String;
+    locatorShowTopStates: Schema.Attribute.String;
+    locatorStateTitle: Schema.Attribute.String;
+    locatorSubtitle: Schema.Attribute.Text;
+    locatorViewAllStates: Schema.Attribute.String;
+    locatorViewBranches: Schema.Attribute.String;
+    locatorViewDetails: Schema.Attribute.String;
+    orgContactTelephone: Schema.Attribute.String;
+    orgDescription: Schema.Attribute.Text;
+    orgLanguages: Schema.Attribute.String;
+    orgLegalName: Schema.Attribute.String;
+    orgName: Schema.Attribute.String;
+    orgSocialLinks: Schema.Attribute.Text;
+    orgTelephone: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    sellModalCloseLabel: Schema.Attribute.String;
+    sellModalSubmitLabel: Schema.Attribute.String;
+    sellModalSuccessHeading: Schema.Attribute.String;
+    sellModalSuccessText: Schema.Attribute.String;
+    sellModalTitle: Schema.Attribute.String;
+    seoDefaultDescription: Schema.Attribute.Text;
+    seoDefaultKeywords: Schema.Attribute.Text;
+    seoDefaultTitle: Schema.Attribute.String;
+    seoPublisher: Schema.Attribute.String;
+    seoShareDescription: Schema.Attribute.String;
+    seoSiteName: Schema.Attribute.String;
+    seoTitleTemplate: Schema.Attribute.String;
+    seoTwitterDescription: Schema.Attribute.String;
+    trustBadgeHighlight: Schema.Attribute.String;
+    trustBadgePrefix: Schema.Attribute.String;
+    trustBadgeSuffix: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    videoComingSoonText: Schema.Attribute.String;
+    videoLanguageLabel: Schema.Attribute.String;
+    videoModalTitle: Schema.Attribute.String;
+    videoUnsupportedText: Schema.Attribute.String;
   };
 }
 
@@ -2743,6 +3040,7 @@ declare module '@strapi/strapi' {
       'api::promo-slide.promo-slide': ApiPromoSlidePromoSlide;
       'api::sell-gold-page-setting.sell-gold-page-setting': ApiSellGoldPageSettingSellGoldPageSetting;
       'api::shared-media.shared-media': ApiSharedMediaSharedMedia;
+      'api::site-text.site-text': ApiSiteTextSiteText;
       'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'api::testimonials-page.testimonials-page': ApiTestimonialsPageTestimonialsPage;
       'plugin::content-manager-organizer.content-manager-configuration': PluginContentManagerOrganizerContentManagerConfiguration;
