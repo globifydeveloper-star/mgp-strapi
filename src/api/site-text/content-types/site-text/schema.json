@@ -12,43 +12,43 @@
   },
   "attributes": {
     "seoDefaultTitle": {
-      "type": "string"
+      "type": "text"
     },
     "seoTitleTemplate": {
-      "type": "string"
+      "type": "text"
     },
     "seoDefaultDescription": {
       "type": "text"
     },
     "seoShareDescription": {
-      "type": "string"
+      "type": "text"
     },
     "seoTwitterDescription": {
-      "type": "string"
+      "type": "text"
     },
     "seoDefaultKeywords": {
       "type": "text"
     },
     "seoSiteName": {
-      "type": "string"
+      "type": "text"
     },
     "seoPublisher": {
-      "type": "string"
+      "type": "text"
     },
     "orgName": {
-      "type": "string"
+      "type": "text"
     },
     "orgLegalName": {
-      "type": "string"
+      "type": "text"
     },
     "orgTelephone": {
-      "type": "string"
+      "type": "text"
     },
     "orgContactTelephone": {
-      "type": "string"
+      "type": "text"
     },
     "orgLanguages": {
-      "type": "string"
+      "type": "text"
     },
     "orgSocialLinks": {
       "type": "text",
@@ -64,308 +64,308 @@
       "type": "text"
     },
     "consentMoreLabel": {
-      "type": "string"
+      "type": "text"
     },
     "consentLessLabel": {
-      "type": "string"
+      "type": "text"
     },
     "formNamePlaceholder": {
-      "type": "string"
+      "type": "text"
     },
     "formFullNamePlaceholder": {
-      "type": "string"
+      "type": "text"
     },
     "formMobilePlaceholder": {
-      "type": "string"
+      "type": "text"
     },
     "formEmailPlaceholder": {
-      "type": "string"
+      "type": "text"
     },
     "formOtpPlaceholder": {
-      "type": "string"
+      "type": "text"
     },
     "formOtpShortPlaceholder": {
-      "type": "string"
+      "type": "text"
     },
     "formMessagePlaceholder": {
-      "type": "string"
+      "type": "text"
     },
     "formSelectState": {
-      "type": "string"
+      "type": "text"
     },
     "formSelectCity": {
-      "type": "string"
+      "type": "text"
     },
     "formSelectBranch": {
-      "type": "string"
+      "type": "text"
     },
     "formGetOtp": {
-      "type": "string"
+      "type": "text"
     },
     "formResendOtp": {
-      "type": "string"
+      "type": "text"
     },
     "formSubmit": {
-      "type": "string"
+      "type": "text"
     },
     "formSubmitting": {
-      "type": "string"
+      "type": "text"
     },
     "formVerifying": {
-      "type": "string"
+      "type": "text"
     },
     "formSuccessTitle": {
-      "type": "string"
+      "type": "text"
     },
     "formNameLabel": {
-      "type": "string"
+      "type": "text"
     },
     "formPhoneLabel": {
-      "type": "string"
+      "type": "text"
     },
     "formOtpInvalidMessage": {
-      "type": "string"
+      "type": "text"
     },
     "formCloseLabel": {
-      "type": "string"
+      "type": "text"
     },
     "formStateLabel": {
-      "type": "string"
+      "type": "text"
     },
     "formCityLabel": {
-      "type": "string"
+      "type": "text"
     },
     "formBranchLabel": {
-      "type": "string"
+      "type": "text"
     },
     "formConsentRequired": {
-      "type": "string"
+      "type": "text"
     },
     "formSubmitEnquiry": {
-      "type": "string"
+      "type": "text"
     },
     "formSelectBranchCityFirst": {
-      "type": "string"
+      "type": "text"
     },
     "formSelectCityStateFirst": {
-      "type": "string"
+      "type": "text"
     },
     "comparisonTitle": {
       "type": "text",
       "description": "Press Enter for a new line."
     },
     "comparisonProcessLabel": {
-      "type": "string"
+      "type": "text"
     },
     "comparisonOtherLabel": {
-      "type": "string"
+      "type": "text"
     },
     "comparisonOtherShortLabel": {
-      "type": "string"
+      "type": "text"
     },
     "comparisonMgpShortLabel": {
-      "type": "string"
+      "type": "text"
     },
     "trustBadgePrefix": {
-      "type": "string"
+      "type": "text"
     },
     "trustBadgeHighlight": {
-      "type": "string"
+      "type": "text"
     },
     "trustBadgeSuffix": {
-      "type": "string"
+      "type": "text"
     },
     "locationPopupTitle": {
-      "type": "string"
+      "type": "text"
     },
     "locationPopupSuccessTitle": {
-      "type": "string",
+      "type": "text",
       "description": "Keep {name} — it is replaced automatically."
     },
     "locationPopupSuccessText": {
-      "type": "string",
+      "type": "text",
       "description": "Keep {city}, {state} — it is replaced automatically."
     },
     "goldValueHeading": {
-      "type": "string"
+      "type": "text"
     },
     "goldValueImageAlt": {
-      "type": "string"
+      "type": "text"
     },
     "goldValueButtonLabel": {
-      "type": "string"
+      "type": "text"
     },
     "goldRateCardTitle": {
-      "type": "string"
+      "type": "text"
     },
     "goldRateLiveLabel": {
-      "type": "string"
+      "type": "text"
     },
     "goldRateFullRateLabel": {
-      "type": "string"
+      "type": "text"
     },
     "goldRateUpdatingLabel": {
-      "type": "string"
+      "type": "text"
     },
     "goldRateUnavailableLabel": {
-      "type": "string"
+      "type": "text"
     },
     "videoModalTitle": {
-      "type": "string"
+      "type": "text"
     },
     "videoUnsupportedText": {
-      "type": "string"
+      "type": "text"
     },
     "videoLanguageLabel": {
-      "type": "string"
+      "type": "text"
     },
     "videoComingSoonText": {
-      "type": "string",
+      "type": "text",
       "description": "Keep {language} — it is replaced automatically."
     },
     "formEmailShortPlaceholder": {
-      "type": "string"
+      "type": "text"
     },
     "formPhonePlaceholder": {
-      "type": "string"
+      "type": "text"
     },
     "formResendLabel": {
-      "type": "string"
+      "type": "text"
     },
     "formWeightLabel": {
-      "type": "string"
+      "type": "text"
     },
     "formWeightPlaceholder": {
-      "type": "string"
+      "type": "text"
     },
     "formWeightHelper": {
-      "type": "string"
+      "type": "text"
     },
     "sellModalTitle": {
-      "type": "string"
+      "type": "text"
     },
     "sellModalSuccessHeading": {
-      "type": "string"
+      "type": "text"
     },
     "sellModalSuccessText": {
-      "type": "string"
+      "type": "text"
     },
     "sellModalCloseLabel": {
-      "type": "string"
+      "type": "text"
     },
     "sellModalSubmitLabel": {
-      "type": "string"
+      "type": "text"
     },
     "branchTiming": {
-      "type": "string"
+      "type": "text"
     },
     "branchSelectorTitle": {
-      "type": "string"
+      "type": "text"
     },
     "branchSelectorSubtitle": {
-      "type": "string"
+      "type": "text"
     },
     "branchSelectorButtonLabel": {
-      "type": "string"
+      "type": "text"
     },
     "locatorHeading": {
-      "type": "string",
+      "type": "text",
       "description": "Keep {count} — it is replaced automatically."
     },
     "locatorFallbackCount": {
-      "type": "string"
+      "type": "text"
     },
     "locatorHighlight": {
-      "type": "string"
+      "type": "text"
     },
     "locatorSubtitle": {
       "type": "text"
     },
     "locatorSearchPlaceholder": {
-      "type": "string"
+      "type": "text"
     },
     "locatorSearchButton": {
-      "type": "string"
+      "type": "text"
     },
     "locatorNearMeLabel": {
-      "type": "string"
+      "type": "text"
     },
     "locatorGeoUnsupported": {
-      "type": "string"
+      "type": "text"
     },
     "locatorGeoFailed": {
-      "type": "string"
+      "type": "text"
     },
     "locatorResultsLabel": {
-      "type": "string"
+      "type": "text"
     },
     "locatorResultsFor": {
-      "type": "string"
+      "type": "text"
     },
     "locatorClearSearch": {
-      "type": "string"
+      "type": "text"
     },
     "locatorNoResults": {
       "type": "text",
       "description": "Keep {query} — it is replaced automatically."
     },
     "locatorPhoneLabel": {
-      "type": "string"
+      "type": "text"
     },
     "locatorMobileLabel": {
-      "type": "string"
+      "type": "text"
     },
     "locatorEmailLabel": {
-      "type": "string"
+      "type": "text"
     },
     "locatorViewDetails": {
-      "type": "string"
+      "type": "text"
     },
     "locatorAllStates": {
-      "type": "string"
+      "type": "text"
     },
     "locatorStateTitle": {
-      "type": "string",
+      "type": "text",
       "description": "Keep {state}, {count} — it is replaced automatically."
     },
     "locatorLoadingStates": {
-      "type": "string"
+      "type": "text"
     },
     "locatorSelectState": {
-      "type": "string"
+      "type": "text"
     },
     "locatorFetching": {
-      "type": "string"
+      "type": "text"
     },
     "locatorBranchCountOne": {
-      "type": "string",
+      "type": "text",
       "description": "Keep {count} — it is replaced automatically."
     },
     "locatorBranchCountMany": {
-      "type": "string",
+      "type": "text",
       "description": "Keep {count} — it is replaced automatically."
     },
     "locatorViewBranches": {
-      "type": "string"
+      "type": "text"
     },
     "locatorShowTopStates": {
-      "type": "string"
+      "type": "text"
     },
     "locatorViewAllStates": {
-      "type": "string",
+      "type": "text",
       "description": "Keep {count} — it is replaced automatically."
     },
     "enquiryTitle": {
-      "type": "string"
+      "type": "text"
     },
     "enquirySubtitle": {
-      "type": "string"
+      "type": "text"
     },
     "enquirySuccessText": {
-      "type": "string"
+      "type": "text"
     },
     "enquiryResetLabel": {
-      "type": "string"
+      "type": "text"
     }
   }
 }
