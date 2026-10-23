@@ -147,27 +147,41 @@ export default {
 
     // 2. Seed Hero Slides
     const heroSlideUid = 'api::hero-slide.hero-slide';
-    const heroSlidesExisting = await strapi.documents(heroSlideUid).findMany({ limit: 1 });
-    if (heroSlidesExisting.length === 0) {
-      strapi.log.info('Seeding Hero Slides...');
-      await strapi.documents(heroSlideUid).create({
-        data: {
-          heroText: 'Sell Your Gold. Get Cash Today.',
-          heroSubtext: 'Get the fair value of your gold through a transparent and reliable process, conducted entirely in front of you.',
-          slideLink: '#branches',
-          button1: { enabled: true, label: 'Find Nearest Branch', link: '#branches' },
-          button2: { enabled: true, label: 'See how it works', link: '#gold-sell-process' }
-        }
-      });
-      await strapi.documents(heroSlideUid).create({
-        data: {
-          heroText: 'Get 100% Value for Your Gold. Safe, Transparent & Scientific.',
-          heroSubtext: 'Sell your gold with complete peace of mind. We use advanced XRF machines for purity testing right in front of you, ensuring you get the exact market rate.',
-          slideLink: '#branches',
-          button1: { enabled: true, label: 'Locate Nearest Branch', link: '#branches' },
-          button2: { enabled: true, label: 'Check Gold Purity', link: '#gold-value-form' }
-        }
-      });
+    const defaultHeroSlides = [
+      {
+        heroText: 'Sell Your Gold. Get Cash Today.',
+        heroSubtext: 'Get the fair value of your gold through a transparent and reliable process, conducted entirely in front of you.',
+        slideLink: '#branches',
+        button1: { enabled: true, label: 'Find Nearest Branch', link: '#branches' },
+        button2: { enabled: true, label: 'See how it works', link: '#gold-sell-process' }
+      },
+      {
+        heroText: 'Get 100% Value for Your Gold. Safe, Transparent & Scientific.',
+        heroSubtext: 'Sell your gold with complete peace of mind. We use advanced XRF machines for purity testing right in front of you, ensuring you get the exact market rate.',
+        slideLink: '#branches',
+        button1: { enabled: true, label: 'Locate Nearest Branch', link: '#branches' },
+        button2: { enabled: true, label: 'Check Gold Purity', link: '#gold-value-form' }
+      },
+      {
+        heroText: 'Recycle Your Gold. Protect Nature, Empower the Nation',
+        heroSubtext: 'Helping Nature by reducing mining for extracting gold, helping government through reducing Current Account Deficit, and 100% transparent process.',
+        slideLink: '#branches',
+        button1: { enabled: true, label: 'Locate Nearest Branch', link: '#branches' },
+        button2: { enabled: true, label: 'Our Transparent Process', link: '#gold-sell-process' },
+        features: [
+          { title: 'Helping Government', tag: 'Economic Growth', desc: 'Helping government through reducing Current Account Deficit by importing less gold from International market.', iconType: 'economy' as const },
+          { title: 'Transparent Process', tag: '100% Transparent', desc: 'Advanced German XRF purity testing right in front of you.', iconType: 'trust' as const },
+          { title: 'Helping Nature', tag: 'Eco Conservation', desc: 'Helping Nature by reducing the mining for extracting gold from the gold mines.', iconType: 'nature' as const }
+        ]
+      }
+    ];
+    // Top up missing slides by position so slides added later (e.g. the 3rd) reach existing databases
+    const heroSlidesCount = await strapi.documents(heroSlideUid).count({});
+    if (heroSlidesCount < defaultHeroSlides.length) {
+      strapi.log.info(`Seeding ${defaultHeroSlides.length - heroSlidesCount} missing Hero Slide(s)...`);
+      for (const slide of defaultHeroSlides.slice(heroSlidesCount)) {
+        await strapi.documents(heroSlideUid).create({ data: slide });
+      }
     }
 
     // 3. Seed Process Steps (Fix 2: Expose order field, compute number on frontend)
