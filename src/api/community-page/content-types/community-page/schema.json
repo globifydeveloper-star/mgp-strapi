@@ -1,0 +1,200 @@
+{
+  "kind": "singleType",
+  "collectionName": "community_pages",
+  "info": {
+    "singularName": "community-page",
+    "pluralName": "community-pages",
+    "displayName": "Community Page",
+    "description": "Content for the Community (CSR) page"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "heroEyebrow": {
+      "type": "string"
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroTitleHighlight": {
+      "type": "string",
+      "description": "Shown in gold after the title"
+    },
+    "heroBody": {
+      "type": "text",
+      "description": "Separate paragraphs with a blank line; inline HTML links (<a href=\"...\">) are allowed."
+    },
+    "heelItems": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.check-item",
+      "description": "The HEEL tiles; the first letter is shown large"
+    },
+    "heroLogo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "roleEyebrow": {
+      "type": "string"
+    },
+    "roleTitle": {
+      "type": "string"
+    },
+    "roleTitleHighlight": {
+      "type": "string",
+      "description": "Shown in gold after the title"
+    },
+    "roleBody": {
+      "type": "text",
+      "description": "Separate paragraphs with a blank line; inline HTML links (<a href=\"...\">) are allowed."
+    },
+    "stakeholdersHeading": {
+      "type": "string"
+    },
+    "stakeholders": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.check-item"
+    },
+    "objectivesHeading": {
+      "type": "string"
+    },
+    "objectivesBody": {
+      "type": "text",
+      "description": "Separate paragraphs with a blank line; inline HTML links (<a href=\"...\">) are allowed."
+    },
+    "objectives": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.check-item"
+    },
+    "sustainabilityEyebrow": {
+      "type": "string"
+    },
+    "sustainabilityTitle": {
+      "type": "string"
+    },
+    "sustainabilityTitleHighlight": {
+      "type": "string",
+      "description": "Shown in gold after the title"
+    },
+    "sustainabilityBody": {
+      "type": "text",
+      "description": "Separate paragraphs with a blank line; inline HTML links (<a href=\"...\">) are allowed."
+    },
+    "sustainabilityAimsHeading": {
+      "type": "string"
+    },
+    "sustainabilityAims": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.check-item"
+    },
+    "impactEyebrow": {
+      "type": "string"
+    },
+    "impactTitle": {
+      "type": "string"
+    },
+    "impactTitleHighlight": {
+      "type": "string",
+      "description": "Shown in gold after the title"
+    },
+    "impactBody": {
+      "type": "text",
+      "description": "Separate paragraphs with a blank line; inline HTML links (<a href=\"...\">) are allowed."
+    },
+    "smileBadge": {
+      "type": "string"
+    },
+    "smileTitle": {
+      "type": "string"
+    },
+    "smileBody": {
+      "type": "text",
+      "description": "Separate paragraphs with a blank line; inline HTML links (<a href=\"...\">) are allowed."
+    },
+    "smileStats": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.stat-item"
+    },
+    "initiativesEyebrow": {
+      "type": "string"
+    },
+    "initiativesTitle": {
+      "type": "string"
+    },
+    "initiativesTitleHighlight": {
+      "type": "string",
+      "description": "Shown in gold after the title"
+    },
+    "initiatives": {
+      "type": "component",
+      "repeatable": true,
+      "component": "community.initiative"
+    },
+    "jeevanEyebrow": {
+      "type": "string"
+    },
+    "jeevanTitle": {
+      "type": "string"
+    },
+    "jeevanTitleHighlight": {
+      "type": "string",
+      "description": "Shown in gold after the title"
+    },
+    "jeevanBody": {
+      "type": "text",
+      "description": "Separate paragraphs with a blank line; inline HTML links (<a href=\"...\">) are allowed."
+    },
+    "jeevanAimsHeading": {
+      "type": "string"
+    },
+    "jeevanAims": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.check-item"
+    },
+    "featuredInitiative": {
+      "type": "component",
+      "repeatable": false,
+      "component": "community.initiative",
+      "description": "The highlighted programme after Jeevan Jyothi (Muthoot Football Academy)"
+    },
+    "conclusion": {
+      "type": "text",
+      "description": "Separate paragraphs with a blank line; inline HTML links (<a href=\"...\">) are allowed."
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "seoKeywords": {
+      "type": "string"
+    },
+    "ogImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Recommended: 1200x630 px (Standard OG Image)"
+    },
+    "hideNavbar": {
+      "type": "boolean",
+      "default": false
+    },
+    "hideFooter": {
+      "type": "boolean",
+      "default": false,
+      "description": "Check this box to completely hide the Footer on this page"
+    }
+  }
+}

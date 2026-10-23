@@ -1,0 +1,90 @@
+{
+  "kind": "singleType",
+  "collectionName": "testimonials_pages",
+  "info": {
+    "singularName": "testimonials-page",
+    "pluralName": "testimonials-pages",
+    "displayName": "Testimonials Page",
+    "description": "Content for the Testimonials page. Reviews come from the Testimonial collection."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "heroEyebrow": {
+      "type": "string"
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroTitleHighlight": {
+      "type": "string",
+      "description": "Shown in gold after the title"
+    },
+    "heroDescription": {
+      "type": "text"
+    },
+    "stats": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.stat-item"
+    },
+    "gridTitle": {
+      "type": "string"
+    },
+    "gridPretitle": {
+      "type": "string"
+    },
+    "gridSubtitle": {
+      "type": "text"
+    },
+    "readMoreLabel": {
+      "type": "string"
+    },
+    "readLessLabel": {
+      "type": "string"
+    },
+    "ctaTitle": {
+      "type": "string"
+    },
+    "ctaSubtext": {
+      "type": "text"
+    },
+    "ctaPrimaryLabel": {
+      "type": "string",
+      "description": "Opens the Sell Gold form"
+    },
+    "ctaSecondaryLabel": {
+      "type": "string"
+    },
+    "ctaSecondaryLink": {
+      "type": "string"
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "seoKeywords": {
+      "type": "string"
+    },
+    "ogImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Recommended: 1200x630 px (Standard OG Image)"
+    },
+    "hideNavbar": {
+      "type": "boolean",
+      "default": false
+    },
+    "hideFooter": {
+      "type": "boolean",
+      "default": false,
+      "description": "Check this box to completely hide the Footer on this page"
+    }
+  }
+}

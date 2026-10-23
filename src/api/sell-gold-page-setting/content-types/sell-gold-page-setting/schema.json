@@ -47,6 +47,125 @@
     "trustBadgeSuffix": {
       "type": "string",
       "default": "Across India"
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroTitleHighlight": {
+      "type": "string"
+    },
+    "heroSubtitle": {
+      "type": "string"
+    },
+    "heroBullets": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.check-item"
+    },
+    "heroFormTitle": {
+      "type": "string"
+    },
+    "heroFormSubtitle": {
+      "type": "string"
+    },
+    "heroFormSuccessText": {
+      "type": "string"
+    },
+    "heroFormResetLabel": {
+      "type": "string"
+    },
+    "overviewEyebrow": {
+      "type": "string"
+    },
+    "overviewTitle": {
+      "type": "string"
+    },
+    "overviewTitleHighlight": {
+      "type": "string"
+    },
+    "overviewSubtitle": {
+      "type": "string"
+    },
+    "overviewDescription": {
+      "type": "text"
+    },
+    "overviewButtonLabel": {
+      "type": "string"
+    },
+    "overviewButtonLink": {
+      "type": "string"
+    },
+    "overviewTile1": {
+      "type": "text",
+      "description": "Press Enter for a new line."
+    },
+    "overviewTile2": {
+      "type": "text",
+      "description": "Press Enter for a new line."
+    },
+    "overviewTile3": {
+      "type": "text",
+      "description": "Press Enter for a new line."
+    },
+    "overviewTile4": {
+      "type": "text",
+      "description": "Press Enter for a new line."
+    },
+    "contactTitle": {
+      "type": "string"
+    },
+    "contactTitleHighlight": {
+      "type": "string"
+    },
+    "contactDescription": {
+      "type": "string"
+    },
+    "contactPhone": {
+      "type": "string"
+    },
+    "contactEmail": {
+      "type": "string"
+    },
+    "contactSuccessText": {
+      "type": "string"
+    },
+    "watchNowLabel": {
+      "type": "string"
+    },
+    "videoModalTitle": {
+      "type": "string"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Hero photo. Falls back to the built-in image if empty. Recommended: 900 × 1100 px"
+    },
+    "overviewImage1": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "\"Why Muthoot Gold Point\" tile photo (top right). Recommended: 440 × 440 px"
+    },
+    "overviewImage2": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "\"Why Muthoot Gold Point\" tile photo (bottom left). Recommended: 440 × 440 px"
+    },
+    "hideNavbar": {
+      "type": "boolean",
+      "default": false
+    },
+    "hideFooter": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

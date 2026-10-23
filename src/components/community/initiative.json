@@ -1,0 +1,54 @@
+{
+  "collectionName": "components_community_initiatives",
+  "info": {
+    "displayName": "Initiative",
+    "description": "A CSR programme card on the Community page"
+  },
+  "options": {},
+  "attributes": {
+    "anchorId": {
+      "type": "string",
+      "description": "Optional URL anchor, e.g. blue-butterflies"
+    },
+    "eyebrow": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "body": {
+      "type": "text",
+      "description": "Separate paragraphs with a blank line; inline HTML links (<a href=\"...\">) are allowed."
+    },
+    "extraTitle": {
+      "type": "string"
+    },
+    "extraText": {
+      "type": "text"
+    },
+    "primaryImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Recommended: 1200 × 800 px"
+    },
+    "secondaryImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Optional smaller overlay image. Recommended: 640 × 480 px"
+    },
+    "imageAlt": {
+      "type": "string"
+    },
+    "wideImage": {
+      "type": "boolean",
+      "default": false,
+      "description": "Show the image full width below the text"
+    }
+  }
+}

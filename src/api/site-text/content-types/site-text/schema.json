@@ -1,0 +1,371 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_texts",
+  "info": {
+    "singularName": "site-text",
+    "pluralName": "site-texts",
+    "displayName": "Site Text",
+    "description": "Labels and copy shared across the site: forms, pop-ups, branch locator, comparison table and default SEO. Leave a field empty to use the built-in text."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "seoDefaultTitle": {
+      "type": "string"
+    },
+    "seoTitleTemplate": {
+      "type": "string"
+    },
+    "seoDefaultDescription": {
+      "type": "text"
+    },
+    "seoShareDescription": {
+      "type": "string"
+    },
+    "seoTwitterDescription": {
+      "type": "string"
+    },
+    "seoDefaultKeywords": {
+      "type": "text"
+    },
+    "seoSiteName": {
+      "type": "string"
+    },
+    "seoPublisher": {
+      "type": "string"
+    },
+    "orgName": {
+      "type": "string"
+    },
+    "orgLegalName": {
+      "type": "string"
+    },
+    "orgTelephone": {
+      "type": "string"
+    },
+    "orgContactTelephone": {
+      "type": "string"
+    },
+    "orgLanguages": {
+      "type": "string"
+    },
+    "orgSocialLinks": {
+      "type": "text",
+      "description": "Press Enter for a new line."
+    },
+    "orgDescription": {
+      "type": "text"
+    },
+    "consentShort": {
+      "type": "text"
+    },
+    "consentRest": {
+      "type": "text"
+    },
+    "consentMoreLabel": {
+      "type": "string"
+    },
+    "consentLessLabel": {
+      "type": "string"
+    },
+    "formNamePlaceholder": {
+      "type": "string"
+    },
+    "formFullNamePlaceholder": {
+      "type": "string"
+    },
+    "formMobilePlaceholder": {
+      "type": "string"
+    },
+    "formEmailPlaceholder": {
+      "type": "string"
+    },
+    "formOtpPlaceholder": {
+      "type": "string"
+    },
+    "formOtpShortPlaceholder": {
+      "type": "string"
+    },
+    "formMessagePlaceholder": {
+      "type": "string"
+    },
+    "formSelectState": {
+      "type": "string"
+    },
+    "formSelectCity": {
+      "type": "string"
+    },
+    "formSelectBranch": {
+      "type": "string"
+    },
+    "formGetOtp": {
+      "type": "string"
+    },
+    "formResendOtp": {
+      "type": "string"
+    },
+    "formSubmit": {
+      "type": "string"
+    },
+    "formSubmitting": {
+      "type": "string"
+    },
+    "formVerifying": {
+      "type": "string"
+    },
+    "formSuccessTitle": {
+      "type": "string"
+    },
+    "formNameLabel": {
+      "type": "string"
+    },
+    "formPhoneLabel": {
+      "type": "string"
+    },
+    "formOtpInvalidMessage": {
+      "type": "string"
+    },
+    "formCloseLabel": {
+      "type": "string"
+    },
+    "formStateLabel": {
+      "type": "string"
+    },
+    "formCityLabel": {
+      "type": "string"
+    },
+    "formBranchLabel": {
+      "type": "string"
+    },
+    "formConsentRequired": {
+      "type": "string"
+    },
+    "formSubmitEnquiry": {
+      "type": "string"
+    },
+    "formSelectBranchCityFirst": {
+      "type": "string"
+    },
+    "formSelectCityStateFirst": {
+      "type": "string"
+    },
+    "comparisonTitle": {
+      "type": "text",
+      "description": "Press Enter for a new line."
+    },
+    "comparisonProcessLabel": {
+      "type": "string"
+    },
+    "comparisonOtherLabel": {
+      "type": "string"
+    },
+    "comparisonOtherShortLabel": {
+      "type": "string"
+    },
+    "comparisonMgpShortLabel": {
+      "type": "string"
+    },
+    "trustBadgePrefix": {
+      "type": "string"
+    },
+    "trustBadgeHighlight": {
+      "type": "string"
+    },
+    "trustBadgeSuffix": {
+      "type": "string"
+    },
+    "locationPopupTitle": {
+      "type": "string"
+    },
+    "locationPopupSuccessTitle": {
+      "type": "string",
+      "description": "Keep {name} — it is replaced automatically."
+    },
+    "locationPopupSuccessText": {
+      "type": "string",
+      "description": "Keep {city}, {state} — it is replaced automatically."
+    },
+    "goldValueHeading": {
+      "type": "string"
+    },
+    "goldValueImageAlt": {
+      "type": "string"
+    },
+    "goldValueButtonLabel": {
+      "type": "string"
+    },
+    "goldRateCardTitle": {
+      "type": "string"
+    },
+    "goldRateLiveLabel": {
+      "type": "string"
+    },
+    "goldRateFullRateLabel": {
+      "type": "string"
+    },
+    "goldRateUpdatingLabel": {
+      "type": "string"
+    },
+    "goldRateUnavailableLabel": {
+      "type": "string"
+    },
+    "videoModalTitle": {
+      "type": "string"
+    },
+    "videoUnsupportedText": {
+      "type": "string"
+    },
+    "videoLanguageLabel": {
+      "type": "string"
+    },
+    "videoComingSoonText": {
+      "type": "string",
+      "description": "Keep {language} — it is replaced automatically."
+    },
+    "formEmailShortPlaceholder": {
+      "type": "string"
+    },
+    "formPhonePlaceholder": {
+      "type": "string"
+    },
+    "formResendLabel": {
+      "type": "string"
+    },
+    "formWeightLabel": {
+      "type": "string"
+    },
+    "formWeightPlaceholder": {
+      "type": "string"
+    },
+    "formWeightHelper": {
+      "type": "string"
+    },
+    "sellModalTitle": {
+      "type": "string"
+    },
+    "sellModalSuccessHeading": {
+      "type": "string"
+    },
+    "sellModalSuccessText": {
+      "type": "string"
+    },
+    "sellModalCloseLabel": {
+      "type": "string"
+    },
+    "sellModalSubmitLabel": {
+      "type": "string"
+    },
+    "branchTiming": {
+      "type": "string"
+    },
+    "branchSelectorTitle": {
+      "type": "string"
+    },
+    "branchSelectorSubtitle": {
+      "type": "string"
+    },
+    "branchSelectorButtonLabel": {
+      "type": "string"
+    },
+    "locatorHeading": {
+      "type": "string",
+      "description": "Keep {count} — it is replaced automatically."
+    },
+    "locatorFallbackCount": {
+      "type": "string"
+    },
+    "locatorHighlight": {
+      "type": "string"
+    },
+    "locatorSubtitle": {
+      "type": "text"
+    },
+    "locatorSearchPlaceholder": {
+      "type": "string"
+    },
+    "locatorSearchButton": {
+      "type": "string"
+    },
+    "locatorNearMeLabel": {
+      "type": "string"
+    },
+    "locatorGeoUnsupported": {
+      "type": "string"
+    },
+    "locatorGeoFailed": {
+      "type": "string"
+    },
+    "locatorResultsLabel": {
+      "type": "string"
+    },
+    "locatorResultsFor": {
+      "type": "string"
+    },
+    "locatorClearSearch": {
+      "type": "string"
+    },
+    "locatorNoResults": {
+      "type": "text",
+      "description": "Keep {query} — it is replaced automatically."
+    },
+    "locatorPhoneLabel": {
+      "type": "string"
+    },
+    "locatorMobileLabel": {
+      "type": "string"
+    },
+    "locatorEmailLabel": {
+      "type": "string"
+    },
+    "locatorViewDetails": {
+      "type": "string"
+    },
+    "locatorAllStates": {
+      "type": "string"
+    },
+    "locatorStateTitle": {
+      "type": "string",
+      "description": "Keep {state}, {count} — it is replaced automatically."
+    },
+    "locatorLoadingStates": {
+      "type": "string"
+    },
+    "locatorSelectState": {
+      "type": "string"
+    },
+    "locatorFetching": {
+      "type": "string"
+    },
+    "locatorBranchCountOne": {
+      "type": "string",
+      "description": "Keep {count} — it is replaced automatically."
+    },
+    "locatorBranchCountMany": {
+      "type": "string",
+      "description": "Keep {count} — it is replaced automatically."
+    },
+    "locatorViewBranches": {
+      "type": "string"
+    },
+    "locatorShowTopStates": {
+      "type": "string"
+    },
+    "locatorViewAllStates": {
+      "type": "string",
+      "description": "Keep {count} — it is replaced automatically."
+    },
+    "enquiryTitle": {
+      "type": "string"
+    },
+    "enquirySubtitle": {
+      "type": "string"
+    },
+    "enquirySuccessText": {
+      "type": "string"
+    },
+    "enquiryResetLabel": {
+      "type": "string"
+    }
+  }
+}

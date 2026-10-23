@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_mobile_van_locations",
+  "info": {
+    "displayName": "Service Location",
+    "icon": "pinMap",
+    "description": "A city served by the mobile van"
+  },
+  "options": {},
+  "attributes": {
+    "city": {
+      "type": "string"
+    },
+    "desc": {
+      "type": "text"
+    },
+    "phones": {
+      "type": "text",
+      "description": "One phone number per line"
+    }
+  }
+}

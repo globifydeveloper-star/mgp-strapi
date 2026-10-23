@@ -22,7 +22,9 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "formTitle": {
       "type": "string"
@@ -61,7 +63,47 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "officeTitle": {
+      "type": "string",
+      "description": "Wrap words in *asterisks* to show them highlighted."
+    },
+    "formServices": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.check-item"
+    },
+    "formServicePlaceholder": {
+      "type": "string"
+    },
+    "formMessagePlaceholder": {
+      "type": "string"
+    },
+    "formSubmitLabel": {
+      "type": "string"
+    },
+    "formSendingLabel": {
+      "type": "string"
+    },
+    "formSuccessText": {
+      "type": "string"
+    },
+    "formResetLabel": {
+      "type": "string"
+    },
+    "seoKeywords": {
+      "type": "string"
+    },
+    "hideNavbar": {
+      "type": "boolean",
+      "default": false
+    },
+    "hideFooter": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

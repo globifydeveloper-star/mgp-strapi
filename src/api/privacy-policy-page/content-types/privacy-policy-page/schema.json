@@ -1,0 +1,76 @@
+{
+  "kind": "singleType",
+  "collectionName": "privacy_policy_pages",
+  "info": {
+    "singularName": "privacy-policy-page",
+    "pluralName": "privacy-policy-pages",
+    "displayName": "Privacy Policy Page",
+    "description": "Content for the Privacy Policy page"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "breadcrumbLabel": {
+      "type": "string"
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroTitleHighlight": {
+      "type": "string",
+      "description": "Shown in gold after the title"
+    },
+    "heroSubtitle": {
+      "type": "text"
+    },
+    "body": {
+      "type": "richtext",
+      "description": "The policy text. Use ## for section headings."
+    },
+    "contactHeading": {
+      "type": "string"
+    },
+    "contactIntro": {
+      "type": "text"
+    },
+    "contactName": {
+      "type": "string"
+    },
+    "contactAddress": {
+      "type": "text"
+    },
+    "contactEmail": {
+      "type": "string"
+    },
+    "contactPhone": {
+      "type": "string"
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "seoKeywords": {
+      "type": "string"
+    },
+    "ogImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Recommended: 1200x630 px (Standard OG Image)"
+    },
+    "hideNavbar": {
+      "type": "boolean",
+      "default": false
+    },
+    "hideFooter": {
+      "type": "boolean",
+      "default": false,
+      "description": "Check this box to completely hide the Footer on this page"
+    }
+  }
+}

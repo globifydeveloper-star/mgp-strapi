@@ -1,0 +1,24 @@
+{
+  "heroEyebrow": "Customer Stories",
+  "heroTitle": "What Our Customers",
+  "heroTitleHighlight": "Say About Us",
+  "heroDescription": "Real experiences from real customers who trusted Muthoot Gold Point with their gold — backed by transparent valuation, fair pricing, and courteous service.",
+  "stats": [
+    { "number": "1M+", "label": "Happy Customers" },
+    { "number": "4.8/5", "label": "Average Rating" },
+    { "number": "133+", "label": "Years of Legacy" },
+    { "number": "100%", "label": "Transparent Valuation" }
+  ],
+  "gridTitle": "Feedback about Gold Point",
+  "gridPretitle": "What do our customers say about us?",
+  "gridSubtitle": "We are a dedicated gold buying company – Built on science, not guesswork.",
+  "readMoreLabel": "Read More",
+  "readLessLabel": "Read Less",
+  "ctaTitle": "Ready to Join Our Happy Customers?",
+  "ctaSubtext": "Experience the same transparent, fair, and trusted gold valuation for yourself.",
+  "ctaPrimaryLabel": "Sell Your Gold",
+  "ctaSecondaryLabel": "Find a Branch",
+  "ctaSecondaryLink": "/#branches",
+  "seoTitle": "Customer Testimonials | Muthoot Gold Point",
+  "seoDescription": "Read real customer testimonials and reviews about Muthoot Gold Point's transparent gold valuation, fair pricing, and trusted service."
+}

@@ -53,6 +53,159 @@
     },
     "heroDescription": {
       "type": "text"
+    },
+    "heroApplyLabel": {
+      "type": "string"
+    },
+    "heroOpeningsLabel": {
+      "type": "string"
+    },
+    "openingsHeading": {
+      "type": "string"
+    },
+    "openingsAllLabel": {
+      "type": "string"
+    },
+    "jobSummaryLabel": {
+      "type": "string"
+    },
+    "jobDescriptionLabel": {
+      "type": "string"
+    },
+    "jobResponsibilitiesLabel": {
+      "type": "string"
+    },
+    "jobRequirementsLabel": {
+      "type": "string"
+    },
+    "jobApplyLabel": {
+      "type": "string"
+    },
+    "openingsEmptyText": {
+      "type": "string"
+    },
+    "formTitle": {
+      "type": "string"
+    },
+    "formSubtitle": {
+      "type": "string"
+    },
+    "formSuccessText": {
+      "type": "string"
+    },
+    "formNameLabel": {
+      "type": "string"
+    },
+    "formNamePlaceholder": {
+      "type": "string"
+    },
+    "formEmailLabel": {
+      "type": "string"
+    },
+    "formEmailPlaceholder": {
+      "type": "string"
+    },
+    "formPhoneLabel": {
+      "type": "string"
+    },
+    "formPhonePlaceholder": {
+      "type": "string"
+    },
+    "formCityLabel": {
+      "type": "string"
+    },
+    "formCityPlaceholder": {
+      "type": "string"
+    },
+    "formExperienceLabel": {
+      "type": "string"
+    },
+    "formExperiencePlaceholder": {
+      "type": "string"
+    },
+    "experienceOptions": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.check-item"
+    },
+    "formNoticeLabel": {
+      "type": "string"
+    },
+    "formNoticePlaceholder": {
+      "type": "string"
+    },
+    "noticePeriodOptions": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.check-item"
+    },
+    "formPositionLabel": {
+      "type": "string"
+    },
+    "formPositionPlaceholder": {
+      "type": "string"
+    },
+    "formGeneralApplicationLabel": {
+      "type": "string"
+    },
+    "formMessageLabel": {
+      "type": "string"
+    },
+    "formMessagePlaceholder": {
+      "type": "string"
+    },
+    "formResumeLabel": {
+      "type": "string"
+    },
+    "formResumeSelectedLabel": {
+      "type": "string"
+    },
+    "formResumeDropText": {
+      "type": "string"
+    },
+    "formResumeBrowseText": {
+      "type": "string"
+    },
+    "formResumeHint": {
+      "type": "string"
+    },
+    "formSubmitLabel": {
+      "type": "string"
+    },
+    "formSubmittingLabel": {
+      "type": "string"
+    },
+    "successTitle": {
+      "type": "string"
+    },
+    "successThanksPrefix": {
+      "type": "string"
+    },
+    "successThanksFallback": {
+      "type": "string"
+    },
+    "successThanksSuffix": {
+      "type": "string"
+    },
+    "successRoleLabel": {
+      "type": "string"
+    },
+    "successText": {
+      "type": "text"
+    },
+    "successDoneLabel": {
+      "type": "string"
+    },
+    "seoKeywords": {
+      "type": "string"
+    },
+    "hideNavbar": {
+      "type": "boolean",
+      "default": false
+    },
+    "hideFooter": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

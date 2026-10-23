@@ -4,7 +4,8 @@
   "info": {
     "singularName": "difference-box",
     "pluralName": "difference-boxes",
-    "displayName": "Difference Box"
+    "displayName": "Why Choose Gold Point",
+    "description": "Cards in the homepage \"Why Choose Gold Point\" section. Lowest order shows first."
   },
   "options": {
     "draftAndPublish": false
@@ -34,6 +35,7 @@
         "flask",
         "scale",
         "rupee",
+        "leaf",
         "default"
       ],
       "default": "default"

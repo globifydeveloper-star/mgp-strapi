@@ -1,0 +1,82 @@
+{
+  "kind": "singleType",
+  "collectionName": "faq_pages",
+  "info": {
+    "singularName": "faq-page",
+    "pluralName": "faq-pages",
+    "displayName": "FAQ Page",
+    "description": "Content for the FAQ page. Questions come from the FAQ collection with Section = faq."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroTitleHighlight": {
+      "type": "string",
+      "description": "Shown in gold after the title"
+    },
+    "heroLead": {
+      "type": "text"
+    },
+    "searchPlaceholder": {
+      "type": "string"
+    },
+    "allCategoryLabel": {
+      "type": "string"
+    },
+    "noResultsText": {
+      "type": "string"
+    },
+    "resetButtonLabel": {
+      "type": "string"
+    },
+    "ctaTitle": {
+      "type": "string"
+    },
+    "ctaSubtitle": {
+      "type": "text"
+    },
+    "ctaButtonLabel": {
+      "type": "string"
+    },
+    "ctaButtonLink": {
+      "type": "string"
+    },
+    "ctaPhoneLabel": {
+      "type": "string"
+    },
+    "ctaPhoneNumber": {
+      "type": "string",
+      "description": "Digits used for the tel: link, e.g. 18001021616"
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "seoKeywords": {
+      "type": "string"
+    },
+    "ogImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Recommended: 1200x630 px (Standard OG Image)"
+    },
+    "hideNavbar": {
+      "type": "boolean",
+      "default": false
+    },
+    "hideFooter": {
+      "type": "boolean",
+      "default": false,
+      "description": "Check this box to completely hide the Footer on this page"
+    }
+  }
+}

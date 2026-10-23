@@ -87,6 +87,38 @@
     },
     "seoKeywords": {
       "type": "string"
+    },
+    "serviceLocations": {
+      "type": "component",
+      "repeatable": true,
+      "component": "mobile-van.location"
+    },
+    "appointmentSuccessText": {
+      "type": "string"
+    },
+    "appointmentResetLabel": {
+      "type": "string"
+    },
+    "appointmentSubmitLabel": {
+      "type": "string"
+    },
+    "appointmentSubmittingLabel": {
+      "type": "string"
+    },
+    "appointmentAddressLabel": {
+      "type": "string"
+    },
+    "appointmentAddressPlaceholder": {
+      "type": "string"
+    },
+    "appointmentNamePlaceholder": {
+      "type": "string"
+    },
+    "appointmentPhonePlaceholder": {
+      "type": "string"
+    },
+    "appointmentOtpPlaceholder": {
+      "type": "string"
     }
   }
 }

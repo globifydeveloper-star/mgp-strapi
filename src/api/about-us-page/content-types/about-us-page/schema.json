@@ -227,6 +227,9 @@
     },
     "seoKeywords": {
       "type": "string"
+    },
+    "philanthropyBadgeText": {
+      "type": "string"
     }
   }
 }

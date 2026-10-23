@@ -829,6 +829,84 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCommunityPageCommunityPage extends Struct.SingleTypeSchema {
+  collectionName: 'community_pages';
+  info: {
+    description: 'Content for the Community (CSR) page';
+    displayName: 'Community Page';
+    pluralName: 'community-pages';
+    singularName: 'community-page';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    conclusion: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    featuredInitiative: Schema.Attribute.Component<
+      'community.initiative',
+      false
+    >;
+    heelItems: Schema.Attribute.Component<'shared.check-item', true>;
+    heroBody: Schema.Attribute.Text;
+    heroEyebrow: Schema.Attribute.String;
+    heroLogo: Schema.Attribute.Media<'images'>;
+    heroTitle: Schema.Attribute.String;
+    heroTitleHighlight: Schema.Attribute.String;
+    hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    impactBody: Schema.Attribute.Text;
+    impactEyebrow: Schema.Attribute.String;
+    impactTitle: Schema.Attribute.String;
+    impactTitleHighlight: Schema.Attribute.String;
+    initiatives: Schema.Attribute.Component<'community.initiative', true>;
+    initiativesEyebrow: Schema.Attribute.String;
+    initiativesTitle: Schema.Attribute.String;
+    initiativesTitleHighlight: Schema.Attribute.String;
+    jeevanAims: Schema.Attribute.Component<'shared.check-item', true>;
+    jeevanAimsHeading: Schema.Attribute.String;
+    jeevanBody: Schema.Attribute.Text;
+    jeevanEyebrow: Schema.Attribute.String;
+    jeevanTitle: Schema.Attribute.String;
+    jeevanTitleHighlight: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::community-page.community-page'
+    > &
+      Schema.Attribute.Private;
+    objectives: Schema.Attribute.Component<'shared.check-item', true>;
+    objectivesBody: Schema.Attribute.Text;
+    objectivesHeading: Schema.Attribute.String;
+    ogImage: Schema.Attribute.Media<'images'>;
+    publishedAt: Schema.Attribute.DateTime;
+    roleBody: Schema.Attribute.Text;
+    roleEyebrow: Schema.Attribute.String;
+    roleTitle: Schema.Attribute.String;
+    roleTitleHighlight: Schema.Attribute.String;
+    seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.String;
+    seoTitle: Schema.Attribute.String;
+    smileBadge: Schema.Attribute.String;
+    smileBody: Schema.Attribute.Text;
+    smileStats: Schema.Attribute.Component<'shared.stat-item', true>;
+    smileTitle: Schema.Attribute.String;
+    stakeholders: Schema.Attribute.Component<'shared.check-item', true>;
+    stakeholdersHeading: Schema.Attribute.String;
+    sustainabilityAims: Schema.Attribute.Component<'shared.check-item', true>;
+    sustainabilityAimsHeading: Schema.Attribute.String;
+    sustainabilityBody: Schema.Attribute.Text;
+    sustainabilityEyebrow: Schema.Attribute.String;
+    sustainabilityTitle: Schema.Attribute.String;
+    sustainabilityTitleHighlight: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiComparisonRowComparisonRow
   extends Struct.CollectionTypeSchema {
   collectionName: 'comparison_rows';
@@ -1069,6 +1147,53 @@ export interface ApiEnquiryEnquiry extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiFaqPageFaqPage extends Struct.SingleTypeSchema {
+  collectionName: 'faq_pages';
+  info: {
+    description: 'Content for the FAQ page. Questions come from the FAQ collection with Section = faq.';
+    displayName: 'FAQ Page';
+    pluralName: 'faq-pages';
+    singularName: 'faq-page';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    allCategoryLabel: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    ctaButtonLabel: Schema.Attribute.String;
+    ctaButtonLink: Schema.Attribute.String;
+    ctaPhoneLabel: Schema.Attribute.String;
+    ctaPhoneNumber: Schema.Attribute.String;
+    ctaSubtitle: Schema.Attribute.Text;
+    ctaTitle: Schema.Attribute.String;
+    heroLead: Schema.Attribute.Text;
+    heroTitle: Schema.Attribute.String;
+    heroTitleHighlight: Schema.Attribute.String;
+    hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::faq-page.faq-page'
+    > &
+      Schema.Attribute.Private;
+    noResultsText: Schema.Attribute.String;
+    ogImage: Schema.Attribute.Media<'images'>;
+    publishedAt: Schema.Attribute.DateTime;
+    resetButtonLabel: Schema.Attribute.String;
+    searchPlaceholder: Schema.Attribute.String;
+    seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.String;
+    seoTitle: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiFaqFaq extends Struct.CollectionTypeSchema {
   collectionName: 'faqs';
   info: {
@@ -1081,6 +1206,7 @@ export interface ApiFaqFaq extends Struct.CollectionTypeSchema {
   };
   attributes: {
     answer: Schema.Attribute.RichText;
+    category: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1097,7 +1223,9 @@ export interface ApiFaqFaq extends Struct.CollectionTypeSchema {
     page: Schema.Attribute.Relation<'manyToOne', 'api::page.page'>;
     publishedAt: Schema.Attribute.DateTime;
     question: Schema.Attribute.String;
-    section: Schema.Attribute.Enumeration<['home', 'gold-rate', 'about-us']>;
+    section: Schema.Attribute.Enumeration<
+      ['home', 'gold-rate', 'about-us', 'faq']
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1752,6 +1880,52 @@ export interface ApiPagePage extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiPrivacyPolicyPagePrivacyPolicyPage
+  extends Struct.SingleTypeSchema {
+  collectionName: 'privacy_policy_pages';
+  info: {
+    description: 'Content for the Privacy Policy page';
+    displayName: 'Privacy Policy Page';
+    pluralName: 'privacy-policy-pages';
+    singularName: 'privacy-policy-page';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    body: Schema.Attribute.RichText;
+    breadcrumbLabel: Schema.Attribute.String;
+    contactAddress: Schema.Attribute.Text;
+    contactEmail: Schema.Attribute.String;
+    contactHeading: Schema.Attribute.String;
+    contactIntro: Schema.Attribute.Text;
+    contactName: Schema.Attribute.String;
+    contactPhone: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    heroSubtitle: Schema.Attribute.Text;
+    heroTitle: Schema.Attribute.String;
+    heroTitleHighlight: Schema.Attribute.String;
+    hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::privacy-policy-page.privacy-policy-page'
+    > &
+      Schema.Attribute.Private;
+    ogImage: Schema.Attribute.Media<'images'>;
+    publishedAt: Schema.Attribute.DateTime;
+    seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.String;
+    seoTitle: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiProcessStepProcessStep extends Struct.CollectionTypeSchema {
   collectionName: 'process_steps';
   info: {
@@ -1926,6 +2100,56 @@ export interface ApiTestimonialTestimonial extends Struct.CollectionTypeSchema {
       > &
       Schema.Attribute.DefaultTo<5>;
     testimonialText: Schema.Attribute.Text;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTestimonialsPageTestimonialsPage
+  extends Struct.SingleTypeSchema {
+  collectionName: 'testimonials_pages';
+  info: {
+    description: 'Content for the Testimonials page. Reviews come from the Testimonial collection.';
+    displayName: 'Testimonials Page';
+    pluralName: 'testimonials-pages';
+    singularName: 'testimonials-page';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    ctaPrimaryLabel: Schema.Attribute.String;
+    ctaSecondaryLabel: Schema.Attribute.String;
+    ctaSecondaryLink: Schema.Attribute.String;
+    ctaSubtext: Schema.Attribute.Text;
+    ctaTitle: Schema.Attribute.String;
+    gridPretitle: Schema.Attribute.String;
+    gridSubtitle: Schema.Attribute.Text;
+    gridTitle: Schema.Attribute.String;
+    heroDescription: Schema.Attribute.Text;
+    heroEyebrow: Schema.Attribute.String;
+    heroTitle: Schema.Attribute.String;
+    heroTitleHighlight: Schema.Attribute.String;
+    hideFooter: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    hideNavbar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::testimonials-page.testimonials-page'
+    > &
+      Schema.Attribute.Private;
+    ogImage: Schema.Attribute.Media<'images'>;
+    publishedAt: Schema.Attribute.DateTime;
+    readLessLabel: Schema.Attribute.String;
+    readMoreLabel: Schema.Attribute.String;
+    seoDescription: Schema.Attribute.Text;
+    seoKeywords: Schema.Attribute.String;
+    seoTitle: Schema.Attribute.String;
+    stats: Schema.Attribute.Component<'shared.stat-item', true>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -2492,11 +2716,13 @@ declare module '@strapi/strapi' {
       'api::blog-post.blog-post': ApiBlogPostBlogPost;
       'api::career-page-setting.career-page-setting': ApiCareerPageSettingCareerPageSetting;
       'api::category.category': ApiCategoryCategory;
+      'api::community-page.community-page': ApiCommunityPageCommunityPage;
       'api::comparison-row.comparison-row': ApiComparisonRowComparisonRow;
       'api::contact-submission.contact-submission': ApiContactSubmissionContactSubmission;
       'api::contact-us-page.contact-us-page': ApiContactUsPageContactUsPage;
       'api::difference-box.difference-box': ApiDifferenceBoxDifferenceBox;
       'api::enquiry.enquiry': ApiEnquiryEnquiry;
+      'api::faq-page.faq-page': ApiFaqPageFaqPage;
       'api::faq.faq': ApiFaqFaq;
       'api::footer-setting.footer-setting': ApiFooterSettingFooterSetting;
       'api::global-stat.global-stat': ApiGlobalStatGlobalStat;
@@ -2512,11 +2738,13 @@ declare module '@strapi/strapi' {
       'api::navbar-setting.navbar-setting': ApiNavbarSettingNavbarSetting;
       'api::otp-request.otp-request': ApiOtpRequestOtpRequest;
       'api::page.page': ApiPagePage;
+      'api::privacy-policy-page.privacy-policy-page': ApiPrivacyPolicyPagePrivacyPolicyPage;
       'api::process-step.process-step': ApiProcessStepProcessStep;
       'api::promo-slide.promo-slide': ApiPromoSlidePromoSlide;
       'api::sell-gold-page-setting.sell-gold-page-setting': ApiSellGoldPageSettingSellGoldPageSetting;
       'api::shared-media.shared-media': ApiSharedMediaSharedMedia;
       'api::testimonial.testimonial': ApiTestimonialTestimonial;
+      'api::testimonials-page.testimonials-page': ApiTestimonialsPageTestimonialsPage;
       'plugin::content-manager-organizer.content-manager-configuration': PluginContentManagerOrganizerContentManagerConfiguration;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

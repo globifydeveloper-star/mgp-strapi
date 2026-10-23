@@ -63,7 +63,7 @@
     "seoTitle": {
       "type": "string"
     },
-        "locatorHeading": {
+    "locatorHeading": {
       "type": "string"
     },
     "locatorHighlight": {
@@ -72,7 +72,7 @@
     "locatorSubtitle": {
       "type": "text"
     },
-      "seoDescription": {
+    "seoDescription": {
       "type": "text"
     },
     "ogImage": {
@@ -106,6 +106,74 @@
     "trustBadgeSuffix": {
       "type": "string",
       "default": "Across India"
+    },
+    "heroArcLabel1": {
+      "type": "text",
+      "description": "Wrap words in *asterisks* to show them highlighted. Press Enter for a new line."
+    },
+    "heroArcLabel2": {
+      "type": "text",
+      "description": "Wrap words in *asterisks* to show them highlighted. Press Enter for a new line."
+    },
+    "heroArcLabel3": {
+      "type": "text",
+      "description": "Wrap words in *asterisks* to show them highlighted. Press Enter for a new line."
+    },
+    "processHeading": {
+      "type": "string"
+    },
+    "processHeadingHighlight": {
+      "type": "string"
+    },
+    "processSubtitle": {
+      "type": "string"
+    },
+    "processStepLabel": {
+      "type": "string"
+    },
+    "diffHeading": {
+      "type": "string"
+    },
+    "diffHeadingHighlight": {
+      "type": "string"
+    },
+    "diffSubtitle": {
+      "type": "string"
+    },
+    "feedbackHeading": {
+      "type": "string"
+    },
+    "vanFeatures": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.check-item"
+    },
+    "faqHeadingHighlight": {
+      "type": "string"
+    },
+    "faqHeading": {
+      "type": "string"
+    },
+    "faqReadMoreLabel": {
+      "type": "string"
+    },
+    "faqViewLessLabel": {
+      "type": "string"
+    },
+    "recentPostsHeading": {
+      "type": "string"
+    },
+    "recentPostsHeadingHighlight": {
+      "type": "string"
+    },
+    "recentPostsHeadingSuffix": {
+      "type": "string"
+    },
+    "recentPostsEmptyText": {
+      "type": "string"
+    },
+    "recentPostsReadMoreLabel": {
+      "type": "string"
     }
   }
 }

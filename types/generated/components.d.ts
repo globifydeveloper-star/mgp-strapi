@@ -13,6 +13,26 @@ export interface BlogCta extends Struct.ComponentSchema {
   };
 }
 
+export interface CommunityInitiative extends Struct.ComponentSchema {
+  collectionName: 'components_community_initiatives';
+  info: {
+    description: 'A CSR programme card on the Community page';
+    displayName: 'Initiative';
+  };
+  attributes: {
+    anchorId: Schema.Attribute.String;
+    body: Schema.Attribute.Text;
+    extraText: Schema.Attribute.Text;
+    extraTitle: Schema.Attribute.String;
+    eyebrow: Schema.Attribute.String;
+    imageAlt: Schema.Attribute.String;
+    primaryImage: Schema.Attribute.Media<'images'>;
+    secondaryImage: Schema.Attribute.Media<'images'>;
+    title: Schema.Attribute.String;
+    wideImage: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+  };
+}
+
 export interface NavigationNavItem extends Struct.ComponentSchema {
   collectionName: 'components_navigation_nav_items';
   info: {
@@ -283,6 +303,7 @@ declare module '@strapi/strapi' {
   export namespace Public {
     export interface ComponentSchemas {
       'blog.cta': BlogCta;
+      'community.initiative': CommunityInitiative;
       'navigation.nav-item': NavigationNavItem;
       'page-section.contact-form': PageSectionContactForm;
       'page-section.difference-grid': PageSectionDifferenceGrid;

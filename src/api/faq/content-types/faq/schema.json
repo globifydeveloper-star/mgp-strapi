@@ -21,8 +21,13 @@
       "enum": [
         "home",
         "gold-rate",
-        "about-us"
+        "about-us",
+        "faq"
       ]
+    },
+    "category": {
+      "type": "string",
+      "description": "Filter group on the FAQ page, e.g. General, Valuation & Purity"
     },
     "order": {
       "type": "integer",

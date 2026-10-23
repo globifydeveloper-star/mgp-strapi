@@ -62,6 +62,77 @@
     },
     "seoKeywords": {
       "type": "string"
+    },
+    "heroUpdatedTime": {
+      "type": "string"
+    },
+    "heroLiveLabel": {
+      "type": "string"
+    },
+    "heroCalculateLabel": {
+      "type": "string"
+    },
+    "heroSellLabel": {
+      "type": "string"
+    },
+    "whyTitle": {
+      "type": "string"
+    },
+    "whyTitleHighlight": {
+      "type": "string"
+    },
+    "whyTitleSuffix": {
+      "type": "string"
+    },
+    "whyReasons": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.benefit-card"
+    },
+    "valuationTitle": {
+      "type": "string"
+    },
+    "valuationTitleHighlight": {
+      "type": "string"
+    },
+    "valuationTitleSuffix": {
+      "type": "string"
+    },
+    "valuationSteps": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.benefit-card"
+    },
+    "ctaTitle": {
+      "type": "string"
+    },
+    "ctaSubtext": {
+      "type": "string"
+    },
+    "ctaPrimaryLabel": {
+      "type": "string"
+    },
+    "ctaSecondaryLabel": {
+      "type": "string"
+    },
+    "ctaSecondaryLink": {
+      "type": "string"
+    },
+    "faqHeading": {
+      "type": "string"
+    },
+    "trustItems": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.check-item"
+    },
+    "valuationProcessImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "\"How we value your gold\" section. Falls back to the built-in image if empty. Recommended: 1600 × 1050 px"
     }
   }
 }

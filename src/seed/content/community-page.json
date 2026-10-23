@@ -1,0 +1,140 @@
+{
+  "heroEyebrow": "Muthoot Pappachan Foundation",
+  "heroTitle": "Committed to the",
+  "heroTitleHighlight": "Community",
+  "heroBody": "Armed with a commitment to society, the Muthoot Pappachan Foundation (MPF), a Public Charitable Trust — the CSR arm of Muthoot Pappachan Group (MPG) — was formed and has touched thousands of lives through its diverse programs. It tackles issues affecting the communities in which its businesses operate.\n\nOur primary aim is to build a portfolio of CSR activities that are in line with our core strengths as a business and our various business units. Such CSR initiatives of MPG revolve around the theme ‘HEEL’, covering Health, Education, Environment and Livelihood.",
+  "heelItems": [
+    { "text": "Health" },
+    { "text": "Education" },
+    { "text": "Environment" },
+    { "text": "Livelihood" }
+  ],
+  "roleEyebrow": "Our Foundation",
+  "roleTitle": "Role of",
+  "roleTitleHighlight": "Muthoot Pappachan Foundation",
+  "roleBody": "Muthoot Pappachan Foundation spearheads the planning and execution of CSR initiatives aligned with organisational objectives, driving impactful programs across various Group companies. The core aim of the Foundation is to facilitate all the CSR activities and programmes of the entire Group, which are bound by the theme HEEL — Health, Education, Environment and Livelihood. MPF facilitates company-level and Group-level CSR activities adhering to this theme for the following stakeholders:",
+  "stakeholdersHeading": "Key Values and Vision",
+  "stakeholders": [
+    { "text": "Customers" },
+    { "text": "Employees" },
+    { "text": "Corporate" },
+    { "text": "Government Sector" },
+    { "text": "Public Sector" },
+    { "text": "Marginalised Communities" },
+    { "text": "Other stakeholders (NGOs, Corporate partners)" }
+  ],
+  "objectivesHeading": "The CSR Objectives of the Muthoot Pappachan Foundation",
+  "objectivesBody": "With a long-term and futuristic perspective, the entire range of CSR activities undertaken by the various group companies is streamlined through the Foundation — to build a framework of CSR activities with a philanthropic approach in line with business unit objectives, which also benefits the organisation at large.",
+  "objectives": [
+    { "text": "Social returns together with financial returns, while imbibing the organisation's ethos and value systems." },
+    { "text": "Build sustainability for the organisation by ‘Engaging the Community’." }
+  ],
+  "sustainabilityEyebrow": "Sustainability",
+  "sustainabilityTitle": "Understanding our Mission of",
+  "sustainabilityTitleHighlight": "Sustainability",
+  "sustainabilityBody": "Under the sustainability mission, MPF partners with projects to ensure long-term sustainability. We plan and implement strategic CSR initiatives that are a blend of philanthropy and business, looking for the combined social and economic benefit of all stakeholders.",
+  "sustainabilityAimsHeading": "With our sustainability mission, we aim to:",
+  "sustainabilityAims": [
+    { "text": "Effectively communicate the organisation's goals and direction" },
+    { "text": "Enhance the brand's value and reputation" },
+    { "text": "Work for long-term sustainability for the organisation and society" },
+    { "text": "Improve financial performance" },
+    { "text": "Build a relationship with businesses in the community and local authorities" },
+    { "text": "Build good relations with government and communities" },
+    { "text": "Have a license to operate" }
+  ],
+  "impactEyebrow": "Reach & Impact",
+  "impactTitle": "The Reach & Impact of Our",
+  "impactTitleHighlight": "CSR Activities",
+  "impactBody": "Muthoot Blue is at the forefront of promoting CSR activities through its various branches and companies. We are actively involved in engaging with the underprivileged groups and marginalised sections of society through intelligently conceived and executed programmes. The benefits received by our stakeholders encourage us to continue our long-term focus on, and support in, the areas of health, education and livelihood. Our focus is on empowerment, which has had an indelible impact on the communities as a whole.",
+  "smileBadge": "Among India's 11 best CSR projects — MCA",
+  "smileTitle": "Smile Mission",
+  "smileBody": "The Muthoot Pappachan Foundation's “Smile Please” initiative supports children from lower socio-economic backgrounds with congenital cleft lip/palate by providing free surgeries, comprehensive care including speech therapy, and raising awareness about the condition. This project is executed in partnership with the medical charity organisation “Mission Smile”, a pioneer in the country's cleft lip space.\n\nThe ‘Smile Please’ mission was implemented across the country and has been acknowledged by IICA / Ministry of Corporate Affairs as one among the 11 best CSR initiatives of India.",
+  "smileStats": [
+    { "number": "10,000", "label": "Muthoot Pappachan Group staff involved in the mission" },
+    { "number": "10 Lakh+", "label": "People covered through the outreach" },
+    { "number": "2 Lakh", "label": "Families covered in the awareness mission" },
+    { "number": "600+", "label": "Medical volunteers associated with the mission" }
+  ],
+  "initiativesEyebrow": "Our Initiatives",
+  "initiativesTitle": "Programs That",
+  "initiativesTitleHighlight": "Change Lives",
+  "initiatives": [
+    {
+      "anchorId": "blue-butterflies",
+      "eyebrow": "Health",
+      "title": "Blue Butterflies",
+      "body": "The project focusses on providing treatment preparedness support to paediatric cancer patients. The preparedness support provided boosts the family's willpower to continue the treatment and remain emotionally available to the child throughout the recovery process. The field outreach covers almost all the major hospitals throughout Kerala, so the most deserving cases are identified and provided support. If they require further treatment options, the same is facilitated with the support of the project.",
+      "extraTitle": "General Treatment Support",
+      "extraText": "General treatment support is extended to people who are finding difficulty in managing demanding medical expenses. The support helps them continue with their treatment requirements.",
+      "imageAlt": "Blue Butterflies - paediatric cancer care support"
+    },
+    {
+      "anchorId": "bhodhini",
+      "eyebrow": "Education",
+      "title": "Bhodhini Counselling Center",
+      "body": "Bhodhini Counselling Centre functions towards the counselling of adolescents and youngsters. The scheme was able to cover 800 individuals through group counselling. Lack of concentration, anger issues and relationship issues are also addressed alongside. Anger management, couple counselling, activity scheduling, tele-counselling and relaxation techniques are some of the mitigation strategies adopted.",
+      "extraTitle": "Other Educational Support",
+      "extraText": "Educational support is extended to students from underprivileged sections of society who are not able to complete their academics.",
+      "imageAlt": "Bhodhini Counselling Center"
+    },
+    {
+      "anchorId": "rebuilding-kerala",
+      "eyebrow": "Livelihood",
+      "title": "Rebuilding Kerala",
+      "body": "In response to the severe floods that hit Kerala on August 16, 2018, the Muthoot Pappachan Foundation supported the government's rebuilding efforts by constructing homes for those who lost theirs. The floods, one of the worst in a century, resulted in numerous deaths, missing persons, and over a million evacuations.\n\nThe foundation planned 48 housing units across five locations in Pathanamthitta: Chittar, Mezhuveli, Kadambanad, Kadapra, and Ayiroor. All planned houses in all the mentioned locations have been completed and handed over to beneficiaries.",
+      "imageAlt": "Rebuilding Kerala - homes for flood-affected families"
+    },
+    {
+      "anchorId": "volleyball-academy",
+      "eyebrow": "Sports",
+      "title": "Muthoot Volleyball Academy",
+      "body": "The Muthoot non-residential volleyball academy was started in Ernakulam district in November 2021 with 4 schools and the surrounding areas. 240 boys and girls were shortlisted, and after screening, 120 students were covered under the project.",
+      "imageAlt": "Muthoot Volleyball Academy"
+    },
+    {
+      "anchorId": "blind-cricket",
+      "eyebrow": "Sports",
+      "title": "Cricket Association for Blind in Kerala",
+      "body": "For supporting, advancing and popularising blind cricket, the Cricket Association for Blind in Kerala (CABK) has developed various platforms for visually impaired men to showcase their talents in cricket. The Cricket Association for the Blind in India (CABI), which is connected to the World Blind Cricket Council, is the parent organisation of CABK, a recognised association under the Societies Registration Act of 1860.\n\nVarious interstate matches and coaching camps were organised for the participants, which lay an important milestone in the lives of the players. Through the extended support of MPF, the team was able to build improved player training, uniforms and equipment, jerseys and shoes, travel for tournaments, branding and promotion, player food and lodging, coach fees and ground rent. The players' smiles conveyed dignity, and their confidence grew after the tournaments."
+    },
+    {
+      "anchorId": "rajasthan-project",
+      "eyebrow": "Environment",
+      "title": "Rajasthan Project with RRF and JRF",
+      "body": "The collaborative work undertaken by the Royal Rajasthan Foundation and the Muthoot Pappachan Foundation works towards capacity building for women to enable access to water. Workshops and capacity building are aimed towards the women of the community. Agriculture and water management, WASH, financial literacy, mental health awareness, TOT sessions for grassroots leaders and exposure visits are some of the focus areas among the community.\n\nWater harvesting structures and farm ponds are developed for the project. 25,000+ saplings have been planted, and the responsibility of caring for them is undertaken by the community itself — making the community the true owner of the project.",
+      "imageAlt": "Visit of Directors to Samarpura Region to meet the women engaged in rug weaving",
+      "wideImage": true
+    },
+    {
+      "anchorId": "disability-rehabilitation",
+      "eyebrow": "Health",
+      "title": "Disability and Rehabilitation",
+      "body": "The Aashiana Rehabilitation Training Centre, supervised by Dr. Mitu C. Shekhar and a multidisciplinary team, provides residential rehab training for patients immobilised due to accidents, paralysis, or spinal cancer. It aims to help paraplegic individuals regain physical and psychological functioning to become contributing members of society.\n\nThe Centre offers free treatment, food, and accommodation for low-income residents and treats various conditions, including brain and spinal cord injuries, strokes, cerebral palsy, and joint-related diseases. Services include customised wheelchairs, calipers, and a Pain Clinic addressing shoulder, neck, knee, and back pain. Since its inception, 183 patients have benefited from the Centre."
+    }
+  ],
+  "jeevanEyebrow": "MELP Initiatives",
+  "jeevanTitle": "Jeevan Jyothi:",
+  "jeevanTitleHighlight": "Providing More Light to Lives",
+  "jeevanBody": "MPF supports Jeevan Jyothi, a charitable foundation working in the red-light district of Budhwar Peth in Pune. Through this, we help provide a ‘safe home’ for the children of women in prostitution and help them realise that there is more to life than what they perceive. We believe that educating neglected community children and giving them a safe environment will help them come out of the vicious circles they are trapped in.",
+  "jeevanAimsHeading": "Through Jeevan Jyothi, we aim to:",
+  "jeevanAims": [
+    { "text": "Shelter to children of women in prostitution" },
+    { "text": "Provide education and a 'safe home' to live" },
+    { "text": "Pre-school for children aged 3 to 5 years" },
+    { "text": "Free medical counselling" },
+    { "text": "Weekly fellowship meetings to provide a sense of community" },
+    { "text": "Help bring them out of the vicious circle of their circumstance" }
+  ],
+  "featuredInitiative": {
+    "anchorId": "football-academy",
+    "eyebrow": "Sports",
+    "title": "Muthoot Football Academy",
+    "body": "The Muthoot Football Academy, a flagship initiative of the Muthoot Pappachan Foundation's sports division, aims to identify and train young football talents to become future stars. With a curriculum designed by international coaches, the Academy focuses on grassroots talent from districts where football is popular, conducting talent hunts in Kozhikode, Kochi, and Thiruvananthapuram.\n\nForty-two selected talents receive comprehensive training, high-quality education, nutrition, healthcare, life skills, and career training. The Academy, a full-fledged residential facility near several schools, offers scholarships covering all expenses, including schooling, food, medical insurance, and accommodation. Students also benefit from physiotherapy services and participate in competitive matches and tournaments to hone their skills.",
+    "imageAlt": "Muthoot Football Academy"
+  },
+  "conclusion": "Muthoot Exim, the <strong>precious metal vertical of the Muthoot Pappachan Group</strong>, specialises in innovative products and offerings in the precious metal space. Customers have access to quality products that meet the highest standards, at an affordable price. For more details on the Muthoot Pappachan Group, visit <a href=\"https://www.muthoot.com\" target=\"_blank\" rel=\"noopener noreferrer\">www.muthoot.com</a>.",
+  "seoTitle": "Community | Muthoot Gold Point",
+  "seoDescription": "Discover the CSR initiatives of the Muthoot Pappachan Foundation across Health, Education, Environment and Livelihood (HEEL) — touching thousands of lives across India.",
+  "seoKeywords": "Muthoot Pappachan Foundation, CSR, Community, HEEL, Smile Mission, Muthoot Football Academy, Muthoot Gold Point"
+}

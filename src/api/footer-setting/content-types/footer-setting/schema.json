@@ -69,6 +69,35 @@
     "copyrightText": {
       "type": "string",
       "default": "Copyright © Muthoot Exim {year}. All Rights Reserved."
+    },
+    "quickLinksHeading": {
+      "type": "string"
+    },
+    "legalText": {
+      "type": "string"
+    },
+    "legalEmail": {
+      "type": "string"
+    },
+    "otherWebsitesLabel": {
+      "type": "string"
+    },
+    "otherWebsites": {
+      "type": "component",
+      "repeatable": true,
+      "component": "navigation.nav-item"
+    },
+    "tollFreeHeading": {
+      "type": "string"
+    },
+    "tollFreeDescription": {
+      "type": "string"
+    },
+    "officeHeading": {
+      "type": "string"
+    },
+    "socialsHeading": {
+      "type": "string"
     }
   }
 }

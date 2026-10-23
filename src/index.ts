@@ -2,6 +2,8 @@ import crypto from 'crypto';
 import { Core } from '@strapi/strapi';
 import fs from 'fs';
 import path from 'path';
+import { seedContentPages } from './seed/content-pages';
+import { seedDifferenceBoxes } from './seed/difference-boxes';
 
 /**
  * Parser to extract branch records from the frontend TypeScript data file.
@@ -210,35 +212,8 @@ export default {
       }
     }
 
-    // 4. Seed Difference Boxes
-    const diffBoxUid = 'api::difference-box.difference-box';
-    const diffBoxesExisting = await strapi.documents(diffBoxUid).findMany({ limit: 1 });
-    if (diffBoxesExisting.length === 0) {
-      strapi.log.info('Seeding Difference Boxes...');
-      const boxes = [
-        {
-          order: 1,
-          boxTitle: 'XRF over touchstone',
-          boxDescription: "Spectroscopic analysis gives the exact elemental composition of your gold. A touchstone gives a rough estimate. We don't do rough estimates.",
-          iconType: 'flask' as const
-        },
-        {
-          order: 2,
-          boxTitle: 'Three-decimal weight',
-          boxDescription: 'Weighed to 0.001g on precision balances. Most buyers round down to the nearest gram. That difference is real money leaving your pocket.',
-          iconType: 'scale' as const
-        },
-        {
-          order: 3,
-          boxTitle: 'Bank transfer, not cash-only',
-          boxDescription: 'Every transaction above ₹10,000 reaches your account digitally. A full itemised invoice issued. No undocumented exchanges.',
-          iconType: 'rupee' as const
-        }
-      ];
-      for (const box of boxes) {
-        await strapi.documents(diffBoxUid).create({ data: box });
-      }
-    }
+    // 4. Seed Difference Boxes (also replaces the original seeded cards the website ignores)
+    await seedDifferenceBoxes(strapi);
 
     // 4b. Seed Comparison Rows
     const comparisonRowUid = 'api::comparison-row.comparison-row';
@@ -718,6 +693,9 @@ export default {
       });
     }
 
+    // 8i. Seed content pages (Community, FAQ, Privacy Policy, Testimonials, ...)
+    await seedContentPages(strapi);
+
     // 9. Auto-configure Public Role Permissions
     try {
       const publicRole = await strapi.db.connection('up_roles').where('type', 'public').first();
@@ -750,6 +728,10 @@ export default {
           'api::job-position.job-position.findOne',
           'api::navbar-setting.navbar-setting.find',
           'api::footer-setting.footer-setting.find',
+          'api::community-page.community-page.find',
+          'api::faq-page.faq-page.find',
+          'api::privacy-policy-page.privacy-policy-page.find',
+          'api::testimonials-page.testimonials-page.find',
           'api::job-application.job-application.create',
           'api::gold-valuation-submission.gold-valuation-submission.create',
           'api::all-lead.all-lead.create'
@@ -865,7 +847,11 @@ export default {
               'api::homepage.homepage',
               'api::shared-media.shared-media',
               'api::blog-page-setting.blog-page-setting',
-              'api::career-page-setting.career-page-setting'
+              'api::career-page-setting.career-page-setting',
+              'api::community-page.community-page',
+              'api::faq-page.faq-page',
+              'api::privacy-policy-page.privacy-policy-page',
+              'api::testimonials-page.testimonials-page'
             ]
           },
           {
