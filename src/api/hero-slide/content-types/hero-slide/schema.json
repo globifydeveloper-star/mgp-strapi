@@ -10,6 +10,20 @@
     "draftAndPublish": false
   },
   "attributes": {
+    "order": {
+      "type": "integer",
+      "min": 1,
+      "description": "Position in the homepage slider (1 = first)"
+    },
+    "variant": {
+      "type": "enumeration",
+      "enum": [
+        "standard",
+        "scientific",
+        "recycling"
+      ],
+      "description": "Layout used to render the slide: standard (model photo), scientific (purity testing), recycling (feature cards)"
+    },
     "heroText": {
       "type": "text"
     },
@@ -22,7 +36,15 @@
       "allowedTypes": [
         "images"
       ],
-      "description": "Recommended: 1254 × 1254 px"
+      "description": "Recommended: 1254 × 1254 px. Recycling slide: wide desktop background, ~1920 × 1080 px"
+    },
+    "mobileImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Phones and tablets (scientific poster / recycling background). Falls back to the built-in image if empty. Recommended: portrait ~1080 × 1600 px"
     },
     "slideLink": {
       "type": "string"

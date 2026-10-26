@@ -24,6 +24,10 @@
         "default"
       ],
       "default": "default"
+    },
+    "link": {
+      "type": "string",
+      "description": "Optional page the card opens, e.g. /blog/my-post"
     }
   }
 }

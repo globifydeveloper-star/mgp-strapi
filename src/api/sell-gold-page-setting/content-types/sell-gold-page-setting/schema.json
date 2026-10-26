@@ -159,6 +159,14 @@
       ],
       "description": "\"Why Muthoot Gold Point\" tile photo (bottom left). Recommended: 440 × 440 px"
     },
+    "contactBackgroundImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "\"Get in Touch\" section background. Falls back to the built-in image if empty. Recommended: 1920 × 900 px"
+    },
     "hideNavbar": {
       "type": "boolean",
       "default": false

@@ -149,6 +149,8 @@ export default {
     const heroSlideUid = 'api::hero-slide.hero-slide';
     const defaultHeroSlides = [
       {
+        order: 1,
+        variant: 'standard' as const,
         heroText: 'Sell Your Gold. Get Cash Today.',
         heroSubtext: 'Get the fair value of your gold through a transparent and reliable process, conducted entirely in front of you.',
         slideLink: '#branches',
@@ -156,6 +158,8 @@ export default {
         button2: { enabled: true, label: 'See how it works', link: '#gold-sell-process' }
       },
       {
+        order: 2,
+        variant: 'scientific' as const,
         heroText: 'Get 100% Value for Your Gold. Safe, Transparent & Scientific.',
         heroSubtext: 'Sell your gold with complete peace of mind. We use advanced XRF machines for purity testing right in front of you, ensuring you get the exact market rate.',
         slideLink: '#branches',
@@ -163,15 +167,17 @@ export default {
         button2: { enabled: true, label: 'Check Gold Purity', link: '#gold-value-form' }
       },
       {
+        order: 3,
+        variant: 'recycling' as const,
         heroText: 'Recycle Your Gold. Protect Nature, Empower the Nation',
         heroSubtext: 'Helping Nature by reducing mining for extracting gold, helping government through reducing Current Account Deficit, and 100% transparent process.',
         slideLink: '#branches',
         button1: { enabled: true, label: 'Locate Nearest Branch', link: '#branches' },
         button2: { enabled: true, label: 'Our Transparent Process', link: '#gold-sell-process' },
         features: [
-          { title: 'Helping Government', tag: 'Economic Growth', desc: 'Helping government through reducing Current Account Deficit by importing less gold from International market.', iconType: 'economy' as const },
-          { title: 'Transparent Process', tag: '100% Transparent', desc: 'Advanced German XRF purity testing right in front of you.', iconType: 'trust' as const },
-          { title: 'Helping Nature', tag: 'Eco Conservation', desc: 'Helping Nature by reducing the mining for extracting gold from the gold mines.', iconType: 'nature' as const }
+          { title: 'Helping Government', tag: 'Economic Growth', desc: 'Helping government through reducing Current Account Deficit by importing less gold from International market.', iconType: 'economy' as const, link: '/blog/how-gold-rate-fluctuation-affect-the-indian-economy' },
+          { title: 'Transparent Process', tag: '100% Transparent', desc: 'Advanced German XRF purity testing right in front of you.', iconType: 'trust' as const, link: '/blog/how-muthoot-gold-point-ensures-the-purity-of-your-gold' },
+          { title: 'Helping Nature', tag: 'Eco Conservation', desc: 'Helping Nature by reducing the mining for extracting gold from the gold mines.', iconType: 'nature' as const, link: '/blog/the-environmental-impact-of-gold-mining-vs-gold-recycling' }
         ]
       }
     ];
@@ -183,30 +189,60 @@ export default {
         await strapi.documents(heroSlideUid).create({ data: slide });
       }
     }
-    // Repair slides that exist but were seeded incomplete (blank heading/subtext, missing feature
-    // cards, or the retired "100% Scientific" tag) without touching content an editor has filled in
+    // Repair slides that exist but were seeded incomplete (no order/variant, blank heading/subtext,
+    // missing feature cards or card links, or the retired "100% Scientific" tag) without touching
+    // content an editor has filled in. Slides without a variant get the default for their position.
     const existingHeroSlides = await strapi.documents(heroSlideUid).findMany({
       sort: 'id:asc',
-      limit: defaultHeroSlides.length,
       populate: ['features', 'button1', 'button2'],
     }) as any[];
+    const usedVariants = new Set(existingHeroSlides.map((s) => s.variant).filter(Boolean));
+    const usedOrders = new Set(existingHeroSlides.map((s) => s.order).filter((o) => o != null));
     for (const [i, existing] of existingHeroSlides.entries()) {
-      const def = defaultHeroSlides[i] as any;
-      if (!def) continue;
       const patch: Record<string, unknown> = {};
-      if (!existing.heroText?.trim()) patch.heroText = def.heroText;
-      if (!existing.heroSubtext?.trim()) patch.heroSubtext = def.heroSubtext;
-      if (!existing.slideLink && def.slideLink) patch.slideLink = def.slideLink;
-      if (!existing.button1 && def.button1) patch.button1 = def.button1;
-      if (!existing.button2 && def.button2) patch.button2 = def.button2;
-      if (def.features) {
-        const features = existing.features ?? [];
-        if (features.length === 0) {
-          patch.features = def.features;
-        } else if (features.some((f: any) => /scientific/i.test(f.tag ?? ''))) {
-          patch.features = features.map(({ id, ...f }: any) =>
-            /scientific/i.test(f.tag ?? '') ? { ...f, tag: '100% Transparent' } : f
-          );
+      let variant = existing.variant;
+      if (!variant) {
+        const positional = defaultHeroSlides[i]?.variant;
+        if (positional && !usedVariants.has(positional)) {
+          variant = positional;
+          usedVariants.add(positional);
+          patch.variant = positional;
+        }
+      }
+      if (existing.order == null) {
+        let order = i + 1;
+        while (usedOrders.has(order)) order++;
+        usedOrders.add(order);
+        patch.order = order;
+      }
+      const def = defaultHeroSlides.find((d) => d.variant === variant) as any;
+      if (def) {
+        if (!existing.heroText?.trim()) patch.heroText = def.heroText;
+        if (!existing.heroSubtext?.trim()) patch.heroSubtext = def.heroSubtext;
+        if (!existing.slideLink && def.slideLink) patch.slideLink = def.slideLink;
+        if (!existing.button1 && def.button1) patch.button1 = def.button1;
+        if (!existing.button2 && def.button2) patch.button2 = def.button2;
+        if (def.features) {
+          const features = existing.features ?? [];
+          if (features.length === 0) {
+            patch.features = def.features;
+          } else {
+            let changed = false;
+            const repaired = features.map(({ id, ...f }: any) => {
+              const next = { ...f };
+              if (/scientific/i.test(next.tag ?? '')) {
+                next.tag = '100% Transparent';
+                changed = true;
+              }
+              const defLink = def.features.find((d: any) => d.iconType === next.iconType)?.link;
+              if (!next.link && defLink) {
+                next.link = defLink;
+                changed = true;
+              }
+              return next;
+            });
+            if (changed) patch.features = repaired;
+          }
         }
       }
       if (Object.keys(patch).length > 0) {
@@ -777,6 +813,10 @@ export default {
           'api::faq-page.faq-page.find',
           'api::privacy-policy-page.privacy-policy-page.find',
           'api::testimonials-page.testimonials-page.find',
+          'api::site-text.site-text.find',
+          'api::sell-gold-page-setting.sell-gold-page-setting.find',
+          'api::global-stat.global-stat.find',
+          'api::page.page.find',
           'api::job-application.job-application.create',
           'api::gold-valuation-submission.gold-valuation-submission.create',
           'api::all-lead.all-lead.create'
@@ -896,7 +936,8 @@ export default {
               'api::community-page.community-page',
               'api::faq-page.faq-page',
               'api::privacy-policy-page.privacy-policy-page',
-              'api::testimonials-page.testimonials-page'
+              'api::testimonials-page.testimonials-page',
+              'api::site-text.site-text'
             ]
           },
           {
