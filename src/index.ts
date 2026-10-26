@@ -183,6 +183,37 @@ export default {
         await strapi.documents(heroSlideUid).create({ data: slide });
       }
     }
+    // Repair slides that exist but were seeded incomplete (blank heading/subtext, missing feature
+    // cards, or the retired "100% Scientific" tag) without touching content an editor has filled in
+    const existingHeroSlides = await strapi.documents(heroSlideUid).findMany({
+      sort: 'id:asc',
+      limit: defaultHeroSlides.length,
+      populate: ['features', 'button1', 'button2'],
+    }) as any[];
+    for (const [i, existing] of existingHeroSlides.entries()) {
+      const def = defaultHeroSlides[i] as any;
+      if (!def) continue;
+      const patch: Record<string, unknown> = {};
+      if (!existing.heroText?.trim()) patch.heroText = def.heroText;
+      if (!existing.heroSubtext?.trim()) patch.heroSubtext = def.heroSubtext;
+      if (!existing.slideLink && def.slideLink) patch.slideLink = def.slideLink;
+      if (!existing.button1 && def.button1) patch.button1 = def.button1;
+      if (!existing.button2 && def.button2) patch.button2 = def.button2;
+      if (def.features) {
+        const features = existing.features ?? [];
+        if (features.length === 0) {
+          patch.features = def.features;
+        } else if (features.some((f: any) => /scientific/i.test(f.tag ?? ''))) {
+          patch.features = features.map(({ id, ...f }: any) =>
+            /scientific/i.test(f.tag ?? '') ? { ...f, tag: '100% Transparent' } : f
+          );
+        }
+      }
+      if (Object.keys(patch).length > 0) {
+        strapi.log.info(`Repairing Hero Slide #${i + 1} (${Object.keys(patch).join(', ')})...`);
+        await strapi.documents(heroSlideUid).update({ documentId: existing.documentId, data: patch });
+      }
+    }
 
     // 3. Seed Process Steps (Fix 2: Expose order field, compute number on frontend)
     const processStepUid = 'api::process-step.process-step';
