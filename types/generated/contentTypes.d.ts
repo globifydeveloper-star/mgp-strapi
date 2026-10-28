@@ -2185,9 +2185,7 @@ export interface ApiSellGoldPageSettingSellGoldPageSetting
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     videoModalTitle: Schema.Attribute.String;
-    watchNowLabel: Schema.Attribute.String;
-    weBuyGoldImage: Schema.Attribute.Media<'images'> &
-      Schema.Attribute.Required;
+    weBuyGoldImage: Schema.Attribute.Media<'images'>;
   };
 }
 

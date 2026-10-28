@@ -804,7 +804,7 @@ export default {
 
     
     // 8f. Seed Sell Gold Page Setting
-    const sellGoldUid = 'api::sell-gold-page-setting.sell-gold-page-setting' as any;
+    const sellGoldUid = 'api::sell-gold-page-setting.sell-gold-page-setting';
     const defaultSellGoldData = {
       seoTitle: 'Sell Gold for Cash | Muthoot Gold Point',
       seoDescription: 'Sell your old gold and get cash instantly with 100% fair and precise gold buying. Free purity testing, 100% transparent process, and free ultrasonic cleaning.',
