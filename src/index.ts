@@ -115,32 +115,79 @@ export default {
       { code: 'mr', label: 'मराठी' },
       { code: 'bn', label: 'বাংলা' }
     ];
+    const defaultHomepageData = {
+      estimateGoldHeading: 'Estimate The Value Of',
+      estimateGoldHeadingHighlight: 'Your Gold',
+      estimateGoldNote: 'Final Value may vary based on physical verification',
+      vanHeadingLight: 'We Bring the',
+      vanHeadingBold: 'Branch to You',
+      vanDescription: "Can't visit us? Our Mobile Van carries the full GoldPoint setup — XRF machines, precision balances, real-time rates — directly to your home or office.",
+      vanButtonLabel: 'Book a Van Visit',
+      seoTitle: 'Sell Gold For Cash | Online Gold Valuation | Gold Point',
+      seoDescription: 'Get the True Market Value of your old, unused or pledged gold through a transparent process conducted entirely in front of you.',
+      homeVideos: defaultHomeVideos,
+      heroArcLabel1: 'Get the *Fair Value*\nfor your gold',
+      heroArcLabel2: '*Transparent*\nGold evaluation\nprocess',
+      heroArcLabel3: '*Instant Payment*\nafter valuation',
+      processHeading: 'Gold Selling',
+      processHeadingHighlight: 'Process',
+      processStepLabel: 'Step',
+      diffHeading: 'Why Choose',
+      diffHeadingHighlight: 'Gold Point',
+      diffSubtitle: "India's First National Level Organised Gold Buyer",
+      feedbackHeading: 'What do our customers say about us?',
+      faqHeading: 'Asked Questions',
+      faqHeadingHighlight: 'Frequently',
+      faqReadMoreLabel: 'Read More FAQs',
+      faqViewLessLabel: 'View Less FAQs',
+      recentPostsHeading: 'Our',
+      recentPostsHeadingHighlight: 'Recent',
+      recentPostsHeadingSuffix: 'Posts',
+      recentPostsEmptyText: 'No recent posts available.',
+      recentPostsReadMoreLabel: 'Read More',
+      vanFeatures: [
+        { text: 'XRF Testing at Your Door' },
+        { text: 'Precise Weighing' },
+        { text: 'Instant Payment' }
+      ]
+    };
+
     const homepageExisting = await strapi.documents(homepageUid).findFirst();
     if (!homepageExisting) {
       strapi.log.info('Seeding Homepage single type...');
-      await strapi.documents(homepageUid).create({
-        data: {
-          estimateGoldHeading: 'Estimate The Value Of',
-          estimateGoldHeadingHighlight: 'Your Gold',
-          estimateGoldNote: 'Final Value may vary based on physical verification',
-          vanHeadingLight: 'We Bring the',
-          vanHeadingBold: 'Branch to You',
-          vanDescription: "Can't visit us? Our Mobile Van carries the full GoldPoint setup — XRF machines, precision balances, real-time rates — directly to your home or office.",
-          vanButtonLabel: 'Book a Van Visit',
-          seoTitle: 'Sell Gold For Cash | Online Gold Valuation | Gold Point',
-          seoDescription: 'Get the True Market Value of your old, unused or pledged gold through a transparent process conducted entirely in front of you.',
-          homeVideos: defaultHomeVideos
-        }
-      });
+      await strapi.documents(homepageUid).create({ data: defaultHomepageData });
     } else {
-      const fullHomepage = await strapi.documents(homepageUid).findFirst({ populate: ['homeVideos'] });
+      const fullHomepage = await strapi.documents(homepageUid).findFirst({ populate: ['homeVideos', 'vanFeatures'] });
+      const hpPatch: any = {};
       if (!fullHomepage?.homeVideos || (Array.isArray(fullHomepage.homeVideos) && fullHomepage.homeVideos.length === 0)) {
-        strapi.log.info('Seeding default homeVideos for Homepage single type...');
+        hpPatch.homeVideos = defaultHomeVideos;
+      }
+      if (!homepageExisting.heroArcLabel1) hpPatch.heroArcLabel1 = defaultHomepageData.heroArcLabel1;
+      if (!homepageExisting.heroArcLabel2) hpPatch.heroArcLabel2 = defaultHomepageData.heroArcLabel2;
+      if (!homepageExisting.heroArcLabel3) hpPatch.heroArcLabel3 = defaultHomepageData.heroArcLabel3;
+      if (!homepageExisting.processHeading) hpPatch.processHeading = defaultHomepageData.processHeading;
+      if (!homepageExisting.processHeadingHighlight) hpPatch.processHeadingHighlight = defaultHomepageData.processHeadingHighlight;
+      if (!homepageExisting.processStepLabel) hpPatch.processStepLabel = defaultHomepageData.processStepLabel;
+      if (!homepageExisting.diffHeading) hpPatch.diffHeading = defaultHomepageData.diffHeading;
+      if (!homepageExisting.diffHeadingHighlight) hpPatch.diffHeadingHighlight = defaultHomepageData.diffHeadingHighlight;
+      if (!homepageExisting.diffSubtitle) hpPatch.diffSubtitle = defaultHomepageData.diffSubtitle;
+      if (!homepageExisting.feedbackHeading) hpPatch.feedbackHeading = defaultHomepageData.feedbackHeading;
+      if (!homepageExisting.faqHeading) hpPatch.faqHeading = defaultHomepageData.faqHeading;
+      if (!homepageExisting.faqHeadingHighlight) hpPatch.faqHeadingHighlight = defaultHomepageData.faqHeadingHighlight;
+      if (!homepageExisting.faqReadMoreLabel) hpPatch.faqReadMoreLabel = defaultHomepageData.faqReadMoreLabel;
+      if (!homepageExisting.faqViewLessLabel) hpPatch.faqViewLessLabel = defaultHomepageData.faqViewLessLabel;
+      if (!homepageExisting.recentPostsHeading) hpPatch.recentPostsHeading = defaultHomepageData.recentPostsHeading;
+      if (!homepageExisting.recentPostsHeadingHighlight) hpPatch.recentPostsHeadingHighlight = defaultHomepageData.recentPostsHeadingHighlight;
+      if (!homepageExisting.recentPostsHeadingSuffix) hpPatch.recentPostsHeadingSuffix = defaultHomepageData.recentPostsHeadingSuffix;
+      if (!homepageExisting.recentPostsEmptyText) hpPatch.recentPostsEmptyText = defaultHomepageData.recentPostsEmptyText;
+      if (!homepageExisting.recentPostsReadMoreLabel) hpPatch.recentPostsReadMoreLabel = defaultHomepageData.recentPostsReadMoreLabel;
+      if (!fullHomepage?.vanFeatures || fullHomepage.vanFeatures.length === 0) hpPatch.vanFeatures = defaultHomepageData.vanFeatures;
+
+      if (Object.keys(hpPatch).length > 0) {
+        strapi.log.info('Updating Homepage with missing default fields and labels...');
         await strapi.documents(homepageUid).update({
           documentId: homepageExisting.documentId,
-          data: {
-            homeVideos: defaultHomeVideos
-          }
+          data: hpPatch
         });
       }
     }
@@ -628,42 +675,96 @@ export default {
 
     // 8c. Seed Contact Us Page
     const contactUsUid = 'api::contact-us-page.contact-us-page';
+    const defaultContactUsData = {
+      heroHeading: "We’re Just A Message Away.",
+      heroLead: "Have questions or need assistance? We’re here to help you with all your gold loan & selling needs.",
+      formTitle: "Write to us",
+      officeTitle: "Registered *Office*",
+      officeName: "MUTHOOT GOLD POINT",
+      officeAddress: "Muthoot Exim Private Limited, 40/7384 Muthoot Towers, M.G. Road, Ernakulam, Kerala - 682035",
+      officePhone1: "0484 2351481",
+      officePhone2: "0484 2351494",
+      officeEmail: "info@muthootexim.com",
+      officeMapUrl: "https://maps.google.com/maps?q=Muthoot%20Towers,%20MG%20Road,%20Ernakulam,%20Kerala%20682035&t=&z=15&ie=UTF8&iwloc=&output=embed",
+      officeMapPopupTitle: "Muthoot Towers",
+      officeMapPopupText: "M.G. Road, Ernakulam, Kerala - 682035",
+      formServices: [
+        { text: "Sell Gold for Cash" },
+        { text: "Release Pledged Gold" },
+        { text: "Mobile Van Appointment" },
+        { text: "Branch Enquiry" },
+        { text: "Gold Valuation & Purity Check" },
+        { text: "Other Assistance" }
+      ],
+      formServicePlaceholder: "Select Service*",
+      formMessagePlaceholder: "Your Message / Query",
+      formSubmitLabel: "Send Message",
+      formSendingLabel: "Sending...",
+      formSuccessText: "Thank you for contacting us, we have received your enquiry. Our team will get back to you shortly.",
+      seoTitle: "Contact Us | Muthoot Gold Point",
+      seoDescription: "Get in touch with Muthoot Gold Point."
+    };
     const contactUsExists = await strapi.documents(contactUsUid).findFirst();
     if (!contactUsExists) {
       strapi.log.info('Seeding Contact Us Page Data...');
       await strapi.documents(contactUsUid).create({
-        data: {
-          heroHeading: "We’re Just A Message Away.",
-          heroLead: "Have questions or need assistance? We’re here to help you with all your gold loan & selling needs.",
-          formTitle: "Write to us",
-          officeName: "MUTHOOT GOLD POINT",
-          officeAddress: "Muthoot Exim Private Limited, 40/7384 Muthoot Towers, M.G. Road, Ernakulam, Kerala - 682035",
-          officePhone1: "0484 2351481",
-          officePhone2: "0484 2351494",
-          officeEmail: "info@muthootexim.com",
-          officeMapUrl: "https://maps.google.com/maps?q=Muthoot%20Towers,%20MG%20Road,%20Ernakulam,%20Kerala%20682035&t=&z=15&ie=UTF8&iwloc=&output=embed",
-          officeMapPopupTitle: "Muthoot Towers",
-          officeMapPopupText: "M.G. Road, Ernakulam, Kerala - 682035",
-          seoTitle: "Contact Us | Muthoot Gold Point",
-          seoDescription: "Get in touch with Muthoot Gold Point."
-        },
+        data: defaultContactUsData,
         status: 'published'
       });
+    } else {
+      if (!contactUsExists.formServicePlaceholder || !contactUsExists.officeTitle) {
+        strapi.log.info('Updating Contact Us Page with missing form labels and services...');
+        await strapi.documents(contactUsUid).update({
+          documentId: contactUsExists.documentId,
+          data: defaultContactUsData
+        });
+      }
     }
 
     // 8d. Seed Gold Rate Page
     const goldRateUid = 'api::gold-rate-page.gold-rate-page';
+    const defaultGoldRateData = {
+      seoTitle: "Today's Gold Rate | Gold Price Per Gram | Gold Point",
+      seoDescription: "Check today's gold rate and gold price per gram. Calculate the estimated value of your gold and explore transparent gold valuation with Gold Point.",
+      heroTitle: "Live Gold Rates & Valuation",
+      heroDescription: "Get the most accurate and real-time market value for your gold.",
+      whyTitle: "Why Gold Rate",
+      whyTitleHighlight: "Changes",
+      whyReasons: [
+        { title: "Global Gold Prices", desc: "International gold prices directly impact domestic rates." },
+        { title: "Exchange Rates", desc: "Changes in INR vs USD affect the price of gold in India." },
+        { title: "Demand & Supply", desc: "Higher demand or lower supply increases gold prices." },
+        { title: "Economic Conditions", desc: "Inflation, interest rates & market volatility influence gold prices." },
+        { title: "Global Events", desc: "Geopolitical events and economic news impact market trends." }
+      ],
+      valuationTitle: "Our Transparent",
+      valuationTitleHighlight: "Valuation Process",
+      valuationSteps: [
+        { title: "Check Today's Gold Rate", desc: "We use the latest live rate for accurate valuation." },
+        { title: "Bring Your Gold", desc: "Visit our nearest branch with your gold." },
+        { title: "Purity Verification", desc: "Your gold is tested using advanced equipment." },
+        { title: "Weight Assessment", desc: "Accurate weight is measured for precise calculation." },
+        { title: "Get Your Gold Value", desc: "You receive a transparent and instant gold valuation." }
+      ],
+      ctaTitle: "Ready to Know What Your Gold Is Worth?",
+      ctaSubtext: "Get a transparent valuation for your gold from our experts.",
+      ctaPrimaryLabel: "Sell Your Gold",
+      ctaSecondaryLabel: "Find a Branch",
+      ctaSecondaryLink: "/#branches"
+    };
+
     const goldRateExists = await strapi.documents(goldRateUid).findFirst();
     if (!goldRateExists) {
       strapi.log.info('Seeding Gold Rate Page Data...');
-      await strapi.documents(goldRateUid).create({
-        data: {
-          seoTitle: "Today's Gold Rate | Gold Price Per Gram | Gold Point",
-          seoDescription: "Check today's gold rate and gold price per gram. Calculate the estimated value of your gold and explore transparent gold valuation with Gold Point.",
-          heroTitle: "Live Gold Rates & Valuation",
-          heroDescription: "Get the most accurate and real-time market value for your gold."
-        }
-      });
+      await strapi.documents(goldRateUid).create({ data: defaultGoldRateData });
+    } else {
+      if (!goldRateExists.whyTitle || !goldRateExists.valuationTitle || !goldRateExists.ctaTitle) {
+        strapi.log.info('Updating Gold Rate Page with missing whyReasons/valuationSteps/cta fields...');
+        await strapi.documents(goldRateUid).update({
+          documentId: goldRateExists.documentId,
+          data: defaultGoldRateData
+        });
+      }
     }
 
     // 8e. Seed Mobile Van Page
@@ -704,21 +805,58 @@ export default {
     
     // 8f. Seed Sell Gold Page Setting
     const sellGoldUid = 'api::sell-gold-page-setting.sell-gold-page-setting' as any;
+    const defaultSellGoldData = {
+      seoTitle: 'Sell Gold for Cash | Muthoot Gold Point',
+      seoDescription: 'Sell your old gold and get cash instantly with 100% fair and precise gold buying. Free purity testing, 100% transparent process, and free ultrasonic cleaning.',
+      seoKeywords: 'Sell Gold, Cash for Gold, Gold Buyers, Sell Old Gold, Muthoot Gold Point, Instant Cash for Gold',
+      heroTitle: 'Sell Your Gold for Cash',
+      heroTitleHighlight: 'Get Cash Instantly',
+      heroSubtitle: 'Safe, transparent and scientifically tested way of selling gold.',
+      heroBullets: [
+        { text: 'Free purity testing of your gold' },
+        { text: '100% transparent process' },
+        { text: 'Free Ultrasonic cleaning of ornaments' }
+      ],
+      heroFormTitle: 'GET IN TOUCH',
+      heroFormSubtitle: 'Fill in the form and our team will get back to you with various information of Muthoot Gold Point.',
+      heroFormSuccessText: 'Thank you for contacting us, we have received your enquiry. Our team will get back to you shortly.',
+      heroFormResetLabel: 'Submit Another Request',
+      overviewEyebrow: 'WHY MUTHOOT GOLD POINT',
+      overviewTitle: 'Sell Your Gold',
+      overviewTitleHighlight: 'Get Cash Instantly!',
+      overviewSubtitle: 'Muthoot Gold Point offers a safe and transparent way to sell your gold.',
+      overviewDescription: 'Muthoot Gold Point makes it easy and convenient to sell gold for cash with a safe and transparent process. With branches across India and mobile van services in selected cities (Mumbai, Kalyan & Bengaluru), customers can get their gold cleaned for free and have its weight and purity checked using advanced XRF machines. The transparent evaluation process helps customers understand the value of their gold before selling it. Payments up to ₹10,000 are made in cash, while higher amounts are transferred securely through IMPS, NEFT, or RTGS. By promoting gold recycling, Muthoot Gold Point helps reduce the need for gold mining, conserve natural resources, protect the environment, and reduce India’s dependence on gold imports.',
+      overviewButtonLabel: 'Visit Your Nearest Branch Today',
+      overviewButtonLink: '/#branches',
+      overviewTile1: 'Free purity testing\nof your Gold',
+      overviewTile2: 'Accurate 3-decimal\nweight measurement',
+      overviewTile3: 'Instant bank transfer\nor cash payout',
+      overviewTile4: '100% transparent\nevaluation process',
+      contactTitle: 'Get in',
+      contactTitleHighlight: 'Touch',
+      contactDescription: 'Have questions about your gold valuation? Our experts are here to help you through the entire process.',
+      contactPhone: '1800 102 1616',
+      contactEmail: 'info@muthootexim.com',
+      contactSuccessText: 'Thank you for contacting us, we have received your enquiry. Our team will get back to you shortly.',
+      trustBadgePrefix: 'Trusted by',
+      trustBadgeHighlight: 'Customers',
+      trustBadgeSuffix: 'Across India'
+    };
     const sellGoldExists = await strapi.documents(sellGoldUid).findFirst();
     if (!sellGoldExists) {
       strapi.log.info('Seeding Sell Gold Page Setting Data...');
       try {
-        await strapi.documents(sellGoldUid).create({
-          data: {
-            seoTitle: 'Sell Gold for Cash | Muthoot Gold Point',
-            seoDescription: 'Sell your old gold and get cash instantly with 100% fair and precise gold buying. Free purity testing, 100% transparent process, and free ultrasonic cleaning.',
-            seoKeywords: 'Sell Gold, Cash for Gold, Gold Buyers, Sell Old Gold, Muthoot Gold Point, Instant Cash for Gold',
-            weBuyGoldImage: null as any
-          }
-        });
+        await strapi.documents(sellGoldUid).create({ data: defaultSellGoldData });
       } catch (err) {
-        // weBuyGoldImage is a required media field, so this seed can't succeed; add the page in the admin panel instead.
         strapi.log.warn(`Skipped Sell Gold Page Setting seed: ${(err as Error).message}`);
+      }
+    } else {
+      if (!sellGoldExists.overviewEyebrow || !sellGoldExists.heroTitle || !sellGoldExists.contactTitle) {
+        strapi.log.info('Updating Sell Gold Page Setting with default overview/contact/hero fields...');
+        await strapi.documents(sellGoldUid).update({
+          documentId: sellGoldExists.documentId,
+          data: defaultSellGoldData
+        });
       }
     }
 
@@ -752,26 +890,73 @@ export default {
       { label: 'Chhattisgarh', url: '/#branches' },
       { label: 'Assam', url: '/#branches' },
     ];
+    const defaultOtherWebsites = [
+      { label: 'Muthoot Capital Services Ltd.', url: 'https://muthootcap.com/', isExternal: true },
+      { label: 'Muthoot Housing Finance Company Ltd', url: 'https://www.muthoothousing.com/', isExternal: true },
+      { label: 'Muthoot Microfin Ltd.', url: 'https://www.muthootmicrofin.com/', isExternal: true },
+      { label: 'Muthoot Pappachan Group', url: 'https://muthoot.com/', isExternal: true },
+      { label: 'Muthoot Blue', url: 'https://www.muthootfincorp.com/', isExternal: true },
+    ];
+    const defaultQuickLinks = [
+      { label: 'About Us', url: '/about-us' },
+      { label: 'Sell Gold for Cash', url: '/sell-gold-for-cash' },
+      { label: "Today's Gold Rate", url: '/gold-rate' },
+      { label: 'Branch Locator', url: '/#branches' },
+      { label: 'Mobile Van', url: '/mobilevantab' },
+      { label: 'Community', url: '/community' },
+      { label: 'Career', url: '/career' },
+      { label: 'Contact Us', url: '/contact-us' },
+      { label: 'FAQs', url: '/faq' },
+      { label: 'Blog', url: '/blog' },
+      { label: 'Privacy Policy', url: '/privacy-policy' },
+      { label: 'Testimonials', url: '/testimonials' }
+    ];
+    const fullDefaultFooterData = {
+      presenceHeading: 'Our Presence - States',
+      presenceStates: defaultPresenceStates,
+      footerDescription: 'Muthoot Gold Point, a unit of Muthoot Exim (P) Ltd. (Precious Metals Division) is a venture of the Muthoot Pappachan Group. It is the first National level organised sector venture to get into recycling of Gold.',
+      quickLinksHeading: 'Quick Links',
+      quickLinks: defaultQuickLinks,
+      legalText: 'CIN: U51909KL1998PTC012492 | GST Number: 32AACCM4564E1ZS',
+      legalEmail: 'info@muthootexim.com',
+      otherWebsitesLabel: 'Select our other websites',
+      otherWebsites: defaultOtherWebsites,
+      tollFreeHeading: 'Our Toll Free Number',
+      tollFreeDescription: 'Call our toll-free number and talk to a customer care representative.',
+      tollFreeNumber: '1800 102 1616',
+      officeHeading: 'Registered Office',
+      officeAddress: 'Muthoot Exim Private Limited Ground Floor Muthoot Towers, M.G.Road, Opposite Abad Plaza Ernakulam, Kerala, 682035',
+      socialsHeading: 'Follow Us On',
+      copyrightText: 'Copyright © Muthoot Exim Pvt 2026 - All Rights Reserved'
+    };
 
     const footerSettingDocs = strapi.documents(footerSettingUid) as any;
-    const footerSettingExisting = await footerSettingDocs.findFirst({ populate: ['presenceStates', 'quickLinks', 'legalLinks'] });
+    const footerSettingExisting = await footerSettingDocs.findFirst({ populate: ['presenceStates', 'quickLinks', 'legalLinks', 'otherWebsites'] });
     if (!footerSettingExisting) {
-      strapi.log.info('Seeding Footer Setting with default presence states...');
-      await footerSettingDocs.create({
-        data: {
-          presenceHeading: 'Our Presence - States',
-          presenceStates: defaultPresenceStates,
-        }
-      });
-    } else if (!footerSettingExisting.presenceStates || (Array.isArray(footerSettingExisting.presenceStates) && footerSettingExisting.presenceStates.length === 0)) {
-      strapi.log.info('Updating Footer Setting with default presence states...');
-      await footerSettingDocs.update({
-        documentId: footerSettingExisting.documentId,
-        data: {
-          presenceHeading: footerSettingExisting.presenceHeading || 'Our Presence - States',
-          presenceStates: defaultPresenceStates,
-        }
-      });
+      strapi.log.info('Seeding Footer Setting with full default settings...');
+      await footerSettingDocs.create({ data: fullDefaultFooterData });
+    } else {
+      const footerPatch: any = {};
+      if (!footerSettingExisting.footerDescription) footerPatch.footerDescription = fullDefaultFooterData.footerDescription;
+      if (!footerSettingExisting.quickLinksHeading) footerPatch.quickLinksHeading = fullDefaultFooterData.quickLinksHeading;
+      if (!footerSettingExisting.legalText) footerPatch.legalText = fullDefaultFooterData.legalText;
+      if (!footerSettingExisting.legalEmail) footerPatch.legalEmail = fullDefaultFooterData.legalEmail;
+      if (!footerSettingExisting.otherWebsitesLabel) footerPatch.otherWebsitesLabel = fullDefaultFooterData.otherWebsitesLabel;
+      if (!footerSettingExisting.tollFreeHeading) footerPatch.tollFreeHeading = fullDefaultFooterData.tollFreeHeading;
+      if (!footerSettingExisting.tollFreeDescription) footerPatch.tollFreeDescription = fullDefaultFooterData.tollFreeDescription;
+      if (!footerSettingExisting.officeHeading) footerPatch.officeHeading = fullDefaultFooterData.officeHeading;
+      if (!footerSettingExisting.socialsHeading) footerPatch.socialsHeading = fullDefaultFooterData.socialsHeading;
+      if (!footerSettingExisting.presenceStates || footerSettingExisting.presenceStates.length === 0) footerPatch.presenceStates = defaultPresenceStates;
+      if (!footerSettingExisting.quickLinks || footerSettingExisting.quickLinks.length === 0) footerPatch.quickLinks = defaultQuickLinks;
+      if (!footerSettingExisting.otherWebsites || footerSettingExisting.otherWebsites.length === 0) footerPatch.otherWebsites = defaultOtherWebsites;
+
+      if (Object.keys(footerPatch).length > 0) {
+        strapi.log.info('Updating Footer Setting with missing default headings and links...');
+        await footerSettingDocs.update({
+          documentId: footerSettingExisting.documentId,
+          data: footerPatch
+        });
+      }
     }
 
     // 8i. Seed content pages (Community, FAQ, Privacy Policy, Testimonials, ...)
