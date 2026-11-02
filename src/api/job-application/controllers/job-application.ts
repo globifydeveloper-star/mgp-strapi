@@ -146,6 +146,7 @@ interface NewApplicationDetails {
   currentCity?: string;
   noticePeriod?: string;
   jobPositionTitle?: string;
+  jobCode?: string;
 }
 
 const notifyHrOfNewApplication = async (strapi: any, details: NewApplicationDetails): Promise<void> => {
@@ -156,11 +157,12 @@ const notifyHrOfNewApplication = async (strapi: any, details: NewApplicationDeta
   }
 
   const roleStr = details.jobPositionTitle || 'Not specified';
+  const jobCodeStr = details.jobCode ? ` [${details.jobCode}]` : '';
 
   try {
     await strapi.plugin('email').service('email').send({
       to: hrEmail,
-      subject: `New Job Application: ${details.fullName} (${roleStr})`,
+      subject: `New Job Application: ${details.fullName} (${roleStr}${jobCodeStr})`,
       text: [
         'A new job application has been submitted.',
         '',
@@ -168,6 +170,7 @@ const notifyHrOfNewApplication = async (strapi: any, details: NewApplicationDeta
         `Email: ${details.email}`,
         `Phone: ${details.phone}`,
         `Position Applied For: ${roleStr}`,
+        `Job Code: ${details.jobCode || 'N/A'}`,
         `Experience: ${details.experienceYears || 'N/A'}`,
         `Current City: ${details.currentCity || 'N/A'}`,
         `Notice Period: ${details.noticePeriod || 'N/A'}`,
@@ -189,14 +192,16 @@ const escapeHtml = (text: string): string =>
  */
 const sendCandidateAcknowledgement = async (
   strapi: any,
-  details: { fullName: string; email: string; jobPositionTitle?: string }
+  details: { fullName: string; email: string; jobPositionTitle?: string; jobCode?: string }
 ): Promise<void> => {
   const name = details.fullName;
   const position = details.jobPositionTitle;
-  const appliedFor = position ? `for the position of ${position}` : '';
+  const code = details.jobCode;
+  const positionLabel = position ? (code ? `${position} (${code})` : position) : '';
+  const appliedFor = positionLabel ? `for the position of ${positionLabel}` : '';
 
-  const subject = position
-    ? `Application Received – ${position} | Muthoot Gold Point`
+  const subject = positionLabel
+    ? `Application Received – ${positionLabel} | Muthoot Gold Point`
     : 'Application Received | Muthoot Gold Point';
 
   const text = [
@@ -290,7 +295,7 @@ export default factories.createCoreController(
         } catch (_) { }
       }
 
-      const { fullName, email, phone, experienceYears, currentCity, noticePeriod, coverNote, resume, jobPosition } = body as Record<string, unknown>;
+      const { fullName, email, phone, experienceYears, currentCity, noticePeriod, coverNote, resume, jobPosition, jobCode } = body as Record<string, unknown>;
 
       if (typeof fullName !== 'string' || !fullName.trim()) {
         throw new ValidationError('fullName is required.');
@@ -348,6 +353,7 @@ export default factories.createCoreController(
 
       let resolvedJobPositionDocId: string | undefined = undefined;
       let resolvedJobPositionTitle: string | undefined = undefined;
+      let resolvedJobCode: string | undefined = typeof jobCode === 'string' && jobCode.trim() ? jobCode.trim() : undefined;
       let finalCoverNote = typeof coverNote === 'string' ? coverNote.trim() : undefined;
 
       if (typeof jobPosition === 'string' && jobPosition.trim()) {
@@ -358,12 +364,16 @@ export default factories.createCoreController(
               $or: [
                 { documentId: { $eq: inputVal } },
                 { title: { $eq: inputVal } },
+                { jobCode: { $eq: inputVal } },
               ],
             },
           });
           if (posDoc) {
             resolvedJobPositionDocId = posDoc.documentId;
             resolvedJobPositionTitle = posDoc.title ?? undefined;
+            if (!resolvedJobCode && (posDoc as any).jobCode) {
+              resolvedJobCode = (posDoc as any).jobCode;
+            }
           } else {
             // Append general position title to cover note so info isn't lost
             finalCoverNote = finalCoverNote
@@ -380,6 +390,7 @@ export default factories.createCoreController(
           fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
           phone: normalizedPhone,
+          jobCode: resolvedJobCode,
           experienceYears: typeof experienceYears === 'string' ? experienceYears.trim() : undefined,
           currentCity: typeof currentCity === 'string' ? currentCity.trim() : undefined,
           noticePeriod: typeof noticePeriod === 'string' ? noticePeriod.trim() : undefined,
@@ -396,6 +407,7 @@ export default factories.createCoreController(
           fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
           phone: normalizedPhone,
+          jobCode: resolvedJobCode,
           experienceYears: typeof experienceYears === 'string' ? experienceYears.trim() : undefined,
           currentCity: typeof currentCity === 'string' ? currentCity.trim() : undefined,
           noticePeriod: typeof noticePeriod === 'string' ? noticePeriod.trim() : undefined,
@@ -405,6 +417,7 @@ export default factories.createCoreController(
           fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
           jobPositionTitle: resolvedJobPositionTitle,
+          jobCode: resolvedJobCode,
         }),
       ]);
 
@@ -545,6 +558,12 @@ export default factories.createCoreController(
         doc.font('Helvetica-Bold').fontSize(10).fillColor('#333333').text('Applied Role / Position: ', { continued: true });
         doc.font('Helvetica').text(jobPos.title || 'N/A');
 
+        const displayJobCode = appDoc.jobCode || jobPos.jobCode;
+        if (displayJobCode) {
+          doc.font('Helvetica-Bold').text('Job Code: ', { continued: true });
+          doc.font('Helvetica').text(displayJobCode);
+        }
+
         doc.font('Helvetica-Bold').text('Department: ', { continued: true });
         doc.font('Helvetica').text(dept.name || 'N/A');
 
@@ -635,13 +654,14 @@ export default factories.createCoreController(
           doc.strokeColor('#DCDCDC').lineWidth(0.5).rect(startX, startY, 523, 20).stroke();
 
           doc.fillColor('#0B1536').fontSize(9).font('Helvetica-Bold');
-          doc.text('#', startX + 4, startY + 5, { width: 20 });
-          doc.text('Name', startX + 25, startY + 5, { width: 110 });
-          doc.text('Role', startX + 140, startY + 5, { width: 100 });
-          doc.text('Department', startX + 245, startY + 5, { width: 90 });
-          doc.text('Status', startX + 340, startY + 5, { width: 60 });
-          doc.text('Applied Date', startX + 405, startY + 5, { width: 70 });
-          doc.text('Resume', startX + 480, startY + 5, { width: 40 });
+          doc.text('#', startX + 4, startY + 5, { width: 18 });
+          doc.text('Name', startX + 22, startY + 5, { width: 95 });
+          doc.text('Job Code', startX + 119, startY + 5, { width: 62 });
+          doc.text('Role', startX + 183, startY + 5, { width: 85 });
+          doc.text('Department', startX + 270, startY + 5, { width: 75 });
+          doc.text('Status', startX + 347, startY + 5, { width: 55 });
+          doc.text('Applied Date', startX + 404, startY + 5, { width: 68 });
+          doc.text('Resume', startX + 474, startY + 5, { width: 45 });
 
           startY += 20;
         };
@@ -658,6 +678,7 @@ export default factories.createCoreController(
           }
 
           const roleStr = app.jobPosition?.title || 'N/A';
+          const codeStr = app.jobCode || app.jobPosition?.jobCode || '-';
           const deptStr = app.jobPosition?.department?.name || 'N/A';
           const statusStr = app.applicationStatus || 'New';
           const dateStr = app.submittedAt ? new Date(app.submittedAt).toLocaleDateString() : 'N/A';
@@ -668,13 +689,14 @@ export default factories.createCoreController(
           doc.strokeColor('#EEEEEE').lineWidth(0.5).rect(startX, startY, 523, 22).stroke();
 
           doc.fillColor('#333333');
-          doc.text(String(idx + 1), startX + 4, startY + 6, { width: 20 });
-          doc.text(app.fullName || 'N/A', startX + 25, startY + 6, { width: 110, height: 14 });
-          doc.text(roleStr, startX + 140, startY + 6, { width: 100, height: 14 });
-          doc.text(deptStr, startX + 245, startY + 6, { width: 90, height: 14 });
-          doc.text(statusStr, startX + 340, startY + 6, { width: 60, height: 14 });
-          doc.text(dateStr, startX + 405, startY + 6, { width: 70, height: 14 });
-          doc.text(hasResume, startX + 480, startY + 6, { width: 40, height: 14 });
+          doc.text(String(idx + 1), startX + 4, startY + 6, { width: 18 });
+          doc.text(app.fullName || 'N/A', startX + 22, startY + 6, { width: 95, height: 14 });
+          doc.text(codeStr, startX + 119, startY + 6, { width: 62, height: 14 });
+          doc.text(roleStr, startX + 183, startY + 6, { width: 85, height: 14 });
+          doc.text(deptStr, startX + 270, startY + 6, { width: 75, height: 14 });
+          doc.text(statusStr, startX + 347, startY + 6, { width: 55, height: 14 });
+          doc.text(dateStr, startX + 404, startY + 6, { width: 68, height: 14 });
+          doc.text(hasResume, startX + 474, startY + 6, { width: 45, height: 14 });
 
           startY += 22;
         });
@@ -719,17 +741,18 @@ export default factories.createCoreController(
         return `"${String(str).replace(/"/g, '""')}"`;
       };
 
-      const header = ['ID', 'Name', 'Email', 'Phone', 'Experience', 'Current City', 'Notice Period', 'Role', 'Department', 'Status', 'Applied Date', 'Has Resume'];
+      const header = ['ID', 'Name', 'Email', 'Phone', 'Job Code', 'Role', 'Department', 'Experience', 'Current City', 'Notice Period', 'Status', 'Applied Date', 'Has Resume'];
       const rows = apps.map((app) => [
         escapeCsv(app.documentId),
         escapeCsv(app.fullName),
         escapeCsv(app.email),
         escapeCsv(app.phone),
+        escapeCsv(app.jobCode || app.jobPosition?.jobCode || ''),
+        escapeCsv(app.jobPosition?.title || ''),
+        escapeCsv(app.jobPosition?.department?.name || ''),
         escapeCsv(app.experienceYears || ''),
         escapeCsv(app.currentCity || ''),
         escapeCsv(app.noticePeriod || ''),
-        escapeCsv(app.jobPosition?.title || ''),
-        escapeCsv(app.jobPosition?.department?.name || ''),
         escapeCsv(app.applicationStatus || 'New'),
         escapeCsv(app.submittedAt ? new Date(app.submittedAt).toISOString() : ''),
         escapeCsv(app.resume ? 'Yes' : 'No'),

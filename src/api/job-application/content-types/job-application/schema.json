@@ -50,6 +50,9 @@
       "relation": "manyToOne",
       "target": "api::job-position.job-position"
     },
+    "jobCode": {
+      "type": "string"
+    },
     "submittedAt": {
       "type": "datetime"
     },
