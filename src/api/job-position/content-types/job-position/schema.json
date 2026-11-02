@@ -16,6 +16,10 @@
       "type": "string",
       "required": true
     },
+    "jobCode": {
+      "type": "string",
+      "description": "Unique Job Reference Code (e.g. MGP-OPS-001)"
+    },
     "slug": {
       "type": "uid",
       "targetField": "title"
