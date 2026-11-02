@@ -18,8 +18,7 @@
     },
     "slug": {
       "type": "uid",
-      "targetField": "title",
-      "required": true
+      "targetField": "title"
     },
     "department": {
       "type": "relation",

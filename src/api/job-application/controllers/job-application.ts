@@ -8,6 +8,7 @@ import path from 'path';
 import { randomUUID } from 'crypto';
 import { enforceRateLimit } from '../../../utils/rate-limit';
 import { verifyAdminSession } from '../../../utils/verify-admin-session';
+import { withListViewFilters } from '../../../utils/export-filters';
 
 const { ValidationError } = errors;
 
@@ -179,6 +180,65 @@ const notifyHrOfNewApplication = async (strapi: any, details: NewApplicationDeta
   }
 };
 
+const escapeHtml = (text: string): string =>
+  text.replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m] as string);
+
+/**
+ * Acknowledgement to the candidate after a successful submission. A failure is logged, never
+ * surfaced: the application is already saved and HR has been notified.
+ */
+const sendCandidateAcknowledgement = async (
+  strapi: any,
+  details: { fullName: string; email: string; jobPositionTitle?: string }
+): Promise<void> => {
+  const name = details.fullName;
+  const position = details.jobPositionTitle;
+  const appliedFor = position ? `for the position of ${position}` : '';
+
+  const subject = position
+    ? `Application Received – ${position} | Muthoot Gold Point`
+    : 'Application Received | Muthoot Gold Point';
+
+  const text = [
+    `Dear ${name},`,
+    '',
+    `Thank you for your interest in a career with Muthoot Gold Point. We have received your application${appliedFor ? ` ${appliedFor}` : ''}.`,
+    '',
+    'Our recruitment team will review your profile. If your qualifications match our requirements, we will contact you about the next steps.',
+    '',
+    'Please note that this is an automated message; kindly do not reply to this email.',
+    '',
+    'Warm regards,',
+    'Recruitment Team',
+    'Muthoot Gold Point',
+  ].join('\n');
+
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin: 0; padding: 24px; background: #f4f5f7; font-family: Arial, Helvetica, sans-serif; color: #333333;">
+  <div style="max-width: 560px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0;">
+    <div style="background: #181826; padding: 18px 24px;">
+      <span style="color: #EBAF20; font-size: 18px; font-weight: bold; letter-spacing: 0.5px;">MUTHOOT GOLD POINT</span>
+    </div>
+    <div style="padding: 24px; font-size: 14px; line-height: 1.6;">
+      <p>Dear ${escapeHtml(name)},</p>
+      <p>Thank you for your interest in a career with Muthoot Gold Point. We have received your application${position ? ` for the position of <strong>${escapeHtml(position)}</strong>` : ''}.</p>
+      <p>Our recruitment team will review your profile. If your qualifications match our requirements, we will contact you about the next steps.</p>
+      <p style="color: #666666; font-size: 12px;">Please note that this is an automated message; kindly do not reply to this email.</p>
+      <p>Warm regards,<br />Recruitment Team<br />Muthoot Gold Point</p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+  try {
+    await strapi.plugin('email').service('email').send({ to: details.email, subject, text, html });
+  } catch (err) {
+    strapi.log.error(`[job-application] Failed to send candidate acknowledgement email: ${(err as Error).name}`);
+  }
+};
+
 export default factories.createCoreController(
   'api::job-application.job-application',
   ({ strapi }) => ({
@@ -331,15 +391,22 @@ export default factories.createCoreController(
         },
       });
 
-      await notifyHrOfNewApplication(strapi, {
-        fullName: fullName.trim(),
-        email: email.trim().toLowerCase(),
-        phone: normalizedPhone,
-        experienceYears: typeof experienceYears === 'string' ? experienceYears.trim() : undefined,
-        currentCity: typeof currentCity === 'string' ? currentCity.trim() : undefined,
-        noticePeriod: typeof noticePeriod === 'string' ? noticePeriod.trim() : undefined,
-        jobPositionTitle: resolvedJobPositionTitle,
-      });
+      await Promise.all([
+        notifyHrOfNewApplication(strapi, {
+          fullName: fullName.trim(),
+          email: email.trim().toLowerCase(),
+          phone: normalizedPhone,
+          experienceYears: typeof experienceYears === 'string' ? experienceYears.trim() : undefined,
+          currentCity: typeof currentCity === 'string' ? currentCity.trim() : undefined,
+          noticePeriod: typeof noticePeriod === 'string' ? noticePeriod.trim() : undefined,
+          jobPositionTitle: resolvedJobPositionTitle,
+        }),
+        sendCandidateAcknowledgement(strapi, {
+          fullName: fullName.trim(),
+          email: email.trim().toLowerCase(),
+          jobPositionTitle: resolvedJobPositionTitle,
+        }),
+      ]);
 
       ctx.status = 201;
       ctx.body = { success: true };
@@ -543,7 +610,7 @@ export default factories.createCoreController(
       }
 
       const apps = (await strapi.documents('api::job-application.job-application').findMany({
-        filters: Object.keys(filters).length ? filters : undefined,
+        ...withListViewFilters(ctx, strapi, 'api::job-application.job-application', filters),
         populate: ['jobPosition', 'jobPosition.department', 'resume'],
         sort: { submittedAt: 'desc' },
       })) as any[];
@@ -642,7 +709,7 @@ export default factories.createCoreController(
       }
 
       const apps = (await strapi.documents('api::job-application.job-application').findMany({
-        filters: Object.keys(filters).length ? filters : undefined,
+        ...withListViewFilters(ctx, strapi, 'api::job-application.job-application', filters),
         populate: ['jobPosition', 'jobPosition.department', 'resume'],
         sort: { submittedAt: 'desc' },
       })) as any[];
@@ -699,7 +766,7 @@ export default factories.createCoreController(
       }
 
       const apps = (await strapi.documents('api::job-application.job-application').findMany({
-        filters: Object.keys(filters).length ? filters : undefined,
+        ...withListViewFilters(ctx, strapi, 'api::job-application.job-application', filters),
         populate: ['resume'],
       })) as any[];
 

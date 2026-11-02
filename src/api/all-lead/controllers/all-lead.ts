@@ -2,6 +2,7 @@ import type { Context } from 'koa';
 import { factories } from '@strapi/strapi';
 import PDFDocument from 'pdfkit';
 import { verifyAdminSession } from '../../../utils/verify-admin-session';
+import { withListViewFilters } from '../../../utils/export-filters';
 import { enforceRateLimit } from '../../../utils/rate-limit';
 import { sanitizePayload, validateStringLengths } from '../../../utils/sanitize-input';
 
@@ -116,7 +117,7 @@ export default factories.createCoreController(
       }
 
       const entries = (await strapi.documents('api::all-lead.all-lead').findMany({
-        filters: Object.keys(filters).length ? filters : undefined,
+        ...withListViewFilters(ctx, strapi, 'api::all-lead.all-lead', filters),
         sort: { submittedAt: 'desc' },
       })) as any[];
 
@@ -185,7 +186,7 @@ export default factories.createCoreController(
       }
 
       const entries = (await strapi.documents('api::all-lead.all-lead').findMany({
-        filters: Object.keys(filters).length ? filters : undefined,
+        ...withListViewFilters(ctx, strapi, 'api::all-lead.all-lead', filters),
         sort: { submittedAt: 'desc' },
       })) as any[];
 

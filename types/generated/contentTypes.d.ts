@@ -1707,7 +1707,7 @@ export interface ApiJobDepartmentJobDepartment
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
-    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
+    slug: Schema.Attribute.UID<'name'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1752,7 +1752,7 @@ export interface ApiJobPositionJobPosition extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     requirements: Schema.Attribute.Text;
     responsibilities: Schema.Attribute.Text;
-    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    slug: Schema.Attribute.UID<'title'>;
     summary: Schema.Attribute.Text;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;

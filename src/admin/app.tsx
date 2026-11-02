@@ -177,12 +177,18 @@ export default {
           });
           keysToDelete.forEach((k) => params.delete(k));
 
+          // Append after any Content Manager filters (status, job position…) instead of overwriting $and[0]/[1]
+          let nextIndex = 0;
+          params.forEach((_, key) => {
+            const m = key.match(/^filters\[\$and\]\[(\d+)\]/);
+            if (m) nextIndex = Math.max(nextIndex, Number(m[1]) + 1);
+          });
           if (startVal) {
-            params.set('filters[$and][0][submittedAt][$gte]', `${startVal}T00:00:00.000Z`);
+            params.set(`filters[$and][${nextIndex++}][submittedAt][$gte]`, `${startVal}T00:00:00.000Z`);
             params.set('fromDate', startVal);
           }
           if (endVal) {
-            params.set('filters[$and][1][submittedAt][$lte]', `${endVal}T23:59:59.999Z`);
+            params.set(`filters[$and][${nextIndex++}][submittedAt][$lte]`, `${endVal}T23:59:59.999Z`);
             params.set('toDate', endVal);
           }
 
@@ -244,15 +250,16 @@ export default {
           e.target.value = ''; // reset
           if (!type) return;
 
-          let queryStr = '';
+          // Export exactly what the list shows: carry over the Content Manager filters and search
+          const q = new URLSearchParams();
+          new URLSearchParams(window.location.search).forEach((value, key) => {
+            if (key.startsWith('filters[') || key === '_q') q.append(key, value);
+          });
           const activeFrom = appliedFrom || fromDate;
           const activeTo = appliedTo || toDate;
-          if (activeFrom || activeTo) {
-            const q = new URLSearchParams();
-            if (activeFrom) q.set('fromDate', activeFrom);
-            if (activeTo) q.set('toDate', activeTo);
-            queryStr = `?${q.toString()}`;
-          }
+          if (activeFrom) q.set('fromDate', activeFrom);
+          if (activeTo) q.set('toDate', activeTo);
+          const queryStr = q.toString() ? `?${q.toString()}` : '';
 
           if (isJobApp) {
             if (type === 'pdf') downloadAdminFile(`/api/job-applications/export/pdf${queryStr}`, `Job_Applications_Export_${Date.now()}.pdf`);
