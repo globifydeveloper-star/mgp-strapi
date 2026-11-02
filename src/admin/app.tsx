@@ -1,6 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { getFetchClient, type StrapiApp } from '@strapi/strapi/admin';
 
+// Badge colours for Job Application status. Tinted backgrounds keep them readable in light and dark themes.
+const APPLICATION_STATUS_COLORS: Record<string, string> = {
+  New: '#4c7cf0',
+  Shortlisted: '#d08a00',
+  Rejected: '#e5484d',
+  Hired: '#30a46c',
+};
+
+const ApplicationStatusBadge = ({ status }: { status?: string | null }) => {
+  const label = status || 'New';
+  const color = APPLICATION_STATUS_COLORS[label] || '#8e8ea9';
+  return (
+    <span
+      style={{
+        display: 'inline-block',
+        padding: '2px 10px',
+        borderRadius: '12px',
+        fontSize: '12px',
+        fontWeight: 600,
+        lineHeight: '18px',
+        color,
+        backgroundColor: `${color}26`,
+        border: `1px solid ${color}66`,
+        whiteSpace: 'nowrap',
+      }}
+    >
+      {label}
+    </span>
+  );
+};
+
 export default {
   config: {
     locales: [],
@@ -8,6 +39,21 @@ export default {
   bootstrap(app: StrapiApp) {
     const contentManager = app.getPlugin('content-manager');
     if (!contentManager) return;
+
+    // Show Job Application status as a coloured badge in the list view
+    app.registerHook('Admin/CM/pages/ListView/inject-column-in-table', ({ displayedHeaders, layout }: any) => {
+      if (typeof window === 'undefined' || !window.location.pathname.includes('api::job-application.job-application')) {
+        return { displayedHeaders, layout };
+      }
+      return {
+        layout,
+        displayedHeaders: displayedHeaders.map((header: any) =>
+          header.name === 'applicationStatus'
+            ? { ...header, cellFormatter: (row: any) => <ApplicationStatusBadge status={row.applicationStatus} /> }
+            : header
+        ),
+      };
+    });
 
     const downloadAdminFile = async (endpointPath: string, defaultFilename: string) => {
       const loaderId = `admin-download-loader-${Date.now()}`;
