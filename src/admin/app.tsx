@@ -53,7 +53,14 @@ export default {
         window.URL.revokeObjectURL(blobUrl);
       } catch (err) {
         console.error('[Admin Export] Download error:', err);
-        alert('Download failed: ' + String(err));
+        const status = (err as any)?.status;
+        if (status === 403) {
+          alert('Download failed: your admin role is not allowed to export this data. Ask a Super Admin to give your role full read access to this content type.');
+        } else if (status === 404) {
+          alert('Download failed: the record or file could not be found.');
+        } else {
+          alert('Download failed: ' + String(err));
+        }
       } finally {
         if (typeof document !== 'undefined') {
           const el = document.getElementById(loaderId);

@@ -93,6 +93,11 @@ export default {
       if (KNOWN_PLACEHOLDER_SECRETS.has(internalSecret) || PLACEHOLDER_SECRET_PATTERN.test(internalSecret)) {
         throw new Error('INTERNAL_API_SECRET is still set to a known placeholder value. Rotate it before starting in production.');
       }
+
+      // Not fatal (applications are still saved), but HR gets no alert for new applications.
+      if (!process.env.HR_NOTIFICATION_EMAIL) {
+        console.warn('[startup] HR_NOTIFICATION_EMAIL is not set: HR will NOT be emailed about new job applications.');
+      }
     }
   },
 
@@ -1194,9 +1199,66 @@ export default {
           }
         });
         strapi.log.info('Seeded Content Manager Organizer configuration successfully.');
+      } else {
+        // Configs saved before the careers group existed: add it back without touching other groups.
+        const careersGroup = organizerConfig.groups.find((g) => g.id === 'careers-and-jobs');
+        const existingGroups: any[] = Array.isArray(existingConfig.config?.groups) ? existingConfig.config.groups : [];
+        const hasJobApplications = existingGroups.some(
+          (g) => Array.isArray(g?.items) && g.items.includes('api::job-application.job-application')
+        );
+        if (careersGroup && !hasJobApplications && !existingGroups.some((g) => g?.id === careersGroup.id)) {
+          await strapi.db.query(organizerUid).update({
+            where: { key: 'main' },
+            data: { config: { ...existingConfig.config, groups: [...existingGroups, careersGroup] } }
+          });
+          strapi.log.info('Added missing Careers & Job Openings group to Content Manager Organizer.');
+        }
       }
     } catch (err: any) {
       strapi.log.warn('Could not auto-configure Content Manager Organizer:', err.message || err);
+    }
+
+    // 10b. Seed an "HR" admin role (once) scoped to careers content. Admins can tune it later in
+    // Settings → Roles; it is never re-synced. Its full read access on job applications is what
+    // lets HR use the export / CV download buttons (see utils/verify-admin-session.ts).
+    try {
+      const roleService = strapi.service('admin::role') as any;
+      const hrRoleExists = await strapi.db.query('admin::role').findOne({
+        where: { $or: [{ code: 'hr' }, { name: 'HR' }] }
+      });
+      if (!hrRoleExists) {
+        const hrRole = await roleService.create({
+          name: 'HR',
+          code: 'hr',
+          description: 'Manages job openings, departments, the careers page and job applications.'
+        });
+
+        const careerSubjectActions: Record<string, string[]> = {
+          'api::job-application.job-application': ['read', 'update'],
+          'api::job-position.job-position': ['create', 'read', 'update', 'delete'],
+          'api::job-department.job-department': ['create', 'read', 'update', 'delete'],
+          'api::career-page-setting.career-page-setting': ['create', 'read', 'update'],
+        };
+        const { actionProvider } = strapi.service('admin::permission') as any;
+        const actions = new Map<string, any>();
+        for (const [subject, verbs] of Object.entries(careerSubjectActions)) {
+          if (!strapi.contentType(subject as any)) continue;
+          for (const verb of verbs) {
+            const actionId = `plugin::content-manager.explorer.${verb}`;
+            const action = actionProvider.get(actionId);
+            if (!action) continue;
+            const entry = actions.get(actionId) || { ...action, subjects: [] };
+            entry.subjects.push(subject);
+            actions.set(actionId, entry);
+          }
+        }
+        const permissions = (strapi.service('admin::content-type') as any)
+          .getPermissionsWithNestedFields([...actions.values()]);
+        await roleService.assignPermissions(hrRole.id, permissions);
+        strapi.log.info(`Seeded HR admin role with ${permissions.length} careers permissions.`);
+      }
+    } catch (err: any) {
+      strapi.log.warn('Could not seed HR admin role:', err.message || err);
     }
 
     // 11. Admin User Invitation Email Database Lifecycle

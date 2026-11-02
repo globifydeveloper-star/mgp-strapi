@@ -346,7 +346,7 @@ export default factories.createCoreController(
     },
 
     async downloadResume(ctx: Context) {
-      if (!(await verifyAdminSession(ctx, strapi))) {
+      if (!(await verifyAdminSession(ctx, strapi, 'api::job-application.job-application'))) {
         ctx.status = 403;
         ctx.body = { error: 'Forbidden: Admin authentication required.' };
         return;
@@ -407,7 +407,7 @@ export default factories.createCoreController(
     },
 
     async generateSinglePdf(ctx: Context) {
-      if (!(await verifyAdminSession(ctx, strapi))) {
+      if (!(await verifyAdminSession(ctx, strapi, 'api::job-application.job-application'))) {
         ctx.status = 403;
         ctx.body = { error: 'Forbidden: Admin authentication required.' };
         return;
@@ -520,7 +520,7 @@ export default factories.createCoreController(
     },
 
     async exportBulkPdf(ctx: Context) {
-      if (!(await verifyAdminSession(ctx, strapi))) {
+      if (!(await verifyAdminSession(ctx, strapi, 'api::job-application.job-application'))) {
         ctx.status = 403;
         ctx.body = { error: 'Forbidden: Admin authentication required.' };
         return;
@@ -619,7 +619,7 @@ export default factories.createCoreController(
     },
 
     async exportBulkCsv(ctx: Context) {
-      if (!(await verifyAdminSession(ctx, strapi))) {
+      if (!(await verifyAdminSession(ctx, strapi, 'api::job-application.job-application'))) {
         ctx.status = 403;
         ctx.body = { error: 'Forbidden: Admin authentication required.' };
         return;
@@ -676,7 +676,7 @@ export default factories.createCoreController(
     },
 
     async exportBulkZip(ctx: Context) {
-      if (!(await verifyAdminSession(ctx, strapi))) {
+      if (!(await verifyAdminSession(ctx, strapi, 'api::job-application.job-application'))) {
         ctx.status = 403;
         ctx.body = { error: 'Forbidden: Admin authentication required.' };
         return;
