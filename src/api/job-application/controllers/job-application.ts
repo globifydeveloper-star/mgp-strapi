@@ -364,7 +364,7 @@ export default factories.createCoreController(
               $or: [
                 { documentId: { $eq: inputVal } },
                 { title: { $eq: inputVal } },
-                { jobCode: { $eq: inputVal } },
+                ({ jobCode: { $eq: inputVal } } as any),
               ],
             },
           });
@@ -390,7 +390,7 @@ export default factories.createCoreController(
           fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
           phone: normalizedPhone,
-          jobCode: resolvedJobCode,
+          jobCode: resolvedJobCode as any,
           experienceYears: typeof experienceYears === 'string' ? experienceYears.trim() : undefined,
           currentCity: typeof currentCity === 'string' ? currentCity.trim() : undefined,
           noticePeriod: typeof noticePeriod === 'string' ? noticePeriod.trim() : undefined,
@@ -407,7 +407,7 @@ export default factories.createCoreController(
           fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
           phone: normalizedPhone,
-          jobCode: resolvedJobCode,
+          jobCode: resolvedJobCode as any,
           experienceYears: typeof experienceYears === 'string' ? experienceYears.trim() : undefined,
           currentCity: typeof currentCity === 'string' ? currentCity.trim() : undefined,
           noticePeriod: typeof noticePeriod === 'string' ? noticePeriod.trim() : undefined,
@@ -417,7 +417,7 @@ export default factories.createCoreController(
           fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
           jobPositionTitle: resolvedJobPositionTitle,
-          jobCode: resolvedJobCode,
+          jobCode: resolvedJobCode as any,
         }),
       ]);
 

@@ -1668,6 +1668,7 @@ export interface ApiJobApplicationJobApplication
       'api::job-application.job-application'
     > &
       Schema.Attribute.Private;
+    jobCode: Schema.Attribute.String;
     noticePeriod: Schema.Attribute.String;
     phone: Schema.Attribute.String &
       Schema.Attribute.Required &
@@ -1748,6 +1749,7 @@ export interface ApiJobPositionJobPosition extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     location: Schema.Attribute.String;
+    jobCode: Schema.Attribute.String;
     postedDate: Schema.Attribute.Date;
     publishedAt: Schema.Attribute.DateTime;
     requirements: Schema.Attribute.Text;
