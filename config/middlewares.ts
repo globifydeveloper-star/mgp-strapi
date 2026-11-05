@@ -6,10 +6,19 @@ if (process.env.NODE_ENV === 'production' && !process.env.CORS_ORIGINS) {
 const origins = process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',').map(s => s.trim()) : [];
 
 // Upload bucket host for admin media previews; follows the upload provider's bucket per environment.
-const uploadBucketHost =
-  process.env.AWS_BUCKET && process.env.AWS_REGION
-    ? `${process.env.AWS_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com`
-    : 'mgpwebsiteuat.s3.ap-south-1.amazonaws.com';
+// Known hosts are listed explicitly so previews work even if AWS_BUCKET/AWS_REGION are unset at runtime.
+const mediaHosts = Array.from(
+  new Set(
+    [
+      'mgpwebsiteuat.s3.ap-south-1.amazonaws.com',
+      'mgpwebsiteprod.s3.ap-south-1.amazonaws.com',
+      'pub-bd272ef986bf4b208d871d215567b407.r2.dev',
+      process.env.AWS_BUCKET && process.env.AWS_REGION
+        ? `${process.env.AWS_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com`
+        : null,
+    ].filter((h): h is string => Boolean(h)),
+  ),
+);
 
 const config: Core.Config.Middlewares = [
   'strapi::logger',
@@ -30,14 +39,14 @@ const config: Core.Config.Middlewares = [
             'data:',
             'blob:',
             'market-assets.strapi.io',
-            uploadBucketHost,
+            ...mediaHosts,
           ],
           'media-src': [
             "'self'",
             'data:',
             'blob:',
             'market-assets.strapi.io',
-            uploadBucketHost,
+            ...mediaHosts,
           ],
           upgradeInsecureRequests: null,
         },
