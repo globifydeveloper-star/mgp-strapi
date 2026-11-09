@@ -11,7 +11,7 @@ export default {
       }
     },
     options: {
-      rule: '*/10 * * * *',
+      rule: '0 * * * *',
       tz: 'Asia/Kolkata',
     },
   },
