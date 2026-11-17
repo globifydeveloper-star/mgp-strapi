@@ -20,6 +20,10 @@ export interface AllLeadMirrorPayload {
   branch?: string;
   branchCode?: string;
   extraData?: Record<string, unknown>;
+  leadChannel?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
   submittedAt?: string;
   crmPushStatus?: 'Sent' | 'Pending' | 'Failed' | 'Processing';
   crmLeadId?: string;
@@ -47,6 +51,10 @@ export default factories.createCoreService(
             sourceFormDetail: payload.sourceFormDetail,
             branch: payload.branch,
             branchCode: payload.branchCode,
+            leadChannel: payload.leadChannel,
+            utmSource: payload.utmSource,
+            utmMedium: payload.utmMedium,
+            utmCampaign: payload.utmCampaign,
             extraData: payload.extraData
               ? JSON.parse(JSON.stringify(payload.extraData))
               : undefined,

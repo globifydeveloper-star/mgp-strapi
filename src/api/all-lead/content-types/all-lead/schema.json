@@ -48,6 +48,18 @@
         "branchCode": {
             "type": "string"
         },
+        "leadChannel": {
+            "type": "string"
+        },
+        "utmSource": {
+            "type": "string"
+        },
+        "utmMedium": {
+            "type": "string"
+        },
+        "utmCampaign": {
+            "type": "string"
+        },
         "extraData": {
             "type": "json"
         },

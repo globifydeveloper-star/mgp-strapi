@@ -11,6 +11,9 @@ export interface RemarksParams {
   weight?: string | number;
   message?: string;
   branchValidated?: boolean;
+  /** Traffic source, e.g. facebook / twitter / direct */
+  leadChannel?: string;
+  utmCampaign?: string;
 }
 
 /**
@@ -69,6 +72,13 @@ export function buildRemarks(params: RemarksParams): string {
   // Weight
   if (params.weight !== undefined && params.weight !== null && String(params.weight).trim() !== '') {
     parts.push(`Weight: ${String(params.weight).trim()}g`);
+  }
+
+  // Traffic source (ad attribution). Placed before the free-text message so it survives the 500-char cap.
+  const channel = params.leadChannel?.trim();
+  if (channel) {
+    const campaign = params.utmCampaign?.trim();
+    parts.push(`Lead Source: ${channel}${campaign ? ` (${campaign})` : ''}`);
   }
 
   // Message

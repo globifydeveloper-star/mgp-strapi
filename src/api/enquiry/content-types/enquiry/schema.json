@@ -95,6 +95,12 @@
     "allLeadDocumentId": {
       "type": "string",
       "private": true
+    },
+    "leadChannel": {
+      "type": "string"
+    },
+    "attribution": {
+      "type": "json"
     }
   }
 }

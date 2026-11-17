@@ -25,7 +25,42 @@ export interface CreateEnquiryInput {
   state?: string;
   branchName?: string;
   branchValidated?: boolean;
+  attribution?: LeadAttribution;
 }
+
+/** Ad / traffic source sent by the website (UTM params, click IDs, referrer). */
+export interface LeadAttribution {
+  channel: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmTerm?: string;
+  utmContent?: string;
+  clickIdType?: string;
+  clickId?: string;
+  referrer?: string;
+  landingPage?: string;
+  capturedAt?: string;
+}
+
+const ATTRIBUTION_KEYS: ReadonlyArray<keyof LeadAttribution> = [
+  'channel', 'utmSource', 'utmMedium', 'utmCampaign', 'utmTerm', 'utmContent',
+  'clickIdType', 'clickId', 'referrer', 'landingPage', 'capturedAt',
+];
+
+/** Whitelists known string keys; attribution is optional, so bad input is dropped, never rejected. */
+const parseAttribution = (value: unknown): LeadAttribution | undefined => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
+  const src = value as Record<string, unknown>;
+  const out: Record<string, string> = {};
+  for (const key of ATTRIBUTION_KEYS) {
+    const v = src[key];
+    if (typeof v === 'string' && v.trim()) out[key] = v.trim().slice(0, 200);
+  }
+  if (!out.channel) return undefined;
+  out.channel = out.channel.toLowerCase();
+  return out as unknown as LeadAttribution;
+};
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MOBILE_PATTERN = /^\+?[0-9]{7,15}$/;
@@ -100,6 +135,7 @@ const validateInput = (payload: unknown): CreateEnquiryInput => {
     state,
     branchName,
     branchValidated,
+    attribution: parseAttribution(input.attribution),
   };
 };
 
@@ -124,6 +160,8 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
       branchCode: input.branchCode,
       branchValidated: input.branchValidated,
       message: input.remarks,
+      leadChannel: input.attribution?.channel,
+      utmCampaign: input.attribution?.utmCampaign,
     });
 
     const crmRequest: EnquiryForCrm = {
@@ -148,6 +186,8 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
         crmStatus: 'PENDING',
         syncAttempts: 0,
         crmRequest,
+        leadChannel: input.attribution?.channel,
+        attribution: input.attribution ? { ...input.attribution } : undefined,
       },
     });
 
@@ -179,6 +219,11 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
             branchCode: input.branchCode,
             submittedAt: new Date().toISOString(),
             crmPushStatus: 'Pending',
+            leadChannel: input.attribution?.channel,
+            utmSource: input.attribution?.utmSource,
+            utmMedium: input.attribution?.utmMedium,
+            utmCampaign: input.attribution?.utmCampaign,
+            extraData: input.attribution ? { attribution: input.attribution } : undefined,
           });
         }
 

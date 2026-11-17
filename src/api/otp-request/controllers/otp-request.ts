@@ -216,6 +216,7 @@ export default factories.createCoreController(
         sourceForm,
         enquiryType,
         formType,
+        attribution,
       } = (ctx.request.body ?? {}) as {
         phone?: string;
         otp?: string;
@@ -234,6 +235,7 @@ export default factories.createCoreController(
         sourceForm?: string;
         enquiryType?: string;
         formType?: string;
+        attribution?: unknown;
       };
 
       if (typeof phone !== 'string' || !PHONE_REGEX.test(phone) || typeof otp !== 'string') {
@@ -404,6 +406,7 @@ export default factories.createCoreController(
                 enquiryType: enquiryType || (formType === 'sell-gold-page' ? 'Sell Gold' : 'Enquire Now'),
                 city: city || undefined,
                 state: state || undefined,
+                attribution,
               });
               if (created?.documentId) {
                 leadRef = String(created.documentId);

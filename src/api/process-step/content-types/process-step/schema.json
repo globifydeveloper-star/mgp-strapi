@@ -23,6 +23,11 @@
     "leftDescription": {
       "type": "text"
     },
+    "bulletPoints": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.check-item"
+    },
     "stepImage": {
       "type": "media",
       "multiple": false,
