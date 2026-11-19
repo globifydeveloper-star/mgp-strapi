@@ -14,7 +14,17 @@ const FORM_SOURCE_LABELS: Record<string, string> = {
   'Enquiry': 'Enquiry',
 };
 
-const createPdfBuffer = (builder: (doc: PDFKit.PDFDocument) => void): Promise<Buffer> =>
+/** "ref=diwali; agency=abc" from extraData.attribution.customParams, for the CSV export. */
+const formatCustomParams = (extraData: unknown): string => {
+  const params = (extraData as { attribution?: { customParams?: unknown } } | null)?.attribution?.customParams;
+  if (!params || typeof params !== 'object' || Array.isArray(params)) return '';
+  return Object.entries(params as Record<string, unknown>)
+    .filter(([, v]) => typeof v === 'string')
+    .map(([k, v]) => `${k}=${v}`)
+    .join('; ');
+};
+
+const createPdfBuffer =(builder: (doc: PDFKit.PDFDocument) => void): Promise<Buffer> =>
   new Promise((resolve, reject) => {
     try {
       const doc = new PDFDocument({ margin: 36, size: 'A4' });
@@ -138,6 +148,9 @@ export default factories.createCoreController(
         'Lead Source',
         'UTM Medium',
         'UTM Campaign',
+        'UTM Content (Ad)',
+        'UTM Term (Ad Set)',
+        'Other Link Params',
         'CRM Status',
         'CRM Lead ID',
         'CRM Error',
@@ -156,6 +169,9 @@ export default factories.createCoreController(
         escapeCsv(item.leadChannel),
         escapeCsv(item.utmMedium),
         escapeCsv(item.utmCampaign),
+        escapeCsv(item.utmContent),
+        escapeCsv(item.utmTerm),
+        escapeCsv(formatCustomParams(item.extraData)),
         escapeCsv(item.crmPushStatus ?? 'Pending'),
         escapeCsv(item.crmLeadId),
         escapeCsv(item.crmError),

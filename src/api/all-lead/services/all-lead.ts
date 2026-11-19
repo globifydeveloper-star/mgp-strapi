@@ -24,6 +24,8 @@ export interface AllLeadMirrorPayload {
   utmSource?: string;
   utmMedium?: string;
   utmCampaign?: string;
+  utmContent?: string;
+  utmTerm?: string;
   submittedAt?: string;
   crmPushStatus?: 'Sent' | 'Pending' | 'Failed' | 'Processing';
   crmLeadId?: string;
@@ -55,6 +57,8 @@ export default factories.createCoreService(
             utmSource: payload.utmSource,
             utmMedium: payload.utmMedium,
             utmCampaign: payload.utmCampaign,
+            utmContent: payload.utmContent,
+            utmTerm: payload.utmTerm,
             extraData: payload.extraData
               ? JSON.parse(JSON.stringify(payload.extraData))
               : undefined,

@@ -41,13 +41,15 @@ export default factories.createCoreService(
       const branchValidated = typeof input.branchValidated === 'boolean' ? input.branchValidated : undefined;
       const formType = typeof input.formType === 'string' && input.formType.trim() ? input.formType.trim() : undefined;
       const purity = typeof input.purity === 'string' && input.purity.trim() ? input.purity.trim() : undefined;
-      const weight = input.weight !== undefined && input.weight !== null
+      // Weight is optional (e.g. Sell Gold Modal) — treat empty strings as "not provided".
+      const hasValue = (v: unknown) => v !== undefined && v !== null && String(v).trim() !== '';
+      const weight = hasValue(input.weight)
         ? validateWeight(String(input.weight).trim(), 'weight')
         : undefined;
       const sourceForm = typeof input.sourceForm === 'string' && input.sourceForm.trim() ? input.sourceForm.trim() : 'Gold Valuation Form';
       const details = typeof input.details === 'object' && input.details !== null ? (input.details as Record<string, unknown>) : undefined;
 
-      if (details && details.weight !== undefined && details.weight !== null) {
+      if (details && hasValue(details.weight)) {
         validateWeight(String(details.weight).trim(), 'details.weight');
       }
 

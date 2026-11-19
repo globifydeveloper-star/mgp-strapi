@@ -41,25 +41,46 @@ export interface LeadAttribution {
   referrer?: string;
   landingPage?: string;
   capturedAt?: string;
+  /** The client's own extra link parameters, e.g. { ref: 'diwali' } */
+  customParams?: Record<string, string>;
 }
 
-const ATTRIBUTION_KEYS: ReadonlyArray<keyof LeadAttribution> = [
+type AttributionStringKey = Exclude<keyof LeadAttribution, 'customParams'>;
+
+const ATTRIBUTION_KEYS: ReadonlyArray<AttributionStringKey> = [
   'channel', 'utmSource', 'utmMedium', 'utmCampaign', 'utmTerm', 'utmContent',
   'clickIdType', 'clickId', 'referrer', 'landingPage', 'capturedAt',
 ];
 
-/** Whitelists known string keys; attribution is optional, so bad input is dropped, never rejected. */
+const MAX_CUSTOM_PARAMS = 15;
+const CUSTOM_KEY_PATTERN = /^[A-Za-z0-9_.-]{1,50}$/;
+
+const parseCustomParams = (value: unknown): Record<string, string> | undefined => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
+  const out: Record<string, string> = {};
+  let count = 0;
+  for (const [key, v] of Object.entries(value as Record<string, unknown>)) {
+    if (count >= MAX_CUSTOM_PARAMS) break;
+    if (!CUSTOM_KEY_PATTERN.test(key) || typeof v !== 'string' || !v.trim()) continue;
+    out[key] = v.trim().slice(0, 200);
+    count++;
+  }
+  return count ? out : undefined;
+};
+
+/** Whitelists known keys; attribution is optional, so bad input is dropped, never rejected. */
 const parseAttribution = (value: unknown): LeadAttribution | undefined => {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
   const src = value as Record<string, unknown>;
-  const out: Record<string, string> = {};
+  const out: Partial<Record<AttributionStringKey, string>> = {};
   for (const key of ATTRIBUTION_KEYS) {
     const v = src[key];
     if (typeof v === 'string' && v.trim()) out[key] = v.trim().slice(0, 200);
   }
   if (!out.channel) return undefined;
   out.channel = out.channel.toLowerCase();
-  return out as unknown as LeadAttribution;
+  const customParams = parseCustomParams(src.customParams);
+  return { ...(out as LeadAttribution), ...(customParams ? { customParams } : {}) };
 };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -223,6 +244,8 @@ export default factories.createCoreService('api::enquiry.enquiry', ({ strapi }) 
             utmSource: input.attribution?.utmSource,
             utmMedium: input.attribution?.utmMedium,
             utmCampaign: input.attribution?.utmCampaign,
+            utmContent: input.attribution?.utmContent,
+            utmTerm: input.attribution?.utmTerm,
             extraData: input.attribution ? { attribution: input.attribution } : undefined,
           });
         }

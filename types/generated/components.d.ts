@@ -284,6 +284,7 @@ export interface SharedSlideFeature extends Struct.ComponentSchema {
       ['nature', 'economy', 'trust', 'default']
     > &
       Schema.Attribute.DefaultTo<'default'>;
+    link: Schema.Attribute.String;
     tag: Schema.Attribute.String;
     title: Schema.Attribute.String;
   };

@@ -60,6 +60,12 @@
         "utmCampaign": {
             "type": "string"
         },
+        "utmContent": {
+            "type": "string"
+        },
+        "utmTerm": {
+            "type": "string"
+        },
         "extraData": {
             "type": "json"
         },
