@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_marketing_source_aliases",
+  "info": {
+    "displayName": "Source Alias",
+    "icon": "link",
+    "description": "Maps a utm_source value on ad links to a lead source name."
+  },
+  "options": {},
+  "attributes": {
+    "code": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    },
+    "source": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    }
+  }
+}

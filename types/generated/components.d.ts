@@ -33,6 +33,27 @@ export interface CommunityInitiative extends Struct.ComponentSchema {
   };
 }
 
+export interface MarketingSourceAlias extends Struct.ComponentSchema {
+  collectionName: 'components_marketing_source_aliases';
+  info: {
+    description: 'Maps a utm_source value on ad links to a lead source name.';
+    displayName: 'Source Alias';
+    icon: 'link';
+  };
+  attributes: {
+    code: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+    source: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+  };
+}
+
 export interface MobileVanLocation extends Struct.ComponentSchema {
   collectionName: 'components_mobile_van_locations';
   info: {
@@ -319,6 +340,7 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'blog.cta': BlogCta;
       'community.initiative': CommunityInitiative;
+      'marketing.source-alias': MarketingSourceAlias;
       'mobile-van.location': MobileVanLocation;
       'navigation.nav-item': NavigationNavItem;
       'page-section.contact-form': PageSectionContactForm;

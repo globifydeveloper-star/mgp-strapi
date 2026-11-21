@@ -1782,6 +1782,36 @@ export interface ApiJobPositionJobPosition extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiLeadSourceSettingLeadSourceSetting
+  extends Struct.SingleTypeSchema {
+  collectionName: 'lead_source_settings';
+  info: {
+    description: 'Rename utm_source values from ad links. Example: Code "1" \u2192 Source "facebook" makes ?utm_source=1 count as Facebook. Codes are not case-sensitive. Built-in: fb/meta \u2192 facebook, ig \u2192 instagram, x \u2192 twitter.';
+    displayName: 'Lead Source Settings';
+    pluralName: 'lead-source-settings';
+    singularName: 'lead-source-setting';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::lead-source-setting.lead-source-setting'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    sourceAliases: Schema.Attribute.Component<'marketing.source-alias', true>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiMobileVanPageMobileVanPage extends Struct.SingleTypeSchema {
   collectionName: 'mobile_van_pages';
   info: {
@@ -3052,6 +3082,7 @@ declare module '@strapi/strapi' {
       'api::job-application.job-application': ApiJobApplicationJobApplication;
       'api::job-department.job-department': ApiJobDepartmentJobDepartment;
       'api::job-position.job-position': ApiJobPositionJobPosition;
+      'api::lead-source-setting.lead-source-setting': ApiLeadSourceSettingLeadSourceSetting;
       'api::mobile-van-page.mobile-van-page': ApiMobileVanPageMobileVanPage;
       'api::mobile-van-submission.mobile-van-submission': ApiMobileVanSubmissionMobileVanSubmission;
       'api::navbar-setting.navbar-setting': ApiNavbarSettingNavbarSetting;

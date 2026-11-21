@@ -596,8 +596,8 @@ export default {
     const aboutUsUid = 'api::about-us-page.about-us-page';
     const aboutUsData = {
       heroEyebrow: "A Muthoot Exim (P) Ltd. Enterprise",
-      heroTitle: "Muthoot Gold Point — Precision You Can Trust",
-      heroDescription: "Muthoot Gold Point is a unit of Muthoot Exim (P) Ltd., the precious metal vertical of the Muthoot Pappachan Group that specialises in innovative products and offerings in the precious metal space. The vertical gives customers access to quality products that meet the highest standards at an affordable price. Apart from Muthoot Gold Point, Muthoot Exim’s flagship products include Swarnavarsham, Swethavarsham, and Corporate gifting.\nVisit the corporate website of Muthoot EXIM (P) Ltd to know more about the company: www.muthootexim.com\nMuthoot Gold Point is the first national-level organised sector player to get into the recycling of gold that is in sync with the Vision laid down by the Government of India for the Indian Gold Industry.\nWe enable customers to sell gold in a transparent and efficient manner. The unparalleled experience of selling old gold for instant cash is 100% fair and precise. Our customers enjoy a safe, transparent and scientifically tested way of selling gold.\nMobile Muthoot Gold Point – India’s First Mobile Gold Buying van buys gold at the customer’s doorstep. Continuing with our Group values around trust, we take the XRF and ultrasonic machines to the customer’s doorstep to ensure they are getting maximum value for their gold.",
+      heroTitle: "Muthoot Gold Point, Precision You Can Trust",
+      heroDescription: "Muthoot Gold Point is a unit of Muthoot Exim (P) Ltd., the precious metal vertical of the Muthoot Pappachan Group that specialises in innovative products and offerings in the precious metal space. The vertical gives customers access to quality products that meet the highest standards at an affordable price. Apart from Muthoot Gold Point, Muthoot Exim’s flagship products include Swarnavarsham, Swethavarsham, and Corporate gifting.\nVisit the corporate website of Muthoot EXIM (P) Ltd to know more about the company: www.muthootexim.com\nMuthoot Gold Point is the first national-level organised sector player to get into the recycling of gold that is in sync with the Vision laid down by the Government of India for the Indian Gold Industry.\nWe enable customers to sell gold in a transparent and efficient manner. The unparalleled experience of selling old gold for instant cash is 100% fair and precise. Our customers enjoy a safe, transparent and scientifically tested way of selling gold.\nMobile Muthoot Gold Point, India’s first mobile gold buying van, buys gold at the customer’s doorstep. Continuing with our Group values around trust, we take the XRF and ultrasonic machines to the customer’s doorstep to ensure they are getting maximum value for their gold.",
       heroButtonText: "Sell Your Gold",
       heroButtonLink: "#what-we-do",
       heroChecklist: [
@@ -606,7 +606,7 @@ export default {
       ],
       recyclingSubtitle: "Closed-Loop Ecosystem",
       recyclingTitle: "What Do We Do With \nThe Gold We Buy?",
-      recyclingDescription: "Every gram we buy is refined into 995 investment-grade gold bars and re-channeled into domestic markets — stabilizing local demand and curbing the nation's reliance on imports.",
+      recyclingDescription: "Every gram we buy is refined into 995 investment-grade gold bars and re-channeled into domestic markets, stabilizing local demand and curbing the nation's reliance on imports.",
       recyclingSteps: [
         { title: 'Scientific Valuation', desc: 'Our gold is valued transparently using ultrasonic cleaning and advanced XRF gold-testing machines right in front of you.' },
         { title: 'Refinement into 995 Gold Bars', desc: 'All gold purchased from customers is sent to government-approved refineries and cast into pure 995 investment-grade gold bars.' },
@@ -814,7 +814,7 @@ export default {
       seoTitle: 'Sell Gold for Cash | Muthoot Gold Point',
       seoDescription: 'Sell your old gold and get cash instantly with 100% fair and precise gold buying. Free purity testing, 100% transparent process, and free ultrasonic cleaning.',
       seoKeywords: 'Sell Gold, Cash for Gold, Gold Buyers, Sell Old Gold, Muthoot Gold Point, Instant Cash for Gold',
-      heroTitle: 'Sell Your Gold for Cash',
+      heroTitle: 'Sell Your Gold',
       heroTitleHighlight: 'Get Cash Instantly',
       heroSubtitle: 'Safe, transparent and scientifically tested way of selling gold.',
       heroBullets: [
@@ -1004,6 +1004,7 @@ export default {
           'api::privacy-policy-page.privacy-policy-page.find',
           'api::testimonials-page.testimonials-page.find',
           'api::site-text.site-text.find',
+          'api::lead-source-setting.lead-source-setting.find',
           'api::sell-gold-page-setting.sell-gold-page-setting.find',
           'api::global-stat.global-stat.find',
           'api::page.page.find',

@@ -1,0 +1,20 @@
+{
+  "kind": "singleType",
+  "collectionName": "lead_source_settings",
+  "info": {
+    "singularName": "lead-source-setting",
+    "pluralName": "lead-source-settings",
+    "displayName": "Lead Source Settings",
+    "description": "Rename utm_source values from ad links. Example: Code \"1\" → Source \"facebook\" makes ?utm_source=1 count as Facebook. Codes are not case-sensitive. Built-in: fb/meta → facebook, ig → instagram, x → twitter."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "sourceAliases": {
+      "type": "component",
+      "repeatable": true,
+      "component": "marketing.source-alias"
+    }
+  }
+}
