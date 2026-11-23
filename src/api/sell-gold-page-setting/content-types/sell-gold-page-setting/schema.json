@@ -167,6 +167,46 @@
       ],
       "description": "\"Get in Touch\" section background. Falls back to the built-in image if empty. Recommended: 1920 × 900 px"
     },
+    "aboutEyebrow": {
+      "type": "string",
+      "description": "About section (above Get in Touch): small line above the heading. Empty = A Muthoot Exim (P) Ltd. Enterprise"
+    },
+    "aboutTitle": {
+      "type": "string",
+      "description": "About section heading. Empty = Muthoot Gold Point, Trusted Gold Buyer"
+    },
+    "aboutHeading": {
+      "type": "string",
+      "description": "About section sub-heading. Empty = Who We Are"
+    },
+    "aboutDescription": {
+      "type": "text",
+      "description": "About section paragraph. Separate from the About Us page. Empty = built-in text"
+    },
+    "aboutChecklist": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.check-item",
+      "description": "About section tick lines. Empty = the two built-in lines"
+    },
+    "aboutInfoCards": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.text-section",
+      "description": "About section cards (Corporate Information, Industry Pioneer, Transparent Process). A link with href=\"#sell-gold\" scrolls to the form. Empty = built-in cards"
+    },
+    "aboutButtonText": {
+      "type": "string",
+      "description": "About section button. Empty = Sell Your Gold"
+    },
+    "aboutImages": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "About section carousel — add 3 images. Empty = built-in slides. Recommended: 1536 × 1024 px"
+    },
     "hideNavbar": {
       "type": "boolean",
       "default": false
